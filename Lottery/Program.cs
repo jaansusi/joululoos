@@ -67,6 +67,7 @@ namespace Jõululoos
             {
                 try
                 {
+                    Directory.CreateDirectory(@".\Loos");
                     foreach (FileInfo file in new DirectoryInfo(@".\Loos\").GetFiles())
                         file.Delete();
                     using (StreamReader r = new StreamReader("data.json"))

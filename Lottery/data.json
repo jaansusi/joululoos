@@ -1,12 +1,11 @@
 [
   {
-    "id": 1,
     "members": [
       {
         "name": "Jaan",
         "fileExtension": "htm",
         "messageType": "esteid",
-        "personalIdCode":  "39401262728"
+        "personalIdCode": "39401262728"
       },
       {
         "name": "Kristiina",
@@ -15,11 +14,9 @@
     ]
   },
   {
-    "id": 2,
     "members": [
       {
-        "name": "Katre" 
-
+        "name": "Katre"
       },
       {
         "name": "Gristen",
@@ -29,20 +26,12 @@
         "name": "Ene"
       },
       {
-        "name": "Rasmus"
-      },
-      {
         "name": "Ethel"
       }
     ]
   },
   {
-    "id": 3,
     "members": [
-      {
-        "name": "Villem",
-        "messageType": "esteid"
-      },
       {
         "name": "Toomas",
         "messageType": "esteid"
@@ -53,10 +42,27 @@
     ]
   },
   {
-    "id": 4,
     "members": [
       {
         "name": "Emilie"
+      }
+    ]
+  },
+  {
+    "members": [
+      {
+        "name": "Villem",
+        "messageType": "esteid"
+      }
+    ]
+  },
+  {
+    "members": [
+      {
+        "name": "Rasmus"
+      },
+      {
+        "name": "Carmen"
       }
     ]
   }

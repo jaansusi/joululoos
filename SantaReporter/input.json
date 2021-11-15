@@ -1,0 +1,69 @@
+[
+  {
+    "members": [
+      {
+        "name": "Jaan",
+        "fileExtension": "htm",
+        "messageType": "esteid",
+        "personalIdCode": "39401262728"
+      },
+      {
+        "name": "Kristiina",
+        "messageType": "esteid"
+      }
+    ]
+  },
+  {
+    "members": [
+      {
+        "name": "Katre"
+      },
+      {
+        "name": "Gristen",
+        "messageType": "esteid"
+      },
+      {
+        "name": "Ene"
+      },
+      {
+        "name": "Ethel"
+      }
+    ]
+  },
+  {
+    "members": [
+      {
+        "name": "Toomas",
+        "messageType": "esteid"
+      },
+      {
+        "name": "Helle"
+      }
+    ]
+  },
+  {
+    "members": [
+      {
+        "name": "Emilie"
+      }
+    ]
+  },
+  {
+    "members": [
+      {
+        "name": "Villem",
+        "messageType": "esteid"
+      }
+    ]
+  },
+  {
+    "members": [
+      {
+        "name": "Rasmus"
+      },
+      {
+        "name": "Carmen"
+      }
+    ]
+  }
+]

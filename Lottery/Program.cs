@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Jõululoos
+namespace SecretSanta
 {
     class Program
     {
@@ -70,11 +70,8 @@ namespace Jõululoos
                     Directory.CreateDirectory(@".\Loos");
                     foreach (FileInfo file in new DirectoryInfo(@".\Loos\").GetFiles())
                         file.Delete();
-                    using (StreamReader r = new StreamReader("data.json"))
-                    {
-                        string json = r.ReadToEnd();
-                        families = JsonConvert.DeserializeObject<List<Family>>(json).OrderBy(x => Guid.NewGuid()).ToList();
-                    }
+
+                    families = FamilyExtensions.ReadFromFile();
 
                     for (int i = 0; i < families.Count; i++)
                     {

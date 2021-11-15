@@ -83,7 +83,6 @@ namespace Jõululoos
                         foreach (Person person in currentFamily.Members)
                         {
                             //Assuming that this person is not gifting to anyone!
-
                             //Get people that are not getting a gift from anyone, random them up
                             List<Person> personsWithoutIsGiftedTo = otherFamilies
                                                                     .SelectMany(x => x.Members)

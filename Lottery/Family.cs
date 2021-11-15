@@ -9,14 +9,14 @@ namespace Jõululoos
 
     class Family
     {
-        public Family(int id, List<Person> members)
+        public Family(List<Person> members)
         {
-            Id = id;
+            Id = Guid.NewGuid();
             _members = new List<Person>();
             members.ForEach(x => _members.Add(x));
         }
 
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         private List<Person> _members { get; set; }
         public List<Person> Members { get => _members ?? new List<Person>(); set { _members = value; } }

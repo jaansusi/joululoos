@@ -2,7 +2,7 @@
 {
     public class Santa
     {
-        Santa(string name, string designatedPerson)
+        public Santa(string name, string designatedPerson)
         {
             this.Name = name;
             //to-do: Encrypt this

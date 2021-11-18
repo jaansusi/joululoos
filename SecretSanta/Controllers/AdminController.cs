@@ -27,10 +27,7 @@ namespace SecretSanta.Controllers
         public IActionResult GetFamilies()
         {
             if (Request.Headers.Authorization != AdminSecret)
-            {
                 return Unauthorized();
-            }
-
 
             using (var db = new SantaContext())
             {
@@ -46,9 +43,8 @@ namespace SecretSanta.Controllers
         public IActionResult SetFamilies([FromBody] List<Family> families)
         {
             if (Request.Headers.Authorization != AdminSecret)
-            {
                 return Unauthorized();
-            }
+
             var response = new Dictionary<string, string>();
             bool done = false;
             using (var db = new SantaContext())
@@ -56,7 +52,7 @@ namespace SecretSanta.Controllers
 
                 db.Santas?.RemoveRange(db.Santas);
                 db.SaveChanges();
-                
+
                 do
                 {
                     var transaction = db.Database.BeginTransaction();
@@ -76,7 +72,7 @@ namespace SecretSanta.Controllers
                                                                         .OrderBy(x => Guid.NewGuid())
                                                                         .ToList();
                                 Person giftingTo = personsWithoutIsGiftedTo.First();
-                                
+
                                 person.GiftingTo = giftingTo;
                                 giftingTo.IsGiftedTo = true;
 
@@ -120,10 +116,54 @@ namespace SecretSanta.Controllers
                     transaction.Commit();
                 } while (!done);
             }
-                
+
 
 
             return Ok(response);
         }
+
+        [HttpPost]
+        [Route("validateParticipants")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public IActionResult ValidateParticipants([FromBody] Dictionary<string, string> santas)
+        {
+            if (Request.Headers.Authorization != AdminSecret)
+                return Unauthorized();
+
+            var response = new ValidationDto();
+            using (var db = new SantaContext())
+            {
+                foreach (var santa in santas)
+                {
+                    response.Santas.Add(santa.Key);
+                    var thisSanta = db.Santas?.Find(Guid.Parse(santa.Value));
+                    if (thisSanta == null)
+                        return UnprocessableEntity("EI KLAPI");
+                    var symmetricEncryptDecrypt = new EncryptionFactory();
+                    var decryptedName = symmetricEncryptDecrypt.Decrypt(thisSanta.DesignatedPerson, thisSanta.IVBase64, EncryptionKey);
+                    response.Receivers.Add(decryptedName);
+                }
+            }
+            response.Santas = response.Santas.OrderBy(x => x).ToList();
+            response.Receivers = response.Receivers.OrderBy(x => x).ToList();
+            return Ok(response);
+        }
+        private class ValidationDto
+        {
+            public ValidationDto()
+            {
+                Santas = new List<string>();
+                Receivers = new List<string>();
+            }
+
+            public bool SantasEqualReceivers => Santas.All(x => Receivers.Contains(x));
+            public int AmountOfUniqueSantas => Santas.Distinct().Count();
+            public int AmountOfUniqueReceivers => Receivers.Distinct().Count();
+            public List<string> Santas { get; set; }
+            public List<string> Receivers { get; set; }
+        }
     }
+
 }

@@ -4,9 +4,9 @@
     {
         public Santa(string name, string designatedPerson, string IVBase64)
         {
-            this.Id = Guid.NewGuid();
-            this.Name = name;
-            this.DesignatedPerson = designatedPerson;
+            Id = Guid.NewGuid();
+            Name = name;
+            DesignatedPerson = designatedPerson;
             this.IVBase64 = IVBase64;
         }
         public Guid Id { get; set; }

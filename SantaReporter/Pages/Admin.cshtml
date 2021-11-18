@@ -19,7 +19,7 @@
             data: JSON.stringify(payload),
             contentType: 'application/json'
         }).then((res) => {
-            document.getElementById('results').innerHTML = "Success";
+            document.getElementById('results').innerHTML = JSON.stringify(res, null, 4);
         }).catch((err) => {
             document.getElementById('results').innerHTML = JSON.stringify(err, null, 4);
         });

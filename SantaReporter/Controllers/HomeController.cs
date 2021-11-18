@@ -29,7 +29,8 @@ namespace SantaReporter.Controllers
                 {
                     var symmetricEncryptDecrypt = new EncryptionFactory();
                     var decryptedName = symmetricEncryptDecrypt.Decrypt(santa.DesignatedPerson, santa.IVBase64, EncryptionKey);
-
+                    db.LogEntries?.Add(new LogEntry(santa.Id, Request.Headers["User-Agent"], Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty));
+                    db.SaveChanges();
                     return Ok(decryptedName);
                 }
                 else

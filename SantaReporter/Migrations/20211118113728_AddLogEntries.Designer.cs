@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SantaReporter;
 
@@ -10,9 +11,10 @@ using SantaReporter;
 namespace SantaReporter.Migrations
 {
     [DbContext(typeof(SantaContext))]
-    partial class SantaContextModelSnapshot : ModelSnapshot
+    [Migration("20211118113728_AddLogEntries")]
+    partial class AddLogEntries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");

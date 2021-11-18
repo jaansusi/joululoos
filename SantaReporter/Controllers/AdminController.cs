@@ -34,7 +34,9 @@ namespace SantaReporter.Controllers
 
             using (var db = new SantaContext())
             {
-                return Ok(db.Santas?.ToList());
+                var santas = db.Santas?.ToList() ?? new List<Santa>();
+                santas.ForEach(x => x.Id = Guid.Empty);
+                return Ok(santas);
             }
         }
 
@@ -48,6 +50,7 @@ namespace SantaReporter.Controllers
             {
                 return Unauthorized();
             }
+            var response = new Dictionary<string, string>();
             bool done = false;
             using (var db = new SantaContext())
             {
@@ -94,19 +97,21 @@ namespace SantaReporter.Controllers
                                 var IVBase64 = symmetricEncryptDecrypt.InitSymmetricEncryptionIV(EncryptionKey);
 
                                 var encryptedName = symmetricEncryptDecrypt.Encrypt(name, IVBase64, EncryptionKey);
-                                
-                                db.Santas?.Add(new Santa(person.Name, encryptedName, IVBase64));
+                                var santa = new Santa(person.Name, encryptedName, IVBase64);
+                                db.Santas?.Add(santa);
+                                response.Add(person.Name, santa.Id.ToString());
                             }
                         }
-
+                        db.LogEntries?.RemoveRange(db.LogEntries);
                         db.SaveChanges();
                     }
                     catch (Exception ex)
                     {
                         if (ex is InvalidOperationException)
                         {
-                            //All good, this exception is expected, try again!
+                            //All good, this exception is expected, reset and try again!
                             transaction.Rollback();
+                            response = new Dictionary<string, string>();
                         }
                         else
                         {
@@ -115,12 +120,11 @@ namespace SantaReporter.Controllers
                     }
                     transaction.Commit();
                 } while (!done);
-
             }
                 
 
 
-            return Ok();
+            return Ok(response);
         }
     }
 }

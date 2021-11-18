@@ -6,6 +6,7 @@ namespace SantaReporter
     public class SantaContext : DbContext
     {
         public DbSet<Santa>? Santas { get; set; }
+        public DbSet<LogEntry>? LogEntries { get; set; }
 
         public string DbPath { get; set; }
 

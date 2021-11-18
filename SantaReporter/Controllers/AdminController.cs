@@ -9,11 +9,15 @@ namespace SantaReporter.Controllers
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
     {
-        private readonly IConfiguration Configuration;
+        private readonly string AdminSecret;
+        private readonly string EncryptionKey;
 
         public AdminController(IConfiguration configuration)
         {
-            Configuration = configuration;
+            AdminSecret = configuration.GetValue(typeof(string), "AdminSecret")?.ToString() ?? String.Empty;
+            EncryptionKey = configuration.GetValue(typeof(string), "EncryptionKey")?.ToString() ?? String.Empty;
+            if (String.IsNullOrEmpty(AdminSecret) || String.IsNullOrEmpty(EncryptionKey))
+                throw new Exception("AdminSecret or EncryptionKey missing from config!");
         }
 
         [HttpGet]
@@ -22,7 +26,7 @@ namespace SantaReporter.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetFamilies()
         {
-            if (Request.Headers.Authorization != this.Configuration.GetValue(typeof(string), "AdminSecret"))
+            if (Request.Headers.Authorization != AdminSecret)
             {
                 return Unauthorized();
             }
@@ -40,7 +44,7 @@ namespace SantaReporter.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult SetFamilies([FromBody] List<Family> families)
         {
-            if (Request.Headers.Authorization != this.Configuration.GetValue(typeof(string), "AdminSecret"))
+            if (Request.Headers.Authorization != AdminSecret)
             {
                 return Unauthorized();
             }
@@ -50,8 +54,6 @@ namespace SantaReporter.Controllers
 
                 db.Santas?.RemoveRange(db.Santas);
                 db.SaveChanges();
-
-
                 
                 do
                 {
@@ -72,6 +74,7 @@ namespace SantaReporter.Controllers
                                                                         .OrderBy(x => Guid.NewGuid())
                                                                         .ToList();
                                 Person giftingTo = personsWithoutIsGiftedTo.First();
+                                
                                 person.GiftingTo = giftingTo;
                                 giftingTo.IsGiftedTo = true;
 
@@ -82,8 +85,18 @@ namespace SantaReporter.Controllers
                         {
                             foreach (Person person in family.Members)
                             {
-                                if (person.GiftingTo != null)
-                                    db.Santas?.Add(new Santa(person.Name, person.GiftingTo.Name));
+                                if (person.GiftingTo == null)
+                                    throw new Exception("GiftingTo is Null!");
+
+                                var name = person.GiftingTo.Name;
+
+                                var ef = new EncryptionFactory(EncryptionKey);
+                                var encryptedName = ef.Encrypt(name);
+                                System.Diagnostics.Debug.WriteLine(name);
+                                System.Diagnostics.Debug.WriteLine(encryptedName);
+                                System.Diagnostics.Debug.WriteLine(ef.Decrypt(encryptedName));
+
+                                db.Santas?.Add(new Santa(person.Name, encryptedName));
                             }
                         }
 

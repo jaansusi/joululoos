@@ -2,13 +2,10 @@
   {
     "members": [
       {
-        "name": "Jaan",
-        "messageType": "esteid",
-        "personalIdCode": "39401262728"
+        "name": "Jaan"
       },
       {
-        "name": "Kristiina",
-        "messageType": "esteid"
+        "name": "Kristiina"
       }
     ]
   },
@@ -18,8 +15,7 @@
         "name": "Katre"
       },
       {
-        "name": "Gristen",
-        "messageType": "esteid"
+        "name": "Gristen"
       },
       {
         "name": "Ene"
@@ -32,8 +28,7 @@
   {
     "members": [
       {
-        "name": "Toomas",
-        "messageType": "esteid"
+        "name": "Toomas"
       },
       {
         "name": "Helle"
@@ -50,8 +45,7 @@
   {
     "members": [
       {
-        "name": "Villem",
-        "messageType": "esteid"
+        "name": "Villem"
       }
     ]
   },

@@ -9,14 +9,20 @@ namespace SantaReporter.Controllers
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
     {
-        protected string adminSecret = "a";
+        private readonly IConfiguration Configuration;
+
+        public AdminController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         [HttpGet]
         [Route("getFamilies")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Family>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetFamilies()
         {
-            if (Request.Headers.Authorization != this.adminSecret)
+            if (Request.Headers.Authorization != this.Configuration.GetValue(typeof(string), "AdminSecret"))
             {
                 return Unauthorized();
             }
@@ -34,7 +40,7 @@ namespace SantaReporter.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult SetFamilies([FromBody] List<Family> families)
         {
-            if (Request.Headers.Authorization != this.adminSecret)
+            if (Request.Headers.Authorization != this.Configuration.GetValue(typeof(string), "AdminSecret"))
             {
                 return Unauthorized();
             }

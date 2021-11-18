@@ -27,8 +27,9 @@ namespace SantaReporter.Controllers
                 Santa? santa = db.Santas?.First(x => x.Id == code);
                 if (santa != null)
                 {
-                    var ef = new EncryptionFactory(EncryptionKey);
-                    var decryptedName = ef.Decrypt(santa.DesignatedPerson);
+                    var symmetricEncryptDecrypt = new EncryptionFactory();
+                    var decryptedName = symmetricEncryptDecrypt.Decrypt(santa.DesignatedPerson, santa.IVBase64, EncryptionKey);
+
                     return Ok(decryptedName);
                 }
                 else

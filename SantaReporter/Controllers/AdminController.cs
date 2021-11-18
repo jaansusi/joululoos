@@ -90,13 +90,12 @@ namespace SantaReporter.Controllers
 
                                 var name = person.GiftingTo.Name;
 
-                                var ef = new EncryptionFactory(EncryptionKey);
-                                var encryptedName = ef.Encrypt(name);
-                                System.Diagnostics.Debug.WriteLine(name);
-                                System.Diagnostics.Debug.WriteLine(encryptedName);
-                                System.Diagnostics.Debug.WriteLine(ef.Decrypt(encryptedName));
+                                var symmetricEncryptDecrypt = new EncryptionFactory();
+                                var IVBase64 = symmetricEncryptDecrypt.InitSymmetricEncryptionIV(EncryptionKey);
 
-                                db.Santas?.Add(new Santa(person.Name, encryptedName));
+                                var encryptedName = symmetricEncryptDecrypt.Encrypt(name, IVBase64, EncryptionKey);
+                                
+                                db.Santas?.Add(new Santa(person.Name, encryptedName, IVBase64));
                             }
                         }
 

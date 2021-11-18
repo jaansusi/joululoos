@@ -5,10 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace SecretSanta
+namespace SantaReporter.Models
 {
 
-    class Family
+    public class Family
     {
         public Family(List<Person> members)
         {
@@ -30,20 +30,18 @@ namespace SecretSanta
             Directory.CreateDirectory(directory);
             foreach (Person person in families.SelectMany(x => x.Members))
             {
-                using (StreamWriter file =
-                    new StreamWriter(directory + person.Name + $".{person.FileExtension}"))
-                {
-                    file.WriteLine(person.GiftingTo.Name);
-                }
             }
         }
 
         public static List<Family> ReadFromFile()
         {
-            using (StreamReader r = new StreamReader("data.json"))
+            using (StreamReader r = new StreamReader("input.json"))
             {
-                string json = r.ReadToEnd();
-                return JsonConvert.DeserializeObject<List<Family>>(json).OrderBy(x => Guid.NewGuid()).ToList();
+                string json = r.ReadToEnd(); 
+                var res = JsonConvert.DeserializeObject<List<Family>>(json)?.OrderBy(x => Guid.NewGuid()).ToList();
+                if (res != null)
+                    return res;
+                return new List<Family>();
             }
         }
     }

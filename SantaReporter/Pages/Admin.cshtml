@@ -1,10 +1,40 @@
 ﻿@page
-
-<form>
-    <div>Current seed: </div>
-    <span>Seed: </span>
-    <input name="seed" />
-    <button action="submit"></button>
-</form>
-
-<button class="btn btn-outline-primary">Generate list</button>
+<script type="text/javascript">
+    function getFamilies() {
+        $.get({
+            url: '/api/admin/getFamilies',
+            headers: {"Authorization": document.getElementById('secretInput').value}
+        }).then((res) => {
+            console.log(res);
+            document.getElementById('results').innerHTML = JSON.stringify(res, null, 4);
+        }).catch((err) => {
+            document.getElementById('results').innerHTML = JSON.stringify(err, null, 4);
+        });
+    }
+    function setFamilies() {
+        let payload = JSON.parse(document.getElementById('familyInput').value);
+        $.post({
+            url: '/api/admin/setFamilies',
+            headers: {"Authorization": document.getElementById('secretInput').value},
+            data: JSON.stringify(payload),
+            contentType: 'application/json'
+        }).then((res) => {
+            document.getElementById('results').innerHTML = "Success";
+        }).catch((err) => {
+            document.getElementById('results').innerHTML = JSON.stringify(err, null, 4);
+        });
+    }
+</script>
+<div style="max-width: 50%" class="input-group mb-3">
+    <input type="text" id="secretInput" class="form-control" placeholder="Admin kood" />
+    <div class="input-group-prepend">
+        <button class="btn btn-outline-primary" onclick="getFamilies()">Kuva tulemus</button>
+    </div>
+</div>
+<div style="max-width: 50%" class="input-group mb-3">
+    <textarea id="familyInput" class="form-control" placeholder="Perekondade json"></textarea>
+    <div class="input-group-prepend">
+        <button class="btn btn-outline-primary" onclick="setFamilies()">Sisesta perekonnad</button>
+    </div>
+</div>
+<pre id="results"></pre>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SecretSanta
+namespace SantaReporter.Models
 {
     public static class MessageTypes
     {

@@ -1,0 +1,19 @@
+﻿@page
+@using SecretSanta.Models
+@model SecretSanta.Pages.LogsModel
+@{
+    ViewData["Title"] = "Logs";
+}
+@{
+    List<LogEntry> logs;
+    using (var db = new SantaContext())
+    {
+        logs = db.LogEntries?.ToList() ?? new List<LogEntry>();
+        
+    }
+}
+<ul>
+@foreach (var log in logs) {
+    <li>@log.DateCreated - @log.CodeOwner.ToString().Substring(0, 8) - @log.Ip - @log.UserAgent</li>
+}
+</ul>

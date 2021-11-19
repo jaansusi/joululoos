@@ -11,14 +11,15 @@
             console.log(res);
             document.getElementById('name').innerHTML = "Tere " + res.name + "!<br />Sina tõmbasid mütsist sildi nimega... <b>" + res.designatedPerson + "</b>";
         }).catch((err) => {
-
             document.getElementById('name').innerHTML = "Vigane kood";
         });
     }
 </script>
-<div style="max-width: 50%" class="input-group mb-3">
-    <input type="text" id="codeInput" class="form-control" placeholder="Sinu kood" />
-    <div class="input-group-prepend">
+<div class="input-group mb-3">
+    <div>
+        <input type="text" id="codeInput" class="form-control" placeholder="Sinu kood" />
+    </div>
+    <div>
         <button class="btn btn-outline-primary" type="button" onclick="getName()">Kuva nimi</button>
     </div>
 </div>

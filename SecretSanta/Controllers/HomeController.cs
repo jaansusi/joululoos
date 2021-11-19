@@ -29,7 +29,7 @@ namespace SecretSanta.Controllers
                 {
                     var symmetricEncryptDecrypt = new EncryptionFactory();
                     var decryptedName = symmetricEncryptDecrypt.Decrypt(santa.DesignatedPerson, santa.IVBase64, EncryptionKey);
-                    db.LogEntries?.Add(new LogEntry(santa.Id, Request.Headers["User-Agent"], Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty));
+                    db.LogEntries?.Add(new LogEntry(santa.Id, Request.Headers["User-Agent"], Request.Headers["X-Forwarded-For"]));
                     db.SaveChanges();
                     var response = new SantaDto
                     {

@@ -9,7 +9,7 @@
             url: '/api/home?code=' + document.getElementById('codeInput').value
         }).then((res) => {
             console.log(res);
-            document.getElementById('name').innerHTML = "Tere, " + res.name + "!<br />Sina tõmbasid mütsist sildi nimega... <b>" + res.designatedPerson + "</b>";
+            document.getElementById('name').innerHTML = "Tere " + res.name + "!<br />Sina tõmbasid mütsist sildi nimega... <b>" + res.designatedPerson + "</b>";
         }).catch((err) => {
 
             document.getElementById('name').innerHTML = "Vigane kood";

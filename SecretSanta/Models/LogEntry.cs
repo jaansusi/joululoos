@@ -1,5 +1,8 @@
 ﻿namespace SecretSanta.Models
 {
+    // Used to keep track of the IP and User Agent
+    // of visitors who decode their giftee in order
+    // to discourage code sharing.
     public class LogEntry
     {
         public LogEntry(Guid codeOwner, string userAgent, string ip)

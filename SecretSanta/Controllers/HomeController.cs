@@ -12,8 +12,8 @@ namespace SecretSanta.Controllers
 
         public HomeController(IConfiguration configuration)
         {
-            EncryptionKey = configuration.GetValue(typeof(string), "EncryptionKey")?.ToString() ?? String.Empty;
-            if (String.IsNullOrEmpty(EncryptionKey))
+            EncryptionKey = configuration.GetValue(typeof(string), "EncryptionKey")?.ToString() ?? string.Empty;
+            if (string.IsNullOrEmpty(EncryptionKey))
                 throw new Exception("EncryptionKey missing from config!");
         }
 
@@ -29,13 +29,19 @@ namespace SecretSanta.Controllers
                 {
                     var symmetricEncryptDecrypt = new EncryptionFactory();
                     var decryptedName = symmetricEncryptDecrypt.Decrypt(santa.DesignatedPerson, santa.IVBase64, EncryptionKey);
-                    db.LogEntries?.Add(new LogEntry(santa.Id, Request.Headers["User-Agent"], Request.Headers["X-Forwarded-For"]));
+                    var userAgent = Request.Headers["User-Agent"];
+                    var ip = Request.Headers["X-Forwarded-For"].Count > 0 ? Request.Headers["X-Forwarded-For"].ToString() : string.Empty;
+
+                    db.LogEntries?.Add(new LogEntry(santa.Id, userAgent, ip));
                     db.SaveChanges();
-                    var response = new SantaDto
-                    {
-                        Name = santa.Name,
-                        DesignatedPerson = decryptedName
-                    };
+
+                    var logEntries = db.LogEntries?.Where(entry => entry.CodeOwner == code);
+                    var response = new SantaDto(
+                        santa.Name,
+                        decryptedName,
+                        logEntries?.Count() ?? 0,
+                        logEntries?.Select(x => x.UserAgent).Distinct().Count() ?? 0
+                    );
                     return Ok(response);
                 }
                 else

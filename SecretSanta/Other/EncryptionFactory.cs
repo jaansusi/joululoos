@@ -3,6 +3,7 @@ using System.Text;
 
 namespace SecretSanta
 {
+    // Encryption helpers
     public class EncryptionFactory
     {
         public string Encrypt(string text, string IV, string key)

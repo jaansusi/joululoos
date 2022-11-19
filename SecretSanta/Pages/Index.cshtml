@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Leia isik";
 }
 <script type="text/javascript">
     function getName() {
@@ -10,7 +10,8 @@
         }).then((res) => {
             console.log(res);
             document.getElementById('name').innerHTML = "Tere " + res.name + "!<br />Sina tõmbasid mütsist sildi nimega... <b>" + res.designatedPerson + "</b>";
-        }).catch((err) => {
+            document.getElementById('logs').innerHTML = "Kokku oled sa vaadanud oma nime lausa " + res.logEntriesCount + " korda, " + res.uniqueUserAgentCount + "-st erinevast kohast!";
+            }).catch((err) => {
             document.getElementById('name').innerHTML = "Vigane kood";
         });
     }
@@ -23,5 +24,6 @@
         <button class="btn btn-outline-primary" type="button" onclick="getName()">Kuva nimi</button>
     </div>
 </div>
-<div id="name" />
+<div id="name"></div>
+<div id="logs"></div>
 

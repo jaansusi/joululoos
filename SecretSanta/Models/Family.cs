@@ -7,7 +7,9 @@ using System.Text;
 
 namespace SecretSanta.Models
 {
-
+    // Not retained in the database, used as a helper
+    // object during import for marking persons who may
+    // not gift to each other.
     public class Family
     {
         public Family(List<Person> members)

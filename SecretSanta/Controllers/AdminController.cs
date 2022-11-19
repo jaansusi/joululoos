@@ -45,7 +45,8 @@ namespace SecretSanta.Controllers
         [HttpPost]
         [Route("generateSantas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         public IActionResult GenerateSantas([FromBody] List<Family> families)
         {
             var response = new Dictionary<string, string>();

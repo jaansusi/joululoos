@@ -1,4 +1,5 @@
-﻿function getName() {
+﻿var snowActive = false;
+function getName() {
     $.get({
         url: '/api/home?code=' + document.getElementById('codeInput').value
     }).then((res) => {
@@ -14,9 +15,13 @@
             res.uniqueUserAgentCount +
             "-st erinevast kohast!") : "!")
             ;
+        if (!snowActive) {
+            snowActive = true;
+            createSnowFlakes();
+        }
     }).catch((err) => {
-        document.getElementById('name').innerHTML = "Vigane kood";
+        document.getElementById('welcome').innerHTML = "Vigane kood";
     });
 
-    var confetti = Snow.init();
+
 }

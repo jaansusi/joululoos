@@ -1,62 +1,86 @@
-﻿var Snow = {
-    el: "#snow",
-    density: 10000, // higher = fewer bits
-    maxHSpeed: 1, // How much do you want them to move horizontally
-    minFallSpeed: 0.5,
-    canvas: null,
-    ctx: null,
-    particles: [],
-    colors: [],
-    mp: 1,
-    quit: false,
-    init() {
-        this.canvas = document.querySelector(this.el);
-        this.ctx = this.canvas.getContext("2d");
-        this.reset();
-        requestAnimationFrame(this.render.bind(this));
-        window.addEventListener("resize", this.reset.bind(this));
-    },
-    reset() {
-        this.w = window.innerWidth;
-        this.h = window.innerHeight;
-        this.canvas.width = this.w;
-        this.canvas.height = this.h;
-        this.particles = [];
-        this.mp = Math.ceil((this.w * this.h) / this.density);
-        for (var i = 0; i < this.mp; i++) {
-            var size = Math.random() * 4 + 5;
-            this.particles.push({
-                x: Math.random() * this.w, //x-coordinate
-                y: Math.random() * this.h, //y-coordinate
-                w: size,
-                h: size,
-                vy: this.minFallSpeed + Math.random(), //density
-                vx: Math.random() * this.maxHSpeed - this.maxHSpeed / 2,
-                fill: "#ffffff",
-                s: Math.random() * 0.2 - 0.1
-            });
-        }
-    },
+﻿var canvas = document.getElementById("snow");
+var ctx = canvas.getContext("2d");
+var particlesOnScreen = 245;
+var particlesArray = [];
+var w, h;
+w = canvas.width = window.innerWidth;
+h = canvas.height = window.innerHeight;
 
-    render() {
-        this.ctx.clearRect(0, 0, this.w, this.h);
-        this.particles.forEach((p, i) => {
-            p.y += p.vy;
-            p.x += p.vx;
-            this.ctx.fillStyle = p.fill;
-            this.ctx.fillRect(p.x, p.y, p.w, p.h);
-            if (p.x > this.w + 5 || p.x < -5 || p.y > this.h) {
-                p.x = Math.random() * this.w;
-                p.y = -10;
-            }
-        });
-        if (this.quit) {
-            return;
-        }
-        requestAnimationFrame(this.render.bind(this));
-    },
-    destroy() {
-        this.quit = true;
+function random(min, max) {
+    return min + Math.random() * (max - min + 1);
+};
+
+function clientResize(ev) {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+};
+window.addEventListener("resize", clientResize);
+
+function sleep(time, exec) {
+    return new Promise((resolve) => setTimeout(resolve, time))
+}
+
+function createSnowFlakes() {
+    for (var i = 0; i < particlesOnScreen; i++) {
+        setTimeout(() => {
+            particlesArray.push({
+                x: Math.random() * w,
+                y: 0,
+                opacity: Math.random(),
+                speedX: random(-3, 3),
+                speedY: random(2, 3),
+                radius: random(0.5, 4.2),
+            })
+        }, i*50);
     }
 };
 
+function drawSnowFlakes() {
+    for (var i = 0; i < particlesArray.length; i++) {
+        var gradient = ctx.createRadialGradient(
+            particlesArray[i].x,
+            particlesArray[i].y,
+            0,
+            particlesArray[i].x,
+            particlesArray[i].y,
+            particlesArray[i].radius
+        );
+
+        gradient.addColorStop(0, "rgba(255, 255, 255," + particlesArray[i].opacity + ")");  // white
+        gradient.addColorStop(.8, "rgba(210, 236, 242," + particlesArray[i].opacity + ")");  // bluish
+        gradient.addColorStop(1, "rgba(237, 247, 249," + particlesArray[i].opacity + ")");   // lighter bluish
+
+        ctx.beginPath();
+        ctx.arc(
+            particlesArray[i].x,
+            particlesArray[i].y,
+            particlesArray[i].radius,
+            0,
+            Math.PI * 2,
+            false
+        );
+
+        ctx.fillStyle = gradient;
+        ctx.fill();
+    }
+};
+
+function moveSnowFlakes() {
+    for (var i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].x += particlesArray[i].speedX;
+        particlesArray[i].y += particlesArray[i].speedY;
+
+        if (particlesArray[i].y > h) {
+            particlesArray[i].x = Math.random() * w * 1.5;
+            particlesArray[i].y = -50;
+        }
+    }
+};
+
+function updateSnowFall() {
+    ctx.clearRect(0, 0, w, h);
+    drawSnowFlakes();
+    moveSnowFlakes();
+};
+
+setInterval(updateSnowFall, 20);

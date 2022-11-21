@@ -45,7 +45,7 @@ namespace SecretSanta.Controllers
         [HttpPost]
         [Route("generateSantas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         public IActionResult GenerateSantas([FromBody] List<Family> families)
         {
@@ -94,26 +94,28 @@ namespace SecretSanta.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("validateSantas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        public IActionResult ValidateSantas([FromBody] Dictionary<string, string> santas)
+        public IActionResult ValidateSantas()
         {
             var response = new ValidationDto();
             using (var db = new SantaContext())
             {
-                foreach (var santa in santas)
-                {
-                    response.Santas.Add(santa.Key);
-                    var thisSanta = db.Santas?.Find(Guid.Parse(santa.Value));
-                    if (thisSanta == null)
-                        return UnprocessableEntity("EI KLAPI");
-                    var symmetricEncryptDecrypt = new EncryptionFactory();
-                    var decryptedName = symmetricEncryptDecrypt.Decrypt(thisSanta.DesignatedPerson, thisSanta.IVBase64, EncryptionKey);
-                    response.Receivers.Add(decryptedName);
-                }
+                if (db.Santas != null)
+                    foreach (var santa in db.Santas.ToList())
+                    {
+                        if (santa == null)
+                            return UnprocessableEntity("Jõuluvana on vigane!");
+                        var symmetricEncryptDecrypt = new EncryptionFactory();
+                        var decryptedName = symmetricEncryptDecrypt.Decrypt(santa.DesignatedPerson, santa.IVBase64, EncryptionKey);
+                        response.Santas.Add(santa.Name);
+                        response.Receivers.Add(decryptedName);
+                    }
+                else
+                    return UnprocessableEntity("Jõuluvanasid pole!");
             }
             response.Santas = response.Santas.OrderBy(x => x).ToList();
             response.Receivers = response.Receivers.OrderBy(x => x).ToList();

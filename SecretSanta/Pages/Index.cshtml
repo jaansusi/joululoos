@@ -3,27 +3,20 @@
 @{
     ViewData["Title"] = "Leia isik";
 }
-<script type="text/javascript">
-    function getName() {
-        $.get({
-            url: '/api/home?code=' + document.getElementById('codeInput').value
-        }).then((res) => {
-            console.log(res);
-            document.getElementById('name').innerHTML = "Tere " + res.name + "!<br />Sina tõmbasid mütsist sildi nimega... <b>" + res.designatedPerson + "</b>";
-            document.getElementById('logs').innerHTML = "Kokku oled sa vaadanud oma nime lausa " + res.logEntriesCount + " korda, " + res.uniqueUserAgentCount + "-st erinevast kohast!";
-            }).catch((err) => {
-            document.getElementById('name').innerHTML = "Vigane kood";
-        });
-    }
-</script>
-<div class="input-group mb-3">
-    <div>
-        <input type="text" id="codeInput" class="form-control" placeholder="Sinu kood" />
-    </div>
-    <div>
-        <button class="btn btn-outline-primary" type="button" onclick="getName()">Kuva nimi</button>
-    </div>
-</div>
-<div id="name"></div>
-<div id="logs"></div>
 
+<canvas id="snow"></canvas>
+<div class="bg">
+<main role="main" class="centerer">
+    <div id="inputContainer">
+            <input type="text" id="codeInput" class="input-group-text" placeholder="Sinu kood" />
+    </div>
+    <div>
+        <button class="button" type="button" onclick="getName()">Kuva nimi</button>
+    </div>
+    <div id="responseContainer">
+        <div id="welcome"></div>
+        <div id="recipient"></div>
+        <div id="logs"></div>
+    </div>
+</main>
+</div>

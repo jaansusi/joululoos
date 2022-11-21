@@ -28,12 +28,9 @@
         });
     }
     function validateParticipants() {
-        let payload = JSON.parse(document.getElementById('validateInput').value);
-        $.post({
+        $.get({
             url: '/api/admin/validateSantas',
-            headers: {"Authorization": document.getElementById('secretInput').value},
-            data: JSON.stringify(payload),
-            contentType: 'application/json'
+            headers: {"Authorization": document.getElementById('secretInput').value}
         }).then((res) => {
             document.getElementById('results').innerHTML = JSON.stringify(res, null, 4);
         }).catch((err) => {

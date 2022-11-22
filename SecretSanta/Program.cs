@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SecretSanta;
 using SecretSanta.Other;
 
@@ -18,7 +19,7 @@ builder.Services.AddAuthentication(o => {
 #endregion
 
 var app = builder.Build();
-
+Console.WriteLine("DB location: " + app.Configuration.GetValue(typeof(string), "DbLocation")?.ToString() ?? string.Empty);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

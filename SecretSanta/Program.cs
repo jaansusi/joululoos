@@ -20,6 +20,9 @@ builder.Services.AddAuthentication(o => {
 
 var app = builder.Build();
 Console.WriteLine("App location: " + Directory.GetCurrentDirectory());
+string[] fileEntries = Directory.GetFiles(Directory.GetCurrentDirectory());
+foreach (string fileName in fileEntries)
+    Console.WriteLine(fileName);
 Console.WriteLine("DB location: " + app.Configuration.GetValue(typeof(string), "DbLocation")?.ToString() ?? string.Empty);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

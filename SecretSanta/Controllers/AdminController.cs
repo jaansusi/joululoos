@@ -125,6 +125,28 @@ namespace SecretSanta.Controllers
             return Ok(response);
         }
 
+
+        [HttpGet]
+        [Route("getMessages")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public IActionResult GetMessages()
+        {
+            List<string> messages = new List<string>();
+            using (var db = new SantaContext(Configuration))
+            {
+                if (db.Santas != null)
+                    foreach (Santa santa in db.Santas)
+                    {
+                        messages.Add("Tere " + santa.Name + "! On jõululoosi aeg, ava veebileht: https://santa.susid.ee?kood=" + santa.Id + ". Vajuta nuppu ja nimi ilmub ekraanile!");
+                    }
+                else
+                    return UnprocessableEntity();
+            }
+            return Ok(messages);
+        }
+
         // Recursive function, 
         private List<PersonGraphNode> FindHamiltonianPath(List<PersonGraphNode> graph, List<PersonGraphNode> path)
         {

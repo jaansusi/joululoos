@@ -2,42 +2,7 @@
 @{
     ViewData["Title"] = "Admin";
 }
-<script type="text/javascript">
-    function getFamilies() {
-        $.get({
-            url: '/api/admin/getSantas',
-            headers: {"Authorization": document.getElementById('secretInput').value}
-        }).then((res) => {
-            console.log(res);
-            document.getElementById('results').innerHTML = JSON.stringify(res, null, 4);
-        }).catch((err) => {
-            document.getElementById('results').innerHTML = JSON.stringify(err, null, 4);
-        });
-    }
-    function setFamilies() {
-        let payload = JSON.parse(document.getElementById('familyInput').value);
-        $.post({
-            url: '/api/admin/generateSantas',
-            headers: {"Authorization": document.getElementById('secretInput').value},
-            data: JSON.stringify(payload),
-            contentType: 'application/json'
-        }).then((res) => {
-            document.getElementById('results').innerHTML = JSON.stringify(res, null, 4);
-        }).catch((err) => {
-            document.getElementById('results').innerHTML = JSON.stringify(err, null, 4);
-        });
-    }
-    function validateParticipants() {
-        $.get({
-            url: '/api/admin/validateSantas',
-            headers: {"Authorization": document.getElementById('secretInput').value}
-        }).then((res) => {
-            document.getElementById('results').innerHTML = JSON.stringify(res, null, 4);
-        }).catch((err) => {
-            document.getElementById('results').innerHTML = JSON.stringify(err, null, 4);
-        });
-    }
-</script>
+
 <div style="max-width: 50%" class="input-group mb-3">
     <input type="text" id="secretInput" class="form-control" placeholder="Admin kood" />
     <div class="input-group-prepend">
@@ -51,9 +16,16 @@
     </div>
 </div>
 <div style="max-width: 50%" class="input-group mb-3">
-    <textarea id="validateInput" class="form-control" placeholder="Valideerimise json"></textarea>
     <div class="input-group-prepend">
         <button class="btn btn-outline-primary" onclick="validateParticipants()">Valideeri sala säntad</button>
     </div>
 </div>
+<div style="max-width: 50%" class="input-group mb-3">
+    <div class="input-group-prepend">
+        <button class="btn btn-outline-primary" onclick="getMessages()">Genereeri sõnumid</button>
+    </div>
+</div>
+
+
+<script src="~/js/admin.js" asp-append-version="true"></script>
 <pre id="results"></pre>

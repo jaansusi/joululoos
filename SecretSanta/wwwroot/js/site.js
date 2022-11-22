@@ -31,7 +31,6 @@ function getName() {
 }
 
 function playPause() {
-    console.log('ASD');
     if (audioPlaying) {
         document.getElementById('player').pause();
         document.getElementById('playButton').style.display = "initial";

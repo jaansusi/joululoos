@@ -19,6 +19,7 @@ builder.Services.AddAuthentication(o => {
 #endregion
 
 var app = builder.Build();
+Console.WriteLine("App location: " + Directory.GetCurrentDirectory());
 Console.WriteLine("DB location: " + app.Configuration.GetValue(typeof(string), "DbLocation")?.ToString() ?? string.Empty);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

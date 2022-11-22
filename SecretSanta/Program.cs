@@ -36,7 +36,7 @@ app.MapRazorPages();
 
 app.MapControllers();
 
-using (var db = new SantaContext())
+using (var db = new SantaContext(app.Configuration))
     db.Database.Migrate();
 
 app.Run();

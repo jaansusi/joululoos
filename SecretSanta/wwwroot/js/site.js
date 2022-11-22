@@ -1,4 +1,5 @@
 ﻿var snowActive = false;
+var audioPlaying = false;
 function getName() {
     $.get({
         url: '/api/home?code=' + document.getElementById('codeInput').value
@@ -19,9 +20,20 @@ function getName() {
             snowActive = true;
             createSnowFlakes();
         }
+        document.getElementById('player').play();
+        audioPlaying = true;
     }).catch((err) => {
         document.getElementById('welcome').innerHTML = "Vigane kood";
     });
+}
 
-
+function playPause() {
+    if (audioPlaying) {
+        document.getElementById('player').pause();
+        audioPlaying = false;
+    }
+    else {
+        document.getElementById('player').play();
+        audioPlaying = true;
+    }
 }

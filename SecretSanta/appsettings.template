@@ -1,4 +1,4 @@
-﻿{
+{
   "AdminSecret": "ZGYwYmJmOWMtODFiOS00MDQ3LTk5MmUtMGMyNGNkZmM2MWM1",
   "EncryptionKey": "WnE0dDd3OXokQyZGKUpATmNSZlVqWG4ycjV1OHgvQT8=",
   "Logging": {
@@ -8,5 +8,5 @@
     }
   },
   "AllowedHosts": "*",
-  "DbLocation": "c:/Users/jaans/Desktop/santa.db"
+  "DbLocation":  "/mnt/database/santa.db"
 }

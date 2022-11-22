@@ -9,9 +9,11 @@ namespace SecretSanta.Controllers
     public class HomeController : ControllerBase
     {
         private readonly string EncryptionKey;
+        private readonly IConfiguration Configuration;
 
         public HomeController(IConfiguration configuration)
         {
+            Configuration = configuration;
             EncryptionKey = configuration.GetValue(typeof(string), "EncryptionKey")?.ToString() ?? string.Empty;
             if (string.IsNullOrEmpty(EncryptionKey))
                 throw new Exception("EncryptionKey missing from config!");
@@ -22,7 +24,7 @@ namespace SecretSanta.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Get(Guid code)
         {
-            using (var db = new SantaContext())
+            using (var db = new SantaContext(Configuration))
             {
                 Santa? santa = db.Santas?.First(x => x.Id == code);
                 if (santa != null)

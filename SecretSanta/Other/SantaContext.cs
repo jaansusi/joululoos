@@ -10,10 +10,9 @@ namespace SecretSanta
 
         public string DbPath { get; set; }
 
-        public SantaContext()
+        public SantaContext(IConfiguration configuration)
         {
-            var folder = Directory.GetCurrentDirectory();
-            DbPath = $"{folder}{System.IO.Path.DirectorySeparatorChar}santa.db";
+            DbPath = configuration.GetValue(typeof(string), "DbLocation")?.ToString() ?? string.Empty;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

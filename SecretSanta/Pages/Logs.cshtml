@@ -1,12 +1,14 @@
 ﻿@page
 @using SecretSanta.Models
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 @model SecretSanta.Pages.LogsModel
 @{
     ViewData["Title"] = "Logs";
 }
 @{
     List<LogEntry> logs;
-    using (var db = new SantaContext())
+    using (var db = new SantaContext(Configuration))
     {
         logs = db.LogEntries?.ToList() ?? new List<LogEntry>();
         

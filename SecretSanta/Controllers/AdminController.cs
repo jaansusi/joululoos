@@ -20,11 +20,14 @@ namespace SecretSanta.Controllers
     {
         private readonly string AdminSecret;
         private readonly string EncryptionKey;
+        private readonly IConfiguration Configuration;
 
         public AdminController(IConfiguration configuration)
         {
+            Configuration = configuration;
             AdminSecret = configuration.GetValue(typeof(string), "AdminSecret")?.ToString() ?? string.Empty;
             EncryptionKey = configuration.GetValue(typeof(string), "EncryptionKey")?.ToString() ?? string.Empty;
+            
             if (string.IsNullOrEmpty(AdminSecret) || string.IsNullOrEmpty(EncryptionKey))
                 throw new Exception("AdminSecret or EncryptionKey missing from config!");
         }
@@ -35,7 +38,7 @@ namespace SecretSanta.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetSantas()
         {
-            using (var db = new SantaContext())
+            using (var db = new SantaContext(Configuration))
             {
                 var santas = db.Santas?.ToList() ?? new List<Santa>();
                 return Ok(santas);
@@ -50,7 +53,7 @@ namespace SecretSanta.Controllers
         public IActionResult GenerateSantas([FromBody] List<Family> families)
         {
             var response = new Dictionary<string, string>();
-            using (var db = new SantaContext())
+            using (var db = new SantaContext(Configuration))
             {
                 // Clean out old santas and logs
                 db.Santas?.RemoveRange(db.Santas);
@@ -102,7 +105,7 @@ namespace SecretSanta.Controllers
         public IActionResult ValidateSantas()
         {
             var response = new ValidationDto();
-            using (var db = new SantaContext())
+            using (var db = new SantaContext(Configuration))
             {
                 if (db.Santas != null)
                     foreach (var santa in db.Santas.ToList())

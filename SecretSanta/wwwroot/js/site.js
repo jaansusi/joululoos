@@ -44,3 +44,12 @@ function playPause() {
         audioPlaying = true;
     }
 }
+
+window.addEventListener("load", (event) => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const code = urlParams.get('kood');
+    if (code !== null) {
+        document.getElementById('codeInput').value = code;
+    }
+});

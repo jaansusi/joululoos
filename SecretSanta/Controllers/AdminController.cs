@@ -139,7 +139,7 @@ namespace SecretSanta.Controllers
                 if (db.Santas != null)
                     foreach (Santa santa in db.Santas)
                     {
-                        messages.Add("Tere " + santa.Name + "! On jõululoosi aeg, ava veebileht: https://santa.susid.ee/?kood=" + santa.Id + " Vajuta nuppu ja nimi ilmub ekraanile! Oma soove saad avaldada siin: https://bit.ly/soovid2022");
+                        messages.Add("Tere, " + santa.Name + "! On jõululoosi aeg, ava veebileht: https://santa.susid.ee/?kood=" + santa.Id + " Vajuta nuppu ja nimi ilmub ekraanile! Oma soove saad avaldada siin: https://bit.ly/soovid2022");
                     }
                 else
                     return UnprocessableEntity();

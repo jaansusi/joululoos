@@ -21,6 +21,9 @@ function getName() {
             createSnowFlakes();
         }
         document.getElementById('player').play();
+        setTimeout(() => {
+            document.getElementById('buttonContainer').style.opacity = 1;
+        }, 1000);
         audioPlaying = true;
     }).catch((err) => {
         document.getElementById('welcome').innerHTML = "Vigane kood";
@@ -28,12 +31,17 @@ function getName() {
 }
 
 function playPause() {
+    console.log('ASD');
     if (audioPlaying) {
         document.getElementById('player').pause();
+        document.getElementById('playButton').style.display = "initial";
+        document.getElementById('pauseButton').style.display = "none";
         audioPlaying = false;
     }
     else {
         document.getElementById('player').play();
+        document.getElementById('playButton').style.display = "none";
+        document.getElementById('pauseButton').style.display = "initial";
         audioPlaying = true;
     }
 }

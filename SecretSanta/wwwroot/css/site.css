@@ -131,3 +131,17 @@ canvas {
     width: 400px;
     border-radius: 10px;
 }
+
+#buttonContainer {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 30px;
+    opacity: 0;
+    box-shadow: inset 1px 1px 0px rgba(51, 0, 234, 0.25), inset 0 0 6px #3127a2, inset 0 80px 80px -40px #d3ccff, 1px 1px 3px rgba(255, 255, 255, 0.75);
+    transition-duration: 10s;
+}
+
+.hiddenButton {
+    display: none;
+}

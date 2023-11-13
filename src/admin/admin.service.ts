@@ -1,53 +1,63 @@
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
-import inputFamilies, { Families } from '../input';
+import inputFamilies, { Families } from '../input';
 
 @Injectable()
 export class AdminService {
-    private allParticipants = inputFamilies.map((family) => family.members.map((member) => member.name)).flat();
-    
+    private shuffledParticipants: string[] = [];
     public getSantas(): Families {
         return inputFamilies;
     }
 
     public generateSantas(): string[] {
-
-        return this.generateGraphPath(this.unbiasedShuffle(this.allParticipants));
+        // console.log('+++++++++++++');
+        const participants = this.getAllInputParticipants();
+        this.shuffledParticipants = this.unbiasedShuffle(participants);
+        const generatedPath = this.generateGraphPath(this.shuffledParticipants.map(x => x), 1);
+        if (generatedPath.length !== this.shuffledParticipants.length) {
+            return [];
+        }
+        return generatedPath;
     }
 
-    private generateGraphPath(remainingNodes: string[]): string[] {
-        const currentNode = remainingNodes[0];
-        const forbiddenPathsFromThisNode = this.generateForbiddenPaths(currentNode, remainingNodes);
+    private generateGraphPath(remainingNodes: string[], depth: number): string[] {
+        // console.log('-------------------');
+        // console.log(`Depth: ${depth}`);
+        const currentNode = remainingNodes.shift();
+        // console.log(`Current node: ${currentNode}`);
+        // console.log(`Remaining nodes: ${remainingNodes}`);
+        const forbiddenPathsFromThisNode = this.generateAllForbiddenPaths(currentNode, remainingNodes);
+        // console.log(`Forbidden paths: ${forbiddenPathsFromThisNode}`);
         const possiblePathsFromThisNode = remainingNodes.filter(x => !forbiddenPathsFromThisNode.includes(x));
-
-        if (remainingNodes.length === 1) {
-            // return [];
+        // console.log(`Possible paths: ${possiblePathsFromThisNode}`);
+        if (remainingNodes.length === 0) {
             // Reached the last node on the list, validate that it has a path to the first.
-            if (!forbiddenPathsFromThisNode.includes(this.allParticipants[0])) {
-                return [currentNode];
-            } else {
-                return [];
-            }
+            let firstNode = this.shuffledParticipants[0];
+            return !forbiddenPathsFromThisNode.includes(firstNode) ? [currentNode] : [];
         }
         for (let node of possiblePathsFromThisNode) {
-            const recursiveNodes = remainingNodes.filter(x => x !== node);
-            const path = this.generateGraphPath(recursiveNodes);
-            if (path.length === remainingNodes.length - 1) {
-                return [node, ...path];
+            // Move the node to the front of the list.
+            let recursiveNodes = remainingNodes.filter(x => x !== node);
+            recursiveNodes.unshift(node);
+            const path = this.generateGraphPath(recursiveNodes, depth + 1);
+            if (path.length === remainingNodes.length) {
+                return [currentNode, ...path];
             }
         }
         return [];
     }
 
-    private generateForbiddenPaths(node: string, remainingNodes: string[]): string[] {
+    private generateAllForbiddenPaths(node: string, remainingNodes: string[]): string[] {
         for (let family of inputFamilies) {
             if (family.members.map(x => x.name).includes(node)) {
-                // Find nodes that are in the same family as this node.
-                const othersinFamily = family.members.filter(member => member.name !== node).map(x => x.name);
-                // Filter out nodes that are in the same family as this node.
-                return remainingNodes.filter(remainingNode => !othersinFamily.includes(remainingNode) && remainingNode !== node);
+                return family.members.map(x => x.name);
             }
         }
+        return [];
+    }
+
+    private getAllInputParticipants(): string[] {
+        return inputFamilies.map((family) => family.members.map((member) => member.name)).flat();
     }
 
     private unbiasedShuffle(array: string[]): string[] {

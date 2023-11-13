@@ -22,42 +22,42 @@ export default [
             }
         ]
     },
-    // {
-    //     members: [
-    //         {
-    //             name: "Katre"
-    //         },
-    //         {
-    //             name: "Gristen"
-    //         },
-    //         {
-    //             name: "Nana"
-    //         },
-    //         {
-    //             name: "Eti"
-    //         }
-    //     ]
-    // },
-    // {
-    //     members: [
-    //         {
-    //             name: "Toomas"
-    //         },
-    //         {
-    //             name: "Helle"
-    //         },
-    //         {
-    //             name: "Emilie"
-    //         }
-    //     ]
-    // },
-    // {
-    //     members: [
-    //         {
-    //             name: "Villem"
-    //         }
-    //     ]
-    // },
+    {
+        members: [
+            {
+                name: "Katre"
+            },
+            {
+                name: "Gristen"
+            },
+            {
+                name: "Nana"
+            },
+            {
+                name: "Eti"
+            }
+        ]
+    },
+    {
+        members: [
+            {
+                name: "Toomas"
+            },
+            {
+                name: "Helle"
+            },
+            {
+                name: "Emilie"
+            }
+        ]
+    },
+    {
+        members: [
+            {
+                name: "Villem"
+            }
+        ]
+    },
     {
         members: [
             {

@@ -5,10 +5,7 @@ import inputFamilies, { Families } from '../input';
 @Injectable()
 export class AdminService {
     private shuffledParticipants: string[] = [];
-    public getSantas(): Families {
-        return inputFamilies;
-    }
-
+    
     public generateSantas(): string[] {
         // console.log('+++++++++++++');
         const participants = this.getAllInputParticipants();

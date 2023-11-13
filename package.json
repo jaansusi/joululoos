@@ -27,6 +27,7 @@
     "@nestjs/passport": "^10.0.2",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/sequelize": "^10.0.0",
+    "hbs": "^4.2.0",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
     "reflect-metadata": "^0.1.13",

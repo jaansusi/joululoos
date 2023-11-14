@@ -10,15 +10,23 @@ export class User extends Model {
     })
     id: number;
 
-    @Column
+    @Column({
+        unique: true,
+    })
     name: string;
 
-    @Column
+    @Column({
+        unique: true,
+    })
     email: string;
 
-    @Column
+    @Column({
+        unique: true,
+    })
     giftingTo: string;
 
-    @Column
-    salt: string;
+    @Column({
+        unique: true,
+    })
+    decryptionCode: string;
 }

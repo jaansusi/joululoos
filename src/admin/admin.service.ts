@@ -1,18 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
-import inputFamilies, { Families } from '../input';
+import inputFamilies, { Member } from '../input';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class AdminService {
     private shuffledParticipants: string[] = [];
-    
-    public generateSantas(): string[] {
+
+    constructor(
+        @InjectModel(User)
+        private userRepository: typeof User,
+    ) { }
+
+
+    public async generateSantas(): Promise<string[]> {
         // console.log('+++++++++++++');
         const participants = this.getAllInputParticipants();
         this.shuffledParticipants = this.unbiasedShuffle(participants);
         const generatedPath = this.generateGraphPath(this.shuffledParticipants.map(x => x), 1);
         if (generatedPath.length !== this.shuffledParticipants.length) {
             return [];
+        }
+        await this.userRepository.truncate();
+        for (let i = 0; i < generatedPath.length; i++) {
+            const nextIndex = i === generatedPath.length - 1 ? 0 : i + 1;
+            try {
+                let userInput = this.lookUpAdditionalInfo(generatedPath[i]);
+                this.userRepository.create({
+                    name: generatedPath[i],
+                    giftingTo: generatedPath[nextIndex],
+                    decryptionCode: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+                    ...userInput
+                });
+            } catch (e) {
+                console.log('--------------')
+                console.log(e);
+            }
         }
         return generatedPath;
     }
@@ -55,6 +78,16 @@ export class AdminService {
 
     private getAllInputParticipants(): string[] {
         return inputFamilies.map((family) => family.members.map((member) => member.name)).flat();
+    }
+
+    private lookUpAdditionalInfo(name: string): Member {
+        for (let family of inputFamilies) {
+            const memberIndex = family.members.map(x => x.name).indexOf(name);
+            if (memberIndex !== -1) {
+                return family.members[memberIndex];
+            }
+
+        }
     }
 
     private unbiasedShuffle(array: string[]): string[] {

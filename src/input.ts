@@ -1,9 +1,9 @@
-interface Member {
+export interface Member {
     name: string;
     email?: string;
 }
 
-interface Family {
+export interface Family {
     members: Member[];
 }
 

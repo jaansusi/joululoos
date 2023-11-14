@@ -1,21 +1,20 @@
 import { GoogleStrategy } from './auth/google.strategy';
 import { Module } from '@nestjs/common';
-import { AppController } from './index/app.controller';
-import { AppService } from './index/app.service';
+import { HomeController } from './home/home.controller';
+import { HomeService } from './home/home.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { UserModule } from './user/user.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { dataBaseConfig } from './database/database.config';
-import { LotteryController } from './lottery/lottery.controller';
-import { AdminController } from './admin/admin.controller';
-import { LotteryService } from './lottery/lottery.service';
-import { AdminService } from './admin/admin.service';
+import { AdminModule } from './admin/admin.module';
+import { AuthModule } from './auth/auth.module';
+import { User } from './user/entities/user.entity';
 
 @Module({
-  imports: [ConfigModule.forRoot(), UserModule, SequelizeModule.forRoot(dataBaseConfig)],
-  controllers: [AppController, AuthController, LotteryController, AdminController],
-  providers: [AppService, LotteryService, AdminService, AuthService, GoogleStrategy],
+  imports: [ConfigModule.forRoot(), UserModule, AdminModule, AuthModule, SequelizeModule.forRoot(dataBaseConfig), SequelizeModule.forFeature([User])],
+  controllers: [HomeController, AuthController],
+  providers: [HomeService, AuthService, GoogleStrategy],
 })
 export class AppModule { }

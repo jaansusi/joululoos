@@ -8,7 +8,7 @@ export class AdminController {
     constructor(private readonly adminService: AdminService) { }
 
     @Get('generate')
-    generateSantas(): string[] {
+    async generateSantas(): Promise<string[]> {
         return this.adminService.generateSantas();
     }
 }

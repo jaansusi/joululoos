@@ -6,6 +6,7 @@ Response page CSS
 Encrypt DB giftingTo column
 Admin - Secure endpoints (Google oauth?)
 Admin - Generate messages to send to people
+Move input data out from the input.ts file
 
 
 Google Calendar event download

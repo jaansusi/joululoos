@@ -54,7 +54,8 @@ export default [
     {
         members: [
             {
-                name: "Villem"
+                name: "Villem",
+                email: "villem.susi@gmail.com"
             }
         ]
     },

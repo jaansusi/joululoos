@@ -1,9 +1,15 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Render, Req } from '@nestjs/common';
 import { HomeService } from './home.service';
+import { Request } from 'express';
+import { InjectModel } from '@nestjs/sequelize';
+import { User } from 'src/user/entities/user.entity';
 
 @Controller()
 export class HomeController {
-  constructor(private readonly homeService: HomeService) {}
+  constructor(
+    private readonly homeService: HomeService,
+    @InjectModel(User) private userRepository: typeof User,
+  ) { }
 
   @Get()
   @Render('index')
@@ -13,8 +19,14 @@ export class HomeController {
 
   @Get('showResult')
   @Render('result')
-  showResult(obj: any) {
-    console.log(obj);
-    return { result: 'Hello world!' };
+  async showResult(@Req() request: Request) {
+    let response = await this.userRepository.findOne({ where: { decryptionCode: request.query.code } }).then(user => {
+      if (!user) {
+        return 'Seda koodi ei leitud süsteemist!';
+      } else {
+        return user.giftingTo;
+      }
+    });
+    return { result: response };
   }
 }

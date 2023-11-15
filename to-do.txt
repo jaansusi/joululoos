@@ -1,18 +1,21 @@
+Must-haves:
 Front page CSS
     Snow effects
 Response page CSS
     Music?
         With a delay?
+
+Nice-to-haves:
 Encrypt DB giftingTo column
 Admin - Secure endpoints (Google oauth?)
 Admin - Generate messages to send to people
 Move input data out from the input.ts file
 
-
+Wishful thinking:
+Accessed by table, record all requests for statistics
 Google Calendar event download
 Email reminder with the gift recipient (code) X amount of days before
     Include link to Google Doc
-Accessed by table, record all requests for statistics
 Add a public key for signing
     Enter private key on website to decrypt
         Decryption only in the browser, no sending the key to API

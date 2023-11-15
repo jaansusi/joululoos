@@ -7,10 +7,8 @@
 </head>
 
 <body>
-  {{ message }}
-  <br />
   <form action="/showResult" method="get">
-    Sisesta kood: <input type="text" id="code" name="code" />
+    Sisesta kood: <input type="text" id="code" name="code" value="{{prefill}}" />
     <button id="submit">Vaata</button>
   </form>
   Või logi sisse guugliga: <a href="/auth/google">Google</a>

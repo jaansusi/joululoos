@@ -17,3 +17,4 @@ Add a public key for signing
         Decryption only in the browser, no sending the key to API
     Allow download of encrypted string for decrypt outside of browser
 DigiDoc encryption!
+Nonce generation for the front page form

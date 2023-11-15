@@ -13,13 +13,16 @@ export class HomeController {
 
   @Get()
   @Render('index')
-  home() {
-    return { message: 'Hello world!' };
+  home(@Req() request: Request) {
+    return { prefill: request.query.code };
   }
 
   @Get('showResult')
   @Render('result')
   async showResult(@Req() request: Request) {
+    if (!request.query.code) {
+      return { result: 'Vigane päring!' };
+    }
     let response = await this.userRepository.findOne({ where: { decryptionCode: request.query.code } }).then(user => {
       if (!user) {
         return 'Seda koodi ei leitud süsteemist!';

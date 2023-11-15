@@ -3,11 +3,17 @@ Front page CSS
 Response page CSS
     Music?
         With a delay?
-Secure admin endpoints (Google oauth?)
 Encrypt DB giftingTo column
+Admin - Secure endpoints (Google oauth?)
+Admin - Generate messages to send to people
 
 
 Google Calendar event download
 Email reminder with the gift recipient (code) X amount of days before
     Include link to Google Doc
 Accessed by table, record all requests for statistics
+Add a public key for signing
+    Enter private key on website to decrypt
+        Decryption only in the browser, no sending the key to API
+    Allow download of encrypted string for decrypt outside of browser
+DigiDoc encryption!

@@ -18,3 +18,5 @@ Add a public key for signing
     Allow download of encrypted string for decrypt outside of browser
 DigiDoc encryption!
 Nonce generation for the front page form
+Add CORS to API
+Add "Show/hide password" button

@@ -8,7 +8,7 @@
 
 <body>
   <form action="/showResult" method="get">
-    Sisesta kood: <input type="text" id="code" name="code" value="{{prefill}}" />
+    Sisesta kood: <input id="code" name="code" value="{{prefill}}" type="{{inputType}}" />
     <button id="submit">Vaata</button>
   </form>
   Või logi sisse guugliga: <a href="/auth/google">Google</a>

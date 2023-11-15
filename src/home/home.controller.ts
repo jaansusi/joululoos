@@ -14,7 +14,10 @@ export class HomeController {
   @Get()
   @Render('index')
   home(@Req() request: Request) {
-    return { prefill: request.query.code };
+    if (request.query.code) {
+      return { inputType: 'password', prefill: request.query.code };
+    }
+    return { inputType: 'text' };
   }
 
   @Get('showResult')

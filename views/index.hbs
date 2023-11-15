@@ -9,9 +9,9 @@
 <body>
   {{ message }}
   <br />
-  <form action="showResult">
-    Sisesta kood: <input type="text" id="code" />
-    <button id="submit">Saada</button>
+  <form action="/showResult" method="get">
+    Sisesta kood: <input type="text" id="code" name="code" />
+    <button id="submit">Vaata</button>
   </form>
   Või logi sisse guugliga: <a href="/auth/google">Google</a>
 </body>

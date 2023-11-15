@@ -1,4 +1,3 @@
-Front page input for code
 Front page CSS
     Snow effects
 Response page CSS

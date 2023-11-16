@@ -5,6 +5,7 @@ var particlesArray = [];
 var w, h;
 w = canvas.width = window.innerWidth;
 h = canvas.height = window.innerHeight;
+let snowActive = false;
 
 function random(min, max) {
     return min + Math.random() * (max - min + 1);

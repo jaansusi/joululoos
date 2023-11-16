@@ -1,7 +1,10 @@
 function showResult() {
     document.getElementById("recipientHidden").style.display = "none";
     document.getElementById("recipient").style.display = "block";
-
-    if (!audioPlaying)
-        playPause();
+    if (!snowActive) {
+        snowActive = true;
+        createSnowFlakes();
+        if (!audioPlaying)
+            playPause();
+    }
 }

@@ -33,6 +33,6 @@ export class HomeController {
         return user.giftingTo;
       }
     });
-    return { result: response };
+    return { result: response, success: true };
   }
 }

@@ -4,21 +4,37 @@
 <head>
     <meta charset="utf-8" />
     <title>App</title>
-    {{#each css}}
-    <link rel="stylesheet" href="/css/{{this}}">
-    {{/each}}
-    {{#each js}}
-    <script src="/js/{{this}}"></script>
-    {{/each}}
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/audio.css">
 </head>
 
-<body>
-
-    <canvas id="snow"></canvas>
-    {{ result }}
-    <div id="buttonContainer">
-        <img id="playButton" onclick="playPause()" style="display: none;" src="~/images/play.png">
-        <img id="pauseButton" onclick="playPause()" src="~/images/pause.png">
+<body onclick="showResult();">
+    <script src="/js/snow.js"></script>
+    <script src="/js/result.js"></script>
+    <div class="bg">
+        <canvas id="snow"></canvas>
+        <main role="main" class="centerer text-center">
+            <div id="responseContainer">
+                <div id="welcome"></div>
+                <div id="recipientHidden">Vajuta siia, et kuvada nimi!</div>
+                <div id="recipient" style="display: none;">{{ result }}</div>
+            </div>
+            {{#if success}}
+            <div id="playButton" class="botón" onclick="playPause();">
+                <div class="fondo" x="0" y="0" width="200" height="200"></div>
+                <div class="icono" width="200" height="200">
+                    <div class="parte izquierda" x="0" y="0" width="200" height="200" fill="#fff"></div>
+                    <div class="parte derecha" x="0" y="0" width="200" height="200" fill="#fff"></div>
+                </div>
+                <div class="puntero"></div>
+            </div>
+            <audio hidden id="player" playsinline="">
+                <source src="audio/alliwantforxmasisu.mp3" type="audio/mpeg">
+            </audio>
+            <script src="/js/audio.js"></script>
+            {{/if}}
+        </main>
     </div>
 </body>
 

@@ -13,6 +13,8 @@ Move input data out from the input.ts file
 Move away from family-based restriction to person-based restrictions
 
 Wishful thinking:
+Facebook authentication
+Apple authentication
 Accessed by table, record all requests for statistics
 Google Calendar event download
 Email reminder with the gift recipient (code) X amount of days before

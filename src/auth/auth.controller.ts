@@ -14,7 +14,11 @@ export class AuthController {
     @UseGuards(GoogleOAuthGuard)
     @Render('result')
     async googleAuthRedirect(@Request() req) {
-        const result = await this.authService.getSecretWithGoogleLogin(req);
-        return { result: result };
+        try {
+            const result = await this.authService.getSecretWithGoogleLogin(req);
+            return { result: result, success: true };
+        } catch (error) {
+            return { result: error.message };
+        }
     }
 }

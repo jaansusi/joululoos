@@ -107,4 +107,10 @@ export class AdminService {
 
         return array;
     }
+
+    public validateSantas(): any {
+        let users = this.userRepository.findAll();
+        
+        return users;
+    }
 }

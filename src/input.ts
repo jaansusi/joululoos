@@ -35,6 +35,9 @@ export default [
             },
             {
                 name: "Eti"
+            },
+            {
+                name: "Mattias"
             }
         ]
     },
@@ -66,6 +69,13 @@ export default [
             },
             {
                 name: "Carmen"
+            }
+        ]
+    },
+    {
+        members: [
+            {
+                name: "Mattias"
             }
         ]
     }

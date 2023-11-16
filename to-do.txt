@@ -10,6 +10,7 @@ Encrypt DB giftingTo column
 Admin - Secure endpoints (Google oauth?)
 Admin - Generate messages to send to people
 Move input data out from the input.ts file
+Move away from family-based restriction to person-based restrictions
 
 Wishful thinking:
 Accessed by table, record all requests for statistics

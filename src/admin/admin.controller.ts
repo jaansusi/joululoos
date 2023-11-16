@@ -1,6 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { User } from 'src/user/entities/user.entity';
 
 
 @Controller('admin')
@@ -10,5 +9,10 @@ export class AdminController {
     @Get('generate')
     async generateSantas(): Promise<string[]> {
         return this.adminService.generateSantas();
+    }
+
+    @Get('validate')
+    async validateSantas(): Promise<any> {
+        return this.adminService.validateSantas();
     }
 }

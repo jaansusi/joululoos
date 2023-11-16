@@ -4,14 +4,31 @@
 <head>
   <meta charset="utf-8" />
   <title>App</title>
+
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/main.css">
 </head>
 
 <body>
-  <form action="/showResult" method="get">
-    Sisesta kood: <input id="code" name="code" value="{{prefill}}" type="{{inputType}}" />
-    <button id="submit">Vaata</button>
-  </form>
-  Või logi sisse guugliga: <a href="/auth/google">Google</a>
+
+
+  <div class="bg">
+    <main role="main" class="centerer">
+      <form action="/showResult" method="get">
+        <div id="inputContainer">
+          <input type="{{inputType}}" id="code" name="code" class="input-group-text" value="{{prefill}}"
+            placeholder="Sinu kood" />
+        </div>
+        <div>
+          <button class="button" id="submit">Kuva nimi</button>
+        </div>
+
+      </form>
+
+      Või logi sisse guugliga: <a href="/auth/google">Google</a>
+    </main>
+  </div>
+
 </body>
 
 </html>

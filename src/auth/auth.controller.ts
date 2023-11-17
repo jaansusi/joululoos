@@ -1,5 +1,5 @@
 import { GoogleOAuthGuard } from './google-oauth.guard';
-import { Controller, Get, Render, UseGuards, Req, Res } from '@nestjs/common';
+import { Controller, Get, Render, UseGuards, Req, Res, Redirect } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 
@@ -13,7 +13,7 @@ export class AuthController {
 
     @Get('google-redirect')
     @UseGuards(GoogleOAuthGuard)
-    @Render('result')
+    @Redirect('/showResult')
     async googleAuthRedirect(@Req() req: Request) {
         try {
             const result = await this.authService.getSecretWithGoogleLogin(req);

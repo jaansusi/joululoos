@@ -31,6 +31,9 @@ export class HomeController {
   @Get('showResult')
   @Render('result')
   async showResult(@Req() request: Request) {
+    if (request.cookies['santa_auth']) {
+      request.query.code = request.cookies['santa_auth'];
+    }
     if (!request.query.code) {
       return { result: 'Vigane päring!' };
     }

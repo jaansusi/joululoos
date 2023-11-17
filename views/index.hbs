@@ -25,7 +25,7 @@
 
       </form>
       <br />
-
+      {{#unless disableGoogleAuth}}
       <button class="gsi-material-button" onclick="location.href = '/auth/google'">
         <div class="gsi-material-button-state"></div>
         <div class="gsi-material-button-content-wrapper">
@@ -51,6 +51,7 @@
           <span style="display: none;">Logi sisse Google kontoga</span>
         </div>
       </button>
+      {{/unless}}
     </main>
   </div>
 

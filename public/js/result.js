@@ -4,7 +4,7 @@ function showResult() {
     if (!snowActive) {
         snowActive = true;
         createSnowFlakes();
-        if (!audioPlaying)
+        if (audioPlaying !== undefined && !audioPlaying)
             playPause();
     }
 }

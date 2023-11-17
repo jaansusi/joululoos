@@ -14,7 +14,8 @@ export default [
         members: [
             {
                 name: "Jaan",
-                email: "jaan.susi@gmail.com"
+                email: "jaan.susi@gmail.com",
+                isAdmin: true
             },
             {
                 name: "Kristiina",
@@ -35,9 +36,6 @@ export default [
             },
             {
                 name: "Eti"
-            },
-            {
-                name: "Mattias"
             }
         ]
     },

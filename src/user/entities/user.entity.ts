@@ -29,4 +29,9 @@ export class User extends Model {
         unique: true,
     })
     decryptionCode: string;
+
+    @Column({
+        defaultValue: false,
+    })
+    isAdmin: boolean;
 }

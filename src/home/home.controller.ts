@@ -14,6 +14,14 @@ export class HomeController {
   @Get()
   @Render('index')
   home(@Req() request: Request) {
+    if (request.cookies['santa_auth']) {
+      return {
+        prefill: request.cookies['santa_auth'],
+        inputType: 'password',
+        disableGoogleAuth: true
+      };
+
+    }
     if (request.query.code) {
       return { inputType: 'password', prefill: request.query.code };
     }
@@ -30,6 +38,7 @@ export class HomeController {
       if (!user) {
         return 'Seda koodi ei leitud süsteemist!';
       } else {
+        request.res.cookie('santa_auth', user.decryptionCode, { maxAge: 5184000000, httpOnly: true });
         return user.giftingTo;
       }
     });

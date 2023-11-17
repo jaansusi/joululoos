@@ -7,9 +7,9 @@ export class AuthService {
   constructor(
     @InjectModel(User)
     private userRepository: typeof User,
-) { }
+  ) { }
 
-  async getSecretWithGoogleLogin(req): Promise<string> {
+  async getSecretWithGoogleLogin(req): Promise<any> {
     if (!req.user) {
       return 'Vigane autentimine!';
     }
@@ -18,7 +18,10 @@ export class AuthService {
       if (!user) {
         return 'Selle e-mailiga kasutaja ei ole süsteemis, kasuta koodi!';
       } else {
-        return user.giftingTo;
+        return {
+          decryptionCode: user.decryptionCode,
+          giftingTo: user.giftingTo
+        };
       }
     });
   }

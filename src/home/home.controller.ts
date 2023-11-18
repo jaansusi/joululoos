@@ -13,17 +13,17 @@ export class HomeController {
 
   @Get()
   @Render('index')
-  home(@Req() request: Request) {
-    if (request.cookies['santa_auth']) {
-      return {
-        prefill: request.cookies['santa_auth'],
-        inputType: 'password',
-        disableGoogleAuth: true
-      };
-
-    }
+  async home(@Req() request: Request) {
+    if (request.cookies['santa_auth'])
+      request.query.code = request.cookies['santa_auth'];
     if (request.query.code) {
-      return { inputType: 'password', prefill: request.query.code };
+      let user = await this.userRepository.findOne({ where: { decryptionCode: request.cookies['santa_auth'] } });
+      if (user)
+        return {
+          inputType: 'password',
+          prefill: request.query.code,
+          isAdmin: user.isAdmin,
+        };
     }
     return { inputType: 'text' };
   }

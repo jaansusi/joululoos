@@ -108,9 +108,29 @@ export class AdminService {
         return array;
     }
 
-    public validateSantas(): any {
-        let users = this.userRepository.findAll();
-        
-        return users;
+    public async validateSantas(): Promise<any> {
+        const users = await this.userRepository.findAll();
+        let names = users.map(x => x.name).sort();
+        let designatedSantas = users.map(x => x.giftingTo).sort();
+        const allPeopleGiftToAUniquePerson = new Set(designatedSantas).size === users.length;
+        let allPeopleGiftToSomeoneNotInTheirFamily = true;
+        for (let user of users) {
+            let userFamily = inputFamilies.filter(x => x.members.map(y => y.name).includes(user.name))[0];
+            let userFamilyNames = userFamily.members.map(x => x.name);
+            if (userFamilyNames.includes(user.giftingTo)) {
+                allPeopleGiftToSomeoneNotInTheirFamily = false;
+                break;
+            }
+        }
+        const secretNameArray = users.map(x => x.name);
+        let response = {
+            namesAndSantasMatch: JSON.stringify(names) === JSON.stringify(designatedSantas),
+            allPeopleGiftToAUniquePerson: allPeopleGiftToAUniquePerson,
+            allPeopleGiftToSomeoneNotInTheirFamily: allPeopleGiftToSomeoneNotInTheirFamily,
+            usersIdsAndTheirDesignatedSantas: users.map(x => (secretNameArray.indexOf(x.name).toString() + '-' + secretNameArray.indexOf(x.giftingTo).toString())),
+            names: names,
+            designatedSantas: designatedSantas,
+        };
+        return response;
     }
 }

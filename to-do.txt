@@ -1,17 +1,12 @@
 Must-haves:
-Front page CSS
-    Snow effects
-Response page CSS
-    Music?
-        With a delay?
+???
 
 Nice-to-haves:
 Encrypt DB giftingTo column
-Admin - Secure endpoints (Google oauth?)
 Admin - Generate messages to send to people
 Move input data out from the input.ts file
 Move away from family-based restriction to person-based restrictions
-Cookie removal button
+Admin - Nicer validation page
 
 Wishful thinking:
 Facebook authentication

@@ -14,6 +14,10 @@
 <body>
   <div class="bg">
     <main role="main" class="centerer text-center">
+      {{#if isAdmin}}
+        <button onclick="location.href = '/admin'">Admin</button>
+        <br />
+      {{/if}}
       <form action="/showResult" method="get">
         <div id="inputContainer">
           <input type="{{inputType}}" id="code" name="code" class="input-group-text" value="{{prefill}}"
@@ -48,7 +52,7 @@
             </svg>
           </div>
           <span class="gsi-material-button-contents">Autendi Google kontoga</span>
-          <span style="display: none;">Logi sisse Google kontoga</span>
+          <span style="display: none;">Autendi Google kontoga</span>
         </div>
       </button>
       {{/unless}}

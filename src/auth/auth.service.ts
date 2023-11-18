@@ -9,20 +9,16 @@ export class AuthService {
     private userRepository: typeof User,
   ) { }
 
-  async getSecretWithGoogleLogin(req): Promise<any> {
+  async getUserWithGoogleLogin(req): Promise<User> {
     if (!req.user) {
-      return 'Vigane autentimine!';
+      return null;
     }
     console.log(req.user);
     return await this.userRepository.findOne({ where: { email: req.user.email } }).then(user => {
       if (!user) {
-        return 'Selle e-mailiga kasutaja ei ole süsteemis, kasuta koodi!';
-      } else {
-        return {
-          decryptionCode: user.decryptionCode,
-          giftingTo: user.giftingTo
-        };
+        return null;
       }
+      return user;
     });
   }
 }

@@ -14,13 +14,22 @@ export class AuthController {
     @Get('google-redirect')
     @UseGuards(GoogleOAuthGuard)
     @Redirect('/showResult')
-    async googleAuthRedirect(@Req() req: Request) {
+    async googleAuthRedirect(@Req() req: Request): Promise<any> {
         try {
-            const result = await this.authService.getSecretWithGoogleLogin(req);
-            req.res.cookie('santa_auth', result.decryptionCode, { maxAge: 5184000000, httpOnly: true });
-            return { result: result.giftingTo, success: true };
+            const user = await this.authService.getUserWithGoogleLogin(req);
+            req.res.cookie('santa_auth', user.decryptionCode, { maxAge: 5184000000, httpOnly: true });
+            req.res.cookie('santa_google', '1', { maxAge: 5184000000, httpOnly: true });
+            return { result: user.giftingTo, success: true };
         } catch (error) {
             return { result: error.message };
         }
+    }
+
+    @Get('logout')
+    @Redirect('/')
+    async logout(@Req() req: Request) {
+        req.res.clearCookie('santa_auth');
+        req.res.clearCookie('santa_google');
+        return { success: true };
     }
 }

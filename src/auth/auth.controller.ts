@@ -13,12 +13,12 @@ export class AuthController {
 
     @Get('google-redirect')
     @UseGuards(GoogleOAuthGuard)
-    @Redirect('/showResult')
+    @Redirect('/')
     async googleAuthRedirect(@Req() req: Request): Promise<any> {
         try {
             const user = await this.authService.getUserWithGoogleLogin(req);
-            req.res.cookie('santa_auth', user.decryptionCode, { maxAge: 5184000000, httpOnly: true });
-            req.res.cookie('santa_google', '1', { maxAge: 5184000000, httpOnly: true });
+            req.res.cookie('santa_auth', user.decryptionCode, { maxAge: 5184000000, httpOnly: false });
+            req.res.cookie('santa_auth_provider', 'google', { maxAge: 5184000000, httpOnly: false });
             return { result: user.giftingTo, success: true };
         } catch (error) {
             return { result: error.message };

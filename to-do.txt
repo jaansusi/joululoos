@@ -1,5 +1,5 @@
 Must-haves:
-???
+Figure out cold-start admin access
 
 Nice-to-haves:
 Encrypt DB giftingTo column

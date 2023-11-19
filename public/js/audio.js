@@ -5,7 +5,7 @@ function playPause() {
     audio.volume = 0.2;
 
     if (audioPlaying) {
-        const readPoem = confirm("Tere sõber! Ma märkasin, et sa parasjagu naudid seda imelist lauluviisikest! Võta hinga korraks sügavalt sisse ja välja ja mõtleme koos elu üle järele. Ma olen siin, et aidata ja kuulata, nii et palun ütle mulle, kuidas ma saan sind kõige paremini toetada. Enne kui lõpetame muusika nautimise, kas ma võin sulle pakkuda ühe vahva luuletuse?");
+        const readPoem = confirm("Tere sõber, siin sinu sõber, ChatGPT! Ma märkasin, et sa parasjagu naudid seda imelist lauluviisikest! Võta hinga korraks sügavalt sisse ja välja ja mõtleme koos elu üle järele. Ma olen siin, et aidata ja kuulata, nii et palun ütle mulle, kuidas ma saan sind kõige paremini toetada. Enne kui lõpetame muusika nautimise, kas ma võin sulle pakkuda ühe vahva luuletuse?");
         if (readPoem) {
             alert("Ma olen nii õnnelik, et sa seda soovid! Ma olen valmis sind toetama, kui sa tunned, et sul on raske. Ma olen siin, et aidata ja kuulata. Väike luuletuseke tuleb nüüd!");
         } else {
@@ -24,12 +24,12 @@ function playPause() {
             alert("Ma mõistan... Kui sa tunned, et sul on raske, siis ma olen siin, et aidata ja kuulata. Võid alati minuga rääkida, kui sul on tunne, et sul on raske. Ma olen siin, et aidata ja kuulata.");
         }
         alert("Nüüd ma lülitan muusika uuesti sisse, et saaksid seda nautida!");
-        alert("Oota, see ei kõla õigesti! Ma vabandan, ma pidin ju hoopis selle välja lülitama!");
+        alert("Ma vabandan, ma pidin ju hoopis selle välja lülitama!");
         const areYouSure = confirm("Kas sa oled ikka täiesti kindel, et sa ei taha muusikat välja lülitada?");
         if (areYouSure) {
             alert("Selge pilt, nagu soovid! Ma olen siin, et aidata ja kuulata.");
         } else {
-            const areYouReallySure = confirm("Okei, viimane võimalus, kas sa ei taha muusikat mitte välja lülitada?");
+            const areYouReallySure = confirm("Ma mõistan... Viimane võimalus, kas sa ei taha muusikat mitte välja lülitada?");
             if (areYouReallySure) {
                 var button = document.getElementById("playButton");
                 button.classList.remove('active')
@@ -39,9 +39,9 @@ function playPause() {
         }
     }
     else {
-        var button = document.getElementById("playButton");
-        button.classList.add('active');
+        document.getElementById("playButton").classList.add('active');
         document.getElementById('player').play();
+        document.getElementById('audioContainer').classList.remove('hidden');
         audioPlaying = true;
     }
 }

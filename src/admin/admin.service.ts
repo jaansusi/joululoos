@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
-import inputFamilies, { Member } from '../input';
+import getInputFamilies, { Member } from '../input';
 import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
@@ -14,7 +14,6 @@ export class AdminService {
 
 
     public async generateSantas(): Promise<string[]> {
-        // console.log('+++++++++++++');
         const participants = this.getAllInputParticipants();
         this.shuffledParticipants = this.unbiasedShuffle(participants);
         const generatedPath = this.generateGraphPath(this.shuffledParticipants.map(x => x), 1);
@@ -68,7 +67,7 @@ export class AdminService {
     }
 
     private generateAllForbiddenPaths(node: string, remainingNodes: string[]): string[] {
-        for (let family of inputFamilies) {
+        for (let family of getInputFamilies()) {
             if (family.members.map(x => x.name).includes(node)) {
                 return family.members.map(x => x.name);
             }
@@ -77,11 +76,11 @@ export class AdminService {
     }
 
     private getAllInputParticipants(): string[] {
-        return inputFamilies.map((family) => family.members.map((member) => member.name)).flat();
+        return getInputFamilies().map((family) => family.members.map((member) => member.name)).flat();
     }
 
     private lookUpAdditionalInfo(name: string): Member {
-        for (let family of inputFamilies) {
+        for (let family of getInputFamilies()) {
             const memberIndex = family.members.map(x => x.name).indexOf(name);
             if (memberIndex !== -1) {
                 return family.members[memberIndex];
@@ -115,7 +114,7 @@ export class AdminService {
         const allPeopleGiftToAUniquePerson = new Set(designatedSantas).size === users.length;
         let allPeopleGiftToSomeoneNotInTheirFamily = true;
         for (let user of users) {
-            let userFamily = inputFamilies.filter(x => x.members.map(y => y.name).includes(user.name))[0];
+            let userFamily = getInputFamilies().filter(x => x.members.map(y => y.name).includes(user.name))[0];
             let userFamilyNames = userFamily.members.map(x => x.name);
             if (userFamilyNames.includes(user.giftingTo)) {
                 allPeopleGiftToSomeoneNotInTheirFamily = false;

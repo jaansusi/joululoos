@@ -15,9 +15,9 @@ describe('AdminService', () => {
     });
 
     describe('validate the santa list', () => {
-        it('santas should have all participants', () => {
+        it('santas should have all participants', async () => {
             for (let i = 0; i < cycleCount; i++) {
-                const santas = adminService.generateSantas();
+                const santas = await adminService.generateSantas();
                 for (let family of familiesInput) {
                     for (let member of family.members) {
                         expect(santas.includes(member.name)).toBe(true);
@@ -26,7 +26,7 @@ describe('AdminService', () => {
             }
         });
 
-        it('no blocked connections', () => {
+        it('no blocked connections', async () => {
             // Generate blocklist for each person in the list.
             let blocklist = {};
             for (let family of familiesInput) {
@@ -35,7 +35,7 @@ describe('AdminService', () => {
                 }
             }
             for (let i = 0; i < cycleCount; i++) {
-                const santas = adminService.generateSantas();
+                const santas = await adminService.generateSantas();
                 for (let j = 0; j < santas.length; j++) {
                     const prevIndex = j === 0 ? santas.length - 1 : j - 1;
                     const nextIndex = j === santas.length - 1 ? 0 : j + 1;

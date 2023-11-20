@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>App</title>
+
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+
+<body>
+    <script>
+        function generateSantas() {
+            let a = confirm("OLED KINDEL?");
+            if (a)
+                location.href = '/admin/generate';
+        }
+    </script>
+    {{!-- <main role="main" class="centerer text-center"> --}}
+        {{#if isAdmin}}
+        Validation data:<br />
+        <pre>{{ result }}</pre>
+        <button onclick="generateSantas()">Generate Santas (DESTRUCTIVE ACTION!)</button>
+        {{/if}}
+    {{!-- </main> --}}
+
+</body>
+
+</html>

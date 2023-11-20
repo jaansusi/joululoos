@@ -1,21 +1,20 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# Base image
+FROM node:18
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
+# Create app directory
+WORKDIR /usr/src/app
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["SecretSanta/SecretSanta.csproj", "SecretSanta/"]
-RUN dotnet restore "SecretSanta/SecretSanta.csproj"
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
+
+# Install app dependencies
+RUN npm install
+
+# Bundle app source
 COPY . .
-WORKDIR "/src/SecretSanta"
-RUN dotnet build "SecretSanta.csproj" -c Release -o /app/build
 
-FROM build AS publish
-RUN dotnet publish "SecretSanta.csproj" -c Release -o /app/publish
+# Creates a "dist" folder with the production build
+RUN npm run build
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SecretSanta.dll"]
+# Start the server using the production build
+CMD [ "node", "dist/main.js" ]

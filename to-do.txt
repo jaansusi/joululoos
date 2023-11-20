@@ -1,0 +1,23 @@
+Must-haves:
+
+Nice-to-haves:
+Encrypt DB giftingTo column
+Admin - Generate messages to send to people
+Move away from family-based restriction to person-based restrictions
+Admin - Nicer validation page
+Add "Show/hide password" button
+
+Wishful thinking:
+Add CORS to API
+Facebook authentication
+Apple authentication
+Accessed by table, record all requests for statistics
+Google Calendar event download
+Email reminder with the gift recipient (code) X amount of days before
+    Include link to Google Doc
+Add a public key for signing
+    Enter private key on website to decrypt
+        Decryption only in the browser, no sending the key to API
+    Allow download of encrypted string for decrypt outside of browser
+DigiDoc encryption!
+Nonce generation for the front page form

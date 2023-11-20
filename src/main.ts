@@ -13,6 +13,9 @@ async function bootstrap() {
 
   app.use(cookieParser(process.env.COOKIE_SECRET));
 
-  await app.listen(3000);
+  console.log('Starting up...')
+  console.log('Node env', process.env.NODE_ENV);
+  console.log('Host', process.env.HOST);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

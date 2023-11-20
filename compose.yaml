@@ -13,4 +13,7 @@ services:
       - GOOGLE_CLIENT_ID=776341974717-8m6k34304p6vitrl711i71gcdvqu8od2.apps.googleusercontent.com
       - GOOGLE_CLIENT_SECRET=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
       - COOKIE_SECRET=1234567890
-      - INPUT_FILE_PATH=/Users/jaan/Desktop/projects/secretsanta/input.json
+      - INPUT_FILE_PATH=/input.json
+    volumes:
+      - ./Users/jaan/Desktop/projects/secretsanta/input.json:/input.json
+      - ./.db:/db

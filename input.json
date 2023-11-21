@@ -15,29 +15,34 @@
     {
         "members": [
             {
-                "name": "Katre"
+                "name": "Katre",
+                "email": "katrekikkas@gmail.com"
             },
             {
-                "name": "Gristen"
+                "name": "Gristen",
+                "email": "gristen.smirnov@gmail.com"
             },
             {
                 "name": "Nana"
             },
             {
-                "name": "Eti"
+                "name": "Eti",
+                "email": "ethel.susi@gmail.com"
             }
         ]
     },
     {
         "members": [
             {
-                "name": "Toomas"
+                "name": "Toomas",
+                "email": "toomas.susi@gmail.com"
             },
             {
                 "name": "Helle"
             },
             {
-                "name": "Emilie"
+                "name": "Emilie",
+                "email": "emilie5051@gmail.com"
             }
         ]
     },

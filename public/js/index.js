@@ -41,7 +41,7 @@ function submitCode() {
         } else {
             document.getElementById('preRecipientText').classList.remove('hidden');
             document.getElementById('inputContainer').classList.add('hidden');
-            document.getElementById('logoutContainer').classList.remove('hidden');
+            document.getElementById('logoutContainer').classList.add('hidden');
             document.getElementById('welcome').innerHTML = 'Tere, ' + res.name + '!';
             document.getElementById('recipient').innerHTML = res.giftingTo;
             if (!snowActive) {

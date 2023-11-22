@@ -35,6 +35,8 @@ function playPause() {
                 button.classList.remove('active')
                 document.getElementById('player').pause();
                 audioPlaying = false;
+
+                document.getElementById('logoutContainer').classList.remove('hidden');
             }
         }
     }

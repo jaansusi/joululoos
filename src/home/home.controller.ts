@@ -20,7 +20,7 @@ export class HomeController {
       let user = await this.userRepository.findOne({ where: { decryptionCode: request.cookies['santa_auth'] } });
       if (user)
         return {
-          inputType: 'password',
+          inputType: 'hidden',
           prefill: request.query.code,
           isAdmin: user.isAdmin,
           loggedIn: request.cookies['santa_auth'] !== undefined,

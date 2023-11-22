@@ -23,7 +23,8 @@
                 "email": "gristen.smirnov@gmail.com"
             },
             {
-                "name": "Nana"
+                "name": "Nana",
+                "email": "eneeha@gmail.com"
             },
             {
                 "name": "Eti",
@@ -57,17 +58,20 @@
     {
         "members": [
             {
-                "name": "Rasmus"
+                "name": "Rasmus",
+                "email": "rasmussusi@gmail.com"
             },
             {
-                "name": "Carmen"
+                "name": "Carmen",
+                "email": "carmenraak@gmail.com"
             }
         ]
     },
     {
         "members": [
             {
-                "name": "Mattias"
+                "name": "Mattias",
+                "email": "mattias.sare@gmail.com"
             }
         ]
     }

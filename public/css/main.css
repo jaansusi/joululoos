@@ -33,11 +33,6 @@ body {
 
     position: relative;
     overflow: visible;
-    /* IE9 & 10 */
-    -webkit-transition: 500ms linear;
-    -moz-transition: 500ms linear;
-    -o-transition: 500ms linear;
-    transition: 500ms linear;
 }
 
 .button::before {

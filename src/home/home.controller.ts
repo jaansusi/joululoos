@@ -17,16 +17,20 @@ export class HomeController {
     if (request.query.code === undefined && request.cookies['santa_auth'])
       request.query.code = request.cookies['santa_auth'];
     if (request.query.code) {
-      let user = await this.userRepository.findOne({ where: { decryptionCode: request.cookies['santa_auth'] } });
-      if (user)
+      let user = await this.userRepository.findOne({ where: { decryptionCode: request.query.code } });
+      if (user) {
+        request.res.cookie('santa_auth', user.decryptionCode, { maxAge: 5184000000, httpOnly: false });
         return {
           inputType: 'hidden',
           prefill: request.query.code,
           isAdmin: user.isAdmin,
-          loggedIn: request.cookies['santa_auth'] !== undefined,
+          loggedIn: true,
         };
+      }
+      else
+        return { inputType: 'text', error: 'Vigane kood!' };
     }
-    return { inputType: 'text' };
+    return { inputType: 'text', };
   }
 
   @Post('result')

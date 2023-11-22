@@ -125,6 +125,10 @@ canvas {
     align-items: center;
 }
 
+#codeInput {
+    margin: auto;
+}
+
 #responseContainer {
     margin-top: 5em;
     padding-top: 2.5em;

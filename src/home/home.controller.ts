@@ -30,7 +30,6 @@ export class HomeController {
   }
 
   @Post('result')
-  // @Render('result')
   async showResult(@Req() request: Request, @Body() body: any) {
     if (request.cookies['santa_auth']) {
       request.query.code = request.cookies['santa_auth'];

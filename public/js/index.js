@@ -1,10 +1,3 @@
-addEventListener("load", (event) => {
-    if (getCookie('santa_auth') !== null) {
-        document.getElementById('logoutContainer').classList.remove('hidden');
-    }
-});
-
-
 function getCookie(name) {
     var dc = document.cookie;
     var prefix = name + "=";
@@ -21,6 +14,10 @@ function getCookie(name) {
         }
     }
     return decodeURI(dc.substring(begin + prefix.length, end));
+}
+
+if (getCookie('santa_auth') !== null) {
+    document.getElementById('logoutContainer').classList.remove('hidden');
 }
 
 function submitCode() {

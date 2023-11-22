@@ -25,6 +25,9 @@ export class AdminService {
             const nextIndex = i === generatedPath.length - 1 ? 0 : i + 1;
             try {
                 let userInput = this.lookUpAdditionalInfo(generatedPath[i]);
+                // Remove dots and spaces from email. Google sometimes leaves dots in, sometimes not.
+                if (userInput.email)
+                    userInput.email = userInput.email.toLowerCase().replace(/\./g, '').replace(/\s/g, '');
                 this.userRepository.create({
                     name: generatedPath[i],
                     giftingTo: generatedPath[nextIndex],

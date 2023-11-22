@@ -14,7 +14,8 @@ export class AuthService {
       return null;
     }
     console.log(req.user);
-    return await this.userRepository.findOne({ where: { email: req.user.email } }).then(user => {
+    // Remove dots and spaces from email. Google sometimes leaves dots in, sometimes not.
+    return await this.userRepository.findOne({ where: { email: req.user.email.replace(/\./g, '') } }).then(user => {
       if (!user) {
         return null;
       }

@@ -1,5 +1,6 @@
 Must-haves:
 
+
 Nice-to-haves:
 Encrypt DB giftingTo column
 Admin - Generate messages to send to people
@@ -21,3 +22,4 @@ Add a public key for signing
     Allow download of encrypted string for decrypt outside of browser
 DigiDoc encryption!
 Nonce generation for the front page form
+ChatGPT integration

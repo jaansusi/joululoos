@@ -20,14 +20,14 @@ Source code is available in [Github - https://github.com/jaansusi/secretsanta](h
 
 1. Install the dependencies:
     ```sh
-    npm install
+    yarn
     ```
 
 2. Create a `.env` file based on the `.env.template` and fill in the required environment variables.
 
 3. Run application in watch mode
     ```sh
-    npm run start:dev
+    yarn start:dev
     ```
 
 4. Navigate to [http://localhost:3000](http://localhost:3000)
@@ -48,17 +48,17 @@ Source code is available in [Github - https://github.com/jaansusi/secretsanta](h
 
 1. Install the dependencies:
     ```sh
-    npm install
+    yarn
     ```
 
 2. Build the project:
     ```sh
-    npm run build
+    yarn build
     ```
 
 2. Start the application:
     ```sh
-    npm start:prod
+    yarn start:prod
     ```
 
 3. The application will be available at [http://localhost:3000](http://localhost:3000)

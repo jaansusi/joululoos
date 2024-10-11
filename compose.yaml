@@ -15,5 +15,5 @@ services:
       - COOKIE_SECRET=${COOKIE_SECRET}
       - INPUT_FILE_PATH=/input.json
     volumes:
-      - /Users/jaan/Desktop/projects/secretsanta/input.json:/input.json
+      - ./input.json:/input.json
       - ./.db/:/usr/src/app/.db/

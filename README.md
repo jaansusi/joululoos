@@ -42,6 +42,7 @@ This project uses a SQLite database and supports Docker for containerization.
 
 1. Build the project:
     ```sh
+    npm run install
     npm run build
     ```
 

@@ -12,22 +12,27 @@ This project uses a SQLite database and supports Docker for containerization.
 - [Scripts](#scripts)
 - [License](#license)
 
-## Installation
+## Source code
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/jaansusi/secretsanta.git
-    cd secretsanta
-    ```
+Source code is available in [Github - https://github.com/jaansusi/secretsanta](https://github.com/jaansusi/secretsanta)
 
-2. Install the dependencies:
+## Run in development mode
+
+1. Install the dependencies:
     ```sh
     npm install
     ```
 
-3. Create a `.env` file based on the `.env.template` and fill in the required environment variables.
+2. Create a `.env` file based on the `.env.template` and fill in the required environment variables.
 
-## Running the Application
+3. Run application in watch mode
+    ```sh
+    npm run start:dev
+    ```
+
+4. Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Running the Application in production mode
 
 ### Using Docker
 
@@ -36,22 +41,27 @@ This project uses a SQLite database and supports Docker for containerization.
     docker-compose up
     ```
 
-2. The application will be available at `http://localhost`.
+2. The application will be available at [http://localhost](http://localhost)
 
 ### Without Docker
 
-1. Build the project:
+
+1. Install the dependencies:
     ```sh
-    npm run install
+    npm install
+    ```
+
+2. Build the project:
+    ```sh
     npm run build
     ```
 
 2. Start the application:
     ```sh
-    npm start
+    npm start:prod
     ```
 
-3. The application will be available at `http://localhost:3000`.
+3. The application will be available at [http://localhost:3000](http://localhost:3000)
 
 ## Environment Variables
 

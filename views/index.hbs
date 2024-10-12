@@ -23,6 +23,13 @@
   <canvas id="snow"></canvas>
   <div class="bg">
     <main role="main" class="centerer text-center">
+      {{#if isAdmin}}
+      <div class="adminContainer">
+        <div class="adminButtonContainer">
+          <button class="button" onclick="location.href = '/admin'">Admin</button>
+        </div>
+      </div>
+      {{/if}}
       <div class="hidden" id="responseContainer">
         <div id="welcome"></div>
         <div id="preRecipientText">Sina tõmbasid loosiga nime:

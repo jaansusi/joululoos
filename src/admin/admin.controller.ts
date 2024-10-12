@@ -20,7 +20,7 @@ export class AdminController {
             let user = await this.userRepository.findOne({ where: { decryptionCode: auth } });
             if (user && user.isAdmin) {
                 const validation = await this.adminService.validateSantas();
-                return { info: 'Admin page', isAdmin: true, result: JSON.stringify(validation, null, 4) };
+                return { info: 'Admin page', isAdmin: true, validationResult: validation };
             }
         }
         return { info: 'Admin page' };

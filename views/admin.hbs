@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/admin.css">
 </head>
 
 <body>
@@ -21,9 +22,31 @@
     </script>
     {{!-- <main role="main" class="centerer text-center"> --}}
         {{#if isAdmin}}
-        Validation data:<br />
-        <pre>{{ result }}</pre>
-        <button onclick="generateSantas()">Generate Santas (DESTRUCTIVE ACTION!)</button>
+        
+        <div class="adminContainer">
+            <div class="adminButtonContainer">
+                <button class="button" onclick="location.href = '/'">Home</button>
+            </div>
+            <br />
+            <button onclick="generateSantas()">Generate Santas (DESTRUCTIVE ACTION!)</button>
+            <br />
+            <br />
+            {{#with validationResult}}
+            Names and santas match: {{namesAndSantasMatch}}
+            <br />
+            All people gift to a unique person: {{allPeopleGiftToAUniquePerson}}
+            <br />
+            All people gift to someone not in their family: {{allPeopleGiftToSomeoneNotInTheirFamily}}
+            <br />
+            User ids and their designated santas: {{usersIdsAndTheirDesignatedSantas}}
+            <br />
+            Names of gifters: &nbsp;{{names}}
+            <br />
+            Names of giftees: {{designatedSantas}}
+            {{/with}}
+        </div>
+
+        
         {{/if}}
     {{!-- </main> --}}
 

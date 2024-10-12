@@ -2,14 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
 import getInputFamilies, { Member } from '../input';
 import { InjectModel } from '@nestjs/sequelize';
+import { EncryptionService, EncryptionStrategy } from 'src/encryption/encryption.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AdminService {
     private shuffledParticipants: string[] = [];
 
     constructor(
-        @InjectModel(User)
-        private userRepository: typeof User,
+        private userService: UserService,
+        private encriptionService: EncryptionService
     ) { }
 
 
@@ -20,7 +22,7 @@ export class AdminService {
         if (generatedPath.length !== this.shuffledParticipants.length) {
             return [];
         }
-        await this.userRepository.truncate();
+        await this.userService.truncate();
         for (let i = 0; i < generatedPath.length; i++) {
             const nextIndex = i === generatedPath.length - 1 ? 0 : i + 1;
             try {
@@ -28,12 +30,14 @@ export class AdminService {
                 // Remove dots and spaces from email. Google sometimes leaves dots in, sometimes not.
                 if (userInput.email)
                     userInput.email = userInput.email.toLowerCase().replace(/\./g, '').replace(/\s/g, '');
-                this.userRepository.create({
+                let user = new User({
                     name: generatedPath[i],
-                    giftingTo: generatedPath[nextIndex],
                     decryptionCode: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
                     ...userInput
                 });
+                let giftingTo = await this.encriptionService.encryptGiftingTo(user, generatedPath[nextIndex]);
+                user.giftingTo = giftingTo;
+                await this.userService.createUser(user);
             } catch (e) {
                 console.log('--------------')
                 console.log(e);
@@ -111,7 +115,7 @@ export class AdminService {
     }
 
     public async validateSantas(): Promise<any> {
-        const users = await this.userRepository.findAll();
+        const users = await this.userService.findAll();
         let names = users.map(x => x.name).sort();
         let designatedSantas = users.map(x => x.giftingTo).sort();
         const allPeopleGiftToAUniquePerson = new Set(designatedSantas).size === users.length;

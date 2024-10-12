@@ -28,7 +28,7 @@ function submitCode() {
         },
         redirect: "follow",
         body: JSON.stringify({
-            code: document.getElementById('codeInput').value
+            code: document.getElementById('userCode').value
         }),
     }).then(res => res.json()).then(res => {
         document.getElementById('responseContainer').classList.remove('hidden');
@@ -53,3 +53,17 @@ function submitCode() {
         }
     });
 }
+
+window.addEventListener("load", (event) => {
+    const togglePassword = document.querySelector('#toggleUserCodeVisibility');
+
+    togglePassword.addEventListener('click', function () {
+        const password = document.querySelector('#userCode');
+
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+
+        this.querySelector('i').classList.toggle('bi-eye');
+        this.querySelector('i').classList.toggle('bi-eye-slash');
+    });
+});

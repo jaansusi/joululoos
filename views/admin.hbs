@@ -13,43 +13,74 @@
 </head>
 
 <body>
-    <script>
-        function generateSantas() {
-            let a = confirm("OLED KINDEL?");
-            if (a)
-                location.href = '/admin/generate';
-        }
-    </script>
-    {{!-- <main role="main" class="centerer text-center"> --}}
+
+
+    <main role="main" class="text-center">
         {{#if isAdmin}}
-        
+
         <div class="adminContainer">
             <div class="adminButtonContainer">
-                <button class="button" onclick="location.href = '/'">Home</button>
+                <button class="btn btn-primary" onclick="location.href = '/'">Home</button>
             </div>
-            <br />
-            <button onclick="generateSantas()">Generate Santas (DESTRUCTIVE ACTION!)</button>
-            <br />
-            <br />
-            {{#with validationResult}}
-            Names and santas match: {{namesAndSantasMatch}}
-            <br />
-            All people gift to a unique person: {{allPeopleGiftToAUniquePerson}}
-            <br />
-            All people gift to someone not in their family: {{allPeopleGiftToSomeoneNotInTheirFamily}}
-            <br />
-            User ids and their designated santas: {{usersIdsAndTheirDesignatedSantas}}
-            <br />
-            Names of gifters: &nbsp;{{names}}
-            <br />
-            Names of giftees: {{designatedSantas}}
-            {{/with}}
+
+            <table class="table admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Strategy</th>
+                        <th>Restrictions</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each users}}
+
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{name}}</td>
+                        <td>{{email}}</td>
+                        <td>{{encryptionStrategy}}</td>
+                        <td>{{restrictions}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm">Edit</button>
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </td>
+                    </tr>
+
+                    {{/each}}
+                </tbody>
+            </table>
+            <div class="admin-actions">
+                <button class="btn btn-success" onclick="generateSantas()">Generate Santas</button>
+            </div>
+            <div class="validation-container">
+                <div class="validation-header">Validation Results</div>
+                <div class="validation-item {{#if validationResult.namesAndSantasMatch}}success{{else}}failure{{/if}}">
+                    <span>Names and Santas Match:</span>
+                    {{#if validationResult.namesAndSantasMatch}}Yes{{else}}No{{/if}}
+                </div>
+                <div
+                    class="validation-item {{#if validationResult.allPeopleGiftToAUniquePerson}}success{{else}}failure{{/if}}">
+                    <span>All People Gift to a Unique Person:</span>
+                    {{#if validationResult.allPeopleGiftToAUniquePerson}}Yes{{else}}No{{/if}}
+                </div>
+                <div
+                    class="validation-item {{#if validationResult.allPeopleGiftToSomeoneNotInTheirFamily}}success{{else}}failure{{/if}}">
+                    <span>All People Gift to Someone Not in Their Family:</span>
+                    {{#if validationResult.allPeopleGiftToSomeoneNotInTheirFamily}}Yes{{else}}No{{/if}}
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="alert alert-warning" role="alert">
+            You do not have admin privileges.
         </div>
 
-        
         {{/if}}
-    {{!-- </main> --}}
-
+    </main>
+    <script src="/js/admin.js"></script>
 </body>
 
 </html>

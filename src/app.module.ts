@@ -13,7 +13,14 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './user/entities/user.entity';
 
 @Module({
-  imports: [ConfigModule.forRoot(), UserModule, AdminModule, AuthModule, SequelizeModule.forRoot(dataBaseConfig), SequelizeModule.forFeature([User])],
+  imports: [
+    ConfigModule.forRoot(), 
+    UserModule, 
+    AdminModule, 
+    AuthModule, 
+    SequelizeModule.forRootAsync(dataBaseConfig), 
+    SequelizeModule.forFeature([User])
+  ],
   controllers: [HomeController, AuthController],
   providers: [HomeService, AuthService, GoogleStrategy],
 })

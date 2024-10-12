@@ -43,6 +43,11 @@ Source code is available in [Github - https://github.com/jaansusi/secretsanta](h
 
 2. The application will be available at [http://localhost](http://localhost)
 
+3. Build and run only the database Docker container
+    ```sh
+    docker-compose --env-file .env -f ./infra/compose.yaml up
+    ```
+
 ### Without Docker
 
 

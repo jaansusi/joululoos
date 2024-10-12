@@ -51,7 +51,8 @@
         "members": [
             {
                 "name": "Villem",
-                "email": "villem.susi@gmail.com"
+                "email": "villem.susi@gmail.com",
+                "isAdmin": true
             }
         ]
     },

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
 import getInputFamilies, { Member } from '../input';
 import { InjectModel } from '@nestjs/sequelize';
+import { exec } from "child_process";
 
 @Injectable()
 export class AdminService {
@@ -33,6 +34,27 @@ export class AdminService {
                     giftingTo: generatedPath[nextIndex],
                     decryptionCode: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
                     ...userInput
+                });
+                console.log("-------............--------------")
+
+                await new Promise((resolve, reject) => {
+                    exec("bash ./infra/encrypt.sh 50011021417 " + generatedPath[i] + " " + generatedPath[nextIndex], function(
+                        error,
+                        stdout,
+                        stderr
+                    ) {
+                        console.log('Running Athena...');
+                        console.log('stdout: ' + stdout);
+                        console.log('stderr: ' + stderr);
+                        if (error !== null) {
+                            console.log('exec error: ' + error);
+                            // Reject if there is an error:
+                            return reject(error);
+                        }
+                
+                        // Otherwise resolve the promise:
+                        return resolve(null);
+                    });
                 });
             } catch (e) {
                 console.log('--------------')

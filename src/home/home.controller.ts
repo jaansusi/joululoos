@@ -21,7 +21,7 @@ export class HomeController {
       if (user) {
         request.res.cookie('santa_auth', user.decryptionCode, { maxAge: 5184000000, httpOnly: false });
         return {
-          inputType: 'hidden',
+          inputType: 'password',
           prefill: request.query.code,
           isAdmin: user.isAdmin,
           loggedIn: true,

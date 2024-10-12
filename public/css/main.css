@@ -142,3 +142,7 @@ canvas {
 div.hidden {
     display: none !important;
 }
+
+#toggleUserCodeVisibility {
+    color: white;
+}

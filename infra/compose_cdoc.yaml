@@ -1,0 +1,5 @@
+services:
+  cdocjar:
+    build:
+      context: ..
+      dockerfile: infra/cdoc.Dockerfile

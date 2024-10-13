@@ -34,7 +34,7 @@ export class AdminController {
             let user = await this.userRepository.findOne({ where: { decryptionCode: auth } });
 
             if (user && user.isAdmin) {
-                this.adminService.generateSantas();
+                await this.adminService.generateSantas();
                 user = await this.userRepository.findOne({ where: { name: user.name } });
                 request.res.cookie('santa_auth', user.decryptionCode, { maxAge: 5184000000, httpOnly: true });
                 return;

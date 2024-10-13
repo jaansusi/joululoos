@@ -35,24 +35,15 @@ export class AdminService {
                     decryptionCode: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
                     ...userInput
                 });
-                console.log("-------............--------------")
 
                 await new Promise((resolve, reject) => {
-                    exec("bash ./infra/encrypt.sh 50011021417 " + generatedPath[i] + " " + generatedPath[nextIndex], function(
+                    exec("bash ./infra/encrypt.sh " + userInput.id_code + " " + generatedPath[i] + " " + generatedPath[nextIndex], function(
                         error,
-                        stdout,
-                        stderr
                     ) {
-                        console.log('Running Athena...');
-                        console.log('stdout: ' + stdout);
-                        console.log('stderr: ' + stderr);
                         if (error !== null) {
                             console.log('exec error: ' + error);
-                            // Reject if there is an error:
                             return reject(error);
                         }
-                
-                        // Otherwise resolve the promise:
                         return resolve(null);
                     });
                 });

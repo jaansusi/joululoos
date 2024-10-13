@@ -1,10 +1,3 @@
-FROM maven:3.8.6-openjdk-11 AS builder
-COPY cdoc/pom.xml /cdoc/pom.xml
-COPY cdoc/src /cdoc/src
-COPY .git /cdoc/.git
-WORKDIR /cdoc
-RUN mvn package
-
 # Base image
 FROM node:18
 
@@ -25,7 +18,7 @@ COPY . .
 # Creates a "dist" folder with the production build
 RUN yarn build
 
-COPY --from=builder /cdoc/target/cdoc.jar ./infra/cdoc.jar
+# COPY --from=builder /cdoc/target/cdoc.jar ./infra/cdoc.jar
 
 # Start the server using the production build
 CMD [ "node", "dist/main.js" ]

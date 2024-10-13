@@ -3,6 +3,7 @@ import { readFileSync } from "fs";
 export interface Member {
     name: string;
     email?: string;
+    id_code?: string;
 }
 
 export interface Family {

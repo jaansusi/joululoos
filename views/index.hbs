@@ -17,6 +17,24 @@
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/auth.css">
   <link rel="stylesheet" href="/css/audio.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+  <script>
+    window.addEventListener("load", (event) => {
+      const togglePassword = document.querySelector('#toggleUserCodeVisibility');
+      
+      togglePassword.addEventListener('click', function () {
+        const password = document.querySelector('#userCode');
+
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+
+        this.querySelector('i').classList.toggle('bi-eye');
+        this.querySelector('i').classList.toggle('bi-eye-slash');
+      });
+    });
+
+  </script>
 </head>
 
 <body>
@@ -37,9 +55,11 @@
         <h2 id="recipient"></h2>
       </div>
       <div class="inputContainer" id="inputContainer">
-        <div>
-          <input type="{{inputType}}" id="codeInput" name="code" class="input-group-text" value="{{prefill}}"
-            placeholder="Sinu kood" />
+        <div class="input-group mb-3">
+          <input type="{{inputType}}" class="form-control" id="userCode" placeholder="Kood">
+          <button class="btn btn-outline-secondary" type="button" id="toggleUserCodeVisibility">
+            <i class="bi bi-eye"></i>
+          </button>
         </div>
         <br />
         <div>

@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <title>App</title>
 
-    <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/auth.css">
     <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/multiselect.css">
 </head>
 
 <body>
@@ -44,7 +44,7 @@
                         <td>{{encryptionStrategy}}</td>
                         <td>{{restrictions}}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm">Edit</button>
+                            <button class="btn btn-primary btn-sm" onclick="openEditModal({{id}});">Edit</button>
                             <button class="btn btn-danger btn-sm">Delete</button>
                         </td>
                     </tr>
@@ -73,6 +73,50 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editUserForm">
+                            <div class="mb-3">
+                                <label for="editUserId" class="form-label">ID</label>
+                                <input type="text" class="form-control" id="editUserId" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editUserName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="editUserName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editUserEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="editUserEmail">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editUserStrategy" class="form-label">Strategy</label>
+                                <input type="text" class="form-control" id="editUserStrategy">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editUserRestrictions" class="form-label">Restrictions</label>
+                                <select id="restrictedUsers" name="restrictedUsers" data-placeholder="Family">
+                                    <option value="">None</option>
+                                    {{#each users}}
+                                    <option value="{{this.id}}">{{this.name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="saveUser()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         {{else}}
         <div class="alert alert-warning" role="alert">
             You do not have admin privileges.
@@ -81,6 +125,8 @@
         {{/if}}
     </main>
     <script src="/js/admin.js"></script>
+    <script src="/js/multiselect.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 </body>
 
 </html>

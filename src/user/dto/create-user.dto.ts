@@ -1,5 +1,6 @@
 export class CreateUserDto {
-    readonly name: string;
-    readonly email: string;
-    readonly restrictedUsers: string[];
+    name: string;
+    email: string;
+    familyId: number;
+    isAdmin: boolean;
 }

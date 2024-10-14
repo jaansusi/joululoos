@@ -4,55 +4,57 @@ import getInputFamilies, { Member } from '../input';
 import { InjectModel } from '@nestjs/sequelize';
 import { EncryptionService, EncryptionStrategy } from 'src/encryption/encryption.service';
 import { UserService } from 'src/user/user.service';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { FamilyService } from 'src/family/family.service';
+import { AssignUserDto } from 'src/user/dto/assign-user.dto';
 
 @Injectable()
 export class AdminService {
-    private shuffledParticipants: string[] = [];
+    private shuffledParticipants: User[] = [];
 
     constructor(
         private userService: UserService,
+        private familyService: FamilyService,
         private encriptionService: EncryptionService
     ) { }
 
 
-    public async generateSantas(): Promise<string[]> {
-        const participants = this.getAllInputParticipants();
+    public async assignSantas(): Promise<boolean> {
+        const participants = await this.userService.findAll();
         this.shuffledParticipants = this.unbiasedShuffle(participants);
-        const generatedPath = this.generateGraphPath(this.shuffledParticipants.map(x => x), 1);
+        const generatedPath = await this.generateGraphPath(this.shuffledParticipants, 1);
         if (generatedPath.length !== this.shuffledParticipants.length) {
-            return [];
+            return false;
         }
-        await this.userService.truncate();
         for (let i = 0; i < generatedPath.length; i++) {
             const nextIndex = i === generatedPath.length - 1 ? 0 : i + 1;
             try {
-                let userInput = this.lookUpAdditionalInfo(generatedPath[i]);
+                let user = this.shuffledParticipants[i];
+                // To-do: remove dots only from the first part, not the whole email. 
+                // Also, don't save the email in the user object as we want to use it to send an e-mail in the future.
+                
                 // Remove dots and spaces from email. Google sometimes leaves dots in, sometimes not.
-                if (userInput.email)
-                    userInput.email = userInput.email.toLowerCase().replace(/\./g, '').replace(/\s/g, '');
-                let user = new User({
-                    name: generatedPath[i],
-                    decryptionCode: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
-                    ...userInput
-                });
-                let giftingTo = await this.encriptionService.encryptGiftingTo(user, generatedPath[nextIndex]);
-                user.giftingTo = giftingTo;
-                await this.userService.createUser(user);
+                if (user.email)
+                    user.email = user.email.toLowerCase().replace(/\./g, '').replace(/\s/g, '');
+                
+                let assignUserDto = new AssignUserDto();
+                assignUserDto.giftingTo = await this.encriptionService.encryptGiftingTo(user, generatedPath[nextIndex].name);
+                this.userService.updateUsersAssignment(user.id, assignUserDto);
             } catch (e) {
                 console.log('--------------')
                 console.log(e);
             }
         }
-        return generatedPath;
+        return true;
     }
 
-    private generateGraphPath(remainingNodes: string[], depth: number): string[] {
+    private async generateGraphPath(remainingNodes: User[], depth: number): Promise<User[]> {
         // console.log('-------------------');
         // console.log(`Depth: ${depth}`);
         const currentNode = remainingNodes.shift();
         // console.log(`Current node: ${currentNode}`);
         // console.log(`Remaining nodes: ${remainingNodes}`);
-        const forbiddenPathsFromThisNode = this.generateAllForbiddenPaths(currentNode, remainingNodes);
+        const forbiddenPathsFromThisNode = await this.generateAllForbiddenPaths(currentNode, remainingNodes);
         // console.log(`Forbidden paths: ${forbiddenPathsFromThisNode}`);
         const possiblePathsFromThisNode = remainingNodes.filter(x => !forbiddenPathsFromThisNode.includes(x));
         // console.log(`Possible paths: ${possiblePathsFromThisNode}`);
@@ -65,7 +67,7 @@ export class AdminService {
             // Move the node to the front of the list.
             let recursiveNodes = remainingNodes.filter(x => x !== node);
             recursiveNodes.unshift(node);
-            const path = this.generateGraphPath(recursiveNodes, depth + 1);
+            const path = await this.generateGraphPath(recursiveNodes, depth + 1);
             if (path.length === remainingNodes.length) {
                 return [currentNode, ...path];
             }
@@ -73,30 +75,17 @@ export class AdminService {
         return [];
     }
 
-    private generateAllForbiddenPaths(node: string, remainingNodes: string[]): string[] {
-        for (let family of getInputFamilies()) {
-            if (family.members.map(x => x.name).includes(node)) {
-                return family.members.map(x => x.name);
+    private async generateAllForbiddenPaths(node: User, remainingNodes: User[]): Promise<User[]> {
+        let families = await this.familyService.findAll();
+        for (let family of families) {
+            if (family.members.map(x => x.name).includes(node.name)) {
+                return family.members;
             }
         }
         return [];
     }
 
-    private getAllInputParticipants(): string[] {
-        return getInputFamilies().map((family) => family.members.map((member) => member.name)).flat();
-    }
-
-    private lookUpAdditionalInfo(name: string): Member {
-        for (let family of getInputFamilies()) {
-            const memberIndex = family.members.map(x => x.name).indexOf(name);
-            if (memberIndex !== -1) {
-                return family.members[memberIndex];
-            }
-
-        }
-    }
-
-    private unbiasedShuffle(array: string[]): string[] {
+    private unbiasedShuffle(array: User[]): User[] {
         let currentIndex = array.length, randomIndex;
 
         // While there remain elements to shuffle.

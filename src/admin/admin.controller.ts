@@ -37,7 +37,7 @@ export class AdminController {
             let user = await this.userService.findOne({ where: { decryptionCode: auth } });
 
             if (user && user.isAdmin) {
-                await this.adminService.generateSantas();
+                await this.adminService.assignSantas();
                 user = await this.userService.findOne({ where: { name: user.name } });
                 request.res.cookie('santa_auth', user.decryptionCode, { maxAge: 5184000000, httpOnly: true });
                 return;
@@ -46,7 +46,7 @@ export class AdminController {
         // Make sure that a list can be generated even without an admin user.
         let users = await this.userService.findAll({ where: { isAdmin: true } });
         if (users.length === 0) {
-            await this.adminService.generateSantas();
+            await this.adminService.assignSantas();
         }
     }
 }

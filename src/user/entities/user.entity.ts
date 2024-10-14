@@ -1,6 +1,6 @@
 import { Column, Table, Model, BelongsToMany, HasOne } from 'sequelize-typescript';
-import { UserRestriction } from './user-restriction.entity';
 import { EncryptionStrategy } from 'src/encryption/encryption.service';
+import { Family } from 'src/family/entities/family.entity';
 
 @Table({
     tableName: 'user',
@@ -40,6 +40,6 @@ export class User extends Model {
     })
     isAdmin: boolean;
 
-    @BelongsToMany(() => User, () => UserRestriction, 'userId', 'restrictionId')
-    restrictions: User[];
+    @HasOne(() => Family, 'id')
+    family: Family;
 }

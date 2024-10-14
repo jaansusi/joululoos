@@ -4,12 +4,13 @@ import { Request } from 'express';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { FamilyService } from 'src/family/family.service';
 
 @Controller()
 export class UserController {
     constructor(
         private readonly userService: UserService,
-        @InjectModel(User) private userRepository: typeof User,
+        private readonly familyService: FamilyService,
     ) { }
 
     @Get('users')
@@ -19,15 +20,6 @@ export class UserController {
 
     @Post('user')
     async createUser(@Body() userDto: CreateUserDto) {
-        let user = new User();
-        user.name = userDto.name;
-        user.email = userDto.email;
-
-        for (const restrictedUserId of userDto.restrictedUsers) {
-            let restrictedUser = await this.userService.getUserById(parseInt(restrictedUserId));
-            if (restrictedUser !== null)
-                user.restrictions.push(restrictedUser);
-        }
-        return this.userService.createUser(user);
+        return this.userService.createUser(userDto);
     }
 }

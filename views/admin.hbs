@@ -19,39 +19,7 @@
         {{#if isAdmin}}
 
         <div class="adminContainer">
-            <div class="adminButtonContainer">
-                <button class="btn btn-primary" onclick="location.href = '/'">Home</button>
-            </div>
-
-            <table class="table admin-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Strategy</th>
-                        <th>Restrictions</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each users}}
-
-                    <tr>
-                        <td>{{id}}</td>
-                        <td>{{name}}</td>
-                        <td>{{email}}</td>
-                        <td>{{encryptionStrategy}}</td>
-                        <td>{{restrictions}}</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm" onclick="openEditModal({{id}});">Edit</button>
-                            <button class="btn btn-danger btn-sm">Delete</button>
-                        </td>
-                    </tr>
-
-                    {{/each}}
-                </tbody>
-            </table>
+            {{> adminheader}}
             <div class="admin-actions">
                 <button class="btn btn-success" onclick="generateSantas()">Generate Santas</button>
             </div>
@@ -70,50 +38,6 @@
                     class="validation-item {{#if validationResult.allPeopleGiftToSomeoneNotInTheirFamily}}success{{else}}failure{{/if}}">
                     <span>All People Gift to Someone Not in Their Family:</span>
                     {{#if validationResult.allPeopleGiftToSomeoneNotInTheirFamily}}Yes{{else}}No{{/if}}
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editUserForm">
-                            <div class="mb-3">
-                                <label for="editUserId" class="form-label">ID</label>
-                                <input type="text" class="form-control" id="editUserId" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label for="editUserName" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="editUserName">
-                            </div>
-                            <div class="mb-3">
-                                <label for="editUserEmail" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="editUserEmail">
-                            </div>
-                            <div class="mb-3">
-                                <label for="editUserStrategy" class="form-label">Strategy</label>
-                                <input type="text" class="form-control" id="editUserStrategy">
-                            </div>
-                            <div class="mb-3">
-                                <label for="editUserRestrictions" class="form-label">Restrictions</label>
-                                <select id="restrictedUsers" name="restrictedUsers" data-placeholder="Family">
-                                    <option value="">None</option>
-                                    {{#each users}}
-                                    <option value="{{this.id}}">{{this.name}}</option>
-                                    {{/each}}
-                                </select>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="saveUser()">Save changes</button>
-                    </div>
                 </div>
             </div>
         </div>

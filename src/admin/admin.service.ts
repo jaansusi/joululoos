@@ -7,6 +7,7 @@ import { UserService } from 'src/user/user.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { FamilyService } from 'src/family/family.service';
 import { AssignUserDto } from 'src/user/dto/assign-user.dto';
+import { Family } from 'src/family/entities/family.entity';
 
 @Injectable()
 export class AdminService {
@@ -104,14 +105,14 @@ export class AdminService {
     }
 
     public async validateSantas(): Promise<any> {
-        const users = await this.userService.findAll();
+        const users = await this.userService.findAll({ include: [{ model: Family }] });
         let names = users.map(x => x.name).sort();
         let designatedSantas = users.map(x => x.giftingTo).sort();
         const allPeopleGiftToAUniquePerson = new Set(designatedSantas).size === users.length;
         let allPeopleGiftToSomeoneNotInTheirFamily = true;
         for (let user of users) {
-            let userFamily = getInputFamilies().filter(x => x.members.map(y => y.name).includes(user.name))[0];
-            let userFamilyNames = userFamily.members.map(x => x.name);
+            console.log(user);
+            let userFamilyNames = user.family.members.map(x => x.name);
             if (userFamilyNames.includes(user.giftingTo)) {
                 allPeopleGiftToSomeoneNotInTheirFamily = false;
                 break;

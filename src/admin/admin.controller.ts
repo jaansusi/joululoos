@@ -1,11 +1,8 @@
 import { Controller, Get, Redirect, Render, Req } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { Request } from 'express';
-import { InjectModel } from '@nestjs/sequelize';
-import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
-import { or } from 'sequelize';
-
+import { Family } from 'src/family/entities/family.entity';
 
 @Controller('admin')
 export class AdminController {
@@ -18,12 +15,17 @@ export class AdminController {
     @Render('admin')
     async admin(@Req() request: Request): Promise<any> {
         if (request.cookies['santa_auth']) {
-            const auth = request.cookies['santa_auth'];
-            let user = await this.userService.findOne({ where: { decryptionCode: auth } });
+            const id = request.cookies['santa_auth'];
+            let user = await this.userService.getById(id);
             if (user && user.isAdmin) {
-                const users = await this.userService.findAll({ order: [['name', 'ASC']], include: [{ model: User }] });
-                const validation = await this.adminService.validateSantas();
-                return { info: 'Admin page', isAdmin: true, users: users, validationResult: validation };
+                const users = await this.userService.findAll({ order: [['name', 'ASC']], include: [{ model: Family }] });
+                try {
+                    const validation = await this.adminService.validateSantas();
+                    return { info: 'Admin page', isAdmin: true, users: users, validationResult: validation };
+                } catch (err) {
+                    console.error(err);
+                    return { info: 'Admin page', isAdmin: true, users: users };
+                }
             }
         }
         return { info: 'Admin page' };
@@ -33,8 +35,8 @@ export class AdminController {
     @Redirect('/admin')
     async generateSantas(@Req() request: Request): Promise<any> {
         if (request.cookies['santa_auth']) {
-            const auth = request.cookies['santa_auth'];
-            let user = await this.userService.findOne({ where: { decryptionCode: auth } });
+            const id = request.cookies['santa_auth'];
+            let user = await this.userService.getById(id);
 
             if (user && user.isAdmin) {
                 await this.adminService.assignSantas();

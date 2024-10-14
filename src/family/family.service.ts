@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Family } from './entities/family.entity';
+import { CreateFamilyDto } from './dto/create-family.dto';
 
 @Injectable()
 export class FamilyService {
@@ -17,9 +18,9 @@ export class FamilyService {
         return this.familyRepository.findOne(options);
     }
 
-    async createFamily(family: Family) {
+    async createFamily(familyDto: CreateFamilyDto) {
         return this.familyRepository.create({
-            name: family.name
+            name: familyDto.name
         });
     }
 }

@@ -13,22 +13,23 @@ export class AuthService {
     if (!req.user) {
       return null;
     }
-    console.log(req.user);
-    const existingUser = await this.userService.getByEmail(req.user.email);
+    const cleanedEmail = this.userService.cleanGmailAddress(req.user.email);
+    const existingUser = await this.userService.getByEmail(cleanedEmail);
     if (existingUser) {
       return existingUser;
     }
     const allUsers = await this.userService.findAll();
+    console.log(allUsers);
     if (allUsers.length === 0) {
       // If no users exist, create an admin user with the Google login
       let newUserDto = new CreateUserDto();
       newUserDto.name = req.user.displayName;
-      newUserDto.email = req.user.email;
+      newUserDto.email = cleanedEmail;
       newUserDto.isAdmin = true;
-      this.userService.createUser(newUserDto);
+      await this.userService.createUser(newUserDto);
     }
-    // Remove dots and spaces from email. Google sometimes leaves dots in, sometimes not.
-    return await this.userService.findOne({ where: { email: req.user.email.replace(/\./g, '') } }).then(user => {
+
+    return await this.userService.findOne({ where: { email: cleanedEmail } }).then(user => {
       if (!user) {
         return null;
       }

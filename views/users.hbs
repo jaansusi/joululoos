@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>App</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body>
+
+
+    <main role="main" class="text-center">
+        {{#if isAdmin}}
+
+        <div class="adminContainer">
+            {{> adminheader}}
+            <table class="table admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Strategy</th>
+                        <th>Family</th>
+                        <th>Admin</th>
+                        <th><button class="btn btn-primary btn-sm" onclick="openUserEditModal();">Add new</button></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each users}}
+
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{name}}</td>
+                        <td>{{email}}</td>
+                        <td>{{encryptionStrategy}}</td>
+                        <td>{{familyId}}</td>
+                        <td>{{#if this.isAdmin}}Yes{{else}}No{{/if}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm"
+                                onclick="openUserEditModal('{{id}}', '{{name}}', '{{email}}', '{{encryptionStrategy}}', '{{this.isAdmin}}', '{{familyId}}');">Edit</button>
+                            <button class="btn btn-danger btn-sm"
+                                onclick="deleteUser({{id}})">Delete</button>
+                        </td>
+                    </tr>
+
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editUserForm">
+                            <div class="mb-3">
+                                <label for="editUserId" class="form-label">ID</label>
+                                <input type="text" class="form-control" id="editUserId" readonly disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editUserName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="editUserName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editUserEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="editUserEmail">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editUserIsAdmin" class="form-label">Is admin</label>
+                                <input type="checkbox" id="editUserIsAdmin" value="1">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editUserStrategy" class="form-label">Encryption strategy</label>
+                                <select id="editUserStrategy" name="encryptionStrategy"
+                                    data-placeholder="Encryption strategy">
+                                    <option value="">None</option>
+                                    {{#each strategies}}
+                                    <option value="{{this}}">{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editUserFamily" class="form-label">Family</label>
+                                <select id="editUserFamily" name="familyId" data-placeholder="Family">
+                                    <option value="">None</option>
+                                    {{#each families}}
+                                    <option value="{{this.id}}">{{this.name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="saveUser()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="alert alert-warning" role="alert">
+            You do not have admin privileges.
+        </div>
+
+        {{/if}}
+    </main>
+    <script src="/js/admin.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+
+</html>

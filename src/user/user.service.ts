@@ -16,16 +16,26 @@ export class UserService {
     async findAll(options?: any) {
         return this.userRepository.findAll(options);
     }
+
     async findOne(options: any) {
         return this.userRepository.findOne(options);
     }
 
     async createUser(user: CreateUserDto) {
-        return this.userRepository.create({
+        console.log(user);
+        return this.userRepository.upsert({
+            id: user.id,
             name: user.name,
             email: user.email,
+            encryptionStrategy: user.encryptionStrategy,
             isAdmin: user.isAdmin,
+            familyId: user.familyId,
+
         });
+    }
+
+    async deleteUser(userId: number) {
+        return this.userRepository.destroy({ where: { id: userId } });
     }
 
     async getById(id: number) {
@@ -46,5 +56,14 @@ export class UserService {
 
     public async truncate() {
         return this.userRepository.truncate();
+    }
+
+    public cleanGmailAddress(email: string) {
+        // Remove dots and spaces from email. Google sometimes leaves dots in, sometimes not.
+        email = email.replace(/^([^@+]+)(\+[^@]*)?@gmail\.com$/, (match, username) => {
+            return username.replace(/\./g, '') + '@gmail.com';
+        });
+        console.log(email);
+        return email;
     }
 }

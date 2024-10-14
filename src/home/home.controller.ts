@@ -21,6 +21,7 @@ export class HomeController {
     //       return { loggedIn: true, isAdmin: false };
     //   }
     // }
+
     if (request.cookies['santa_auth']) {
       let user = await this.userService.findOne({ where: { id: request.cookies['santa_auth'] } });
       if (user) {

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>App</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/multiselect.css">
+</head>
+
+<body>
+
+
+    <main role="main" class="text-center">
+        {{#if isAdmin}}
+        {{> adminheader}}
+        <div class="adminContainer">
+            <table class="table admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Members</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each families}}
+
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{name}}</td>
+                        <td>{{size}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="openEditModal({{id}});">Edit</button>
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </td>
+                    </tr>
+
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="editFamilyModal" tabindex="-1" aria-labelledby="editFamilyModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editFamilyModalLabel">Edit Family</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editFamilyForm">
+                            <div class="mb-3">
+                                <label for="editFamilyId" class="form-label">ID</label>
+                                <input type="text" class="form-control" id="editFamilyId" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editFamilyName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="editFamilyName">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="saveFamily()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="alert alert-warning" role="alert">
+            You do not have admin privileges.
+        </div>
+
+        {{/if}}
+    </main>
+    <script src="/js/admin.js"></script>
+    <script src="/js/multiselect.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+
+</html>

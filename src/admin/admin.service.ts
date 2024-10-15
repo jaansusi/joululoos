@@ -35,6 +35,8 @@ export class AdminService {
                     decryptionCode: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
                     ...userInput
                 });
+                if (userInput.id_code === "")
+                    continue;
                 await new Promise((resolve, reject) => {
                     exec("bash ./infra/encrypt.sh " + userInput.id_code + " " + generatedPath[i] + " " + generatedPath[nextIndex], function(
                         error, stdout, stderr

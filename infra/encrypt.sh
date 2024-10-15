@@ -11,4 +11,4 @@ curl -X POST infra-cdocweb-1:4444/cdoc -d /app/cdoc_files/$NAME.txt -d $ID_CODE 
 
 rm -f $FILE
 
-cp $FILE.cdoc /usr/src/app/public/cdoc_files/$NAME.cdocFILE
+cp $FILE.cdoc /usr/src/app/public/cdoc_files/$NAME.cdoc

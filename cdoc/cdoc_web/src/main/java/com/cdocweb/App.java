@@ -23,7 +23,6 @@ public class App
                 ProcessBuilder processBuilder = new ProcessBuilder(
                         "java", "-jar", jarPath, argParts[0], argParts[1]);
                 processBuilder.redirectErrorStream(true);
-                System.out.println(String.join(" ",processBuilder.command().toArray(new String[0])));
                 Process process = processBuilder.start();
 
                 StringBuilder output = new StringBuilder();
@@ -36,9 +35,8 @@ public class App
                 }
                 int exitCode = process.waitFor();
 
-                ProcessBuilder pb = new ProcessBuilder("mv", argParts[2]+".cdoc", "cdoc_files");
+                ProcessBuilder pb = new ProcessBuilder("mv", argParts[2]+".txt.cdoc", "cdoc_files");
                 pb.redirectErrorStream(true);
-                System.out.println(String.join(" ",pb.command().toArray(new String[0])));
                 Process p = pb.start();
 
                 StringBuilder out = new StringBuilder();

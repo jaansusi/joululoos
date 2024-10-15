@@ -22,9 +22,8 @@ export class UserService {
     }
 
     async createUser(user: CreateUserDto) {
-        console.log(user);
         return this.userRepository.upsert({
-            id: user.id,
+            id: user.id ? user.id : undefined,
             name: user.name,
             email: user.email,
             encryptionStrategy: user.encryptionStrategy,
@@ -46,12 +45,8 @@ export class UserService {
         return this.userRepository.findOne({ where: { email } });
     }
 
-    async updateUser(id: number, user: CreateUserDto) {
+    async updateUser(id: number, user: CreateUserDto|AssignUserDto) {
         return this.userRepository.update(user, { where: { id } });
-    }
-
-    async updateUsersAssignment(id: number, updateDto: AssignUserDto) {
-        return this.userRepository.update(updateDto, { where: { id } });
     }
 
     public async truncate() {

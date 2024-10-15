@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/auth.css">
     <link rel="stylesheet" href="/css/admin.css">
-    <link rel="stylesheet" href="/css/multiselect.css">
 </head>
 
 <body>
@@ -25,6 +24,7 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Members</th>
+                        <th><button class="btn btn-primary btn-sm" onclick="openFamilyEditModal();">Add new</button></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,7 +35,7 @@
                         <td>{{name}}</td>
                         <td>{{size}}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm" onclick="openEditModal({{id}});">Edit</button>
+                            <button class="btn btn-primary btn-sm" onclick="openFamilyEditModal('{{id}}', '{{name}}');">Edit</button>
                             <button class="btn btn-danger btn-sm">Delete</button>
                         </td>
                     </tr>
@@ -79,7 +79,6 @@
         {{/if}}
     </main>
     <script src="/js/admin.js"></script>
-    <script src="/js/multiselect.js"></script>
     <script src="/js/bootstrap.min.js"></script>
 </body>
 

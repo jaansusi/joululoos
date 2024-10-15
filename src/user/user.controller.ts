@@ -22,7 +22,8 @@ export class UserController {
             if (user && user.isAdmin) {
                 const users = await this.userService.findAll({ order: [['name', 'ASC']], include: [{ model: Family }] });
                 let strategies = Object.keys(EncryptionStrategy).map(key => EncryptionStrategy[key]);
-                return { users: users, isAdmin: true, strategies: strategies };
+                let families = await this.familyService.findAll();
+                return { users: users, isAdmin: true, strategies: strategies, families: families };
             }
         }
         return {};

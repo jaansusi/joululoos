@@ -1,5 +1,5 @@
 export class AssignUserDto {
-    id: number;
+    iv: string;
     giftingTo: string;
     decryptionCode: string;
 }

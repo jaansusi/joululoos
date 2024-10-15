@@ -1,4 +1,4 @@
-import { Column, Table, Model, BelongsToMany, HasOne } from 'sequelize-typescript';
+import { Column, Table, Model, BelongsToMany, HasOne, BelongsTo } from 'sequelize-typescript';
 import { EncryptionStrategy } from 'src/encryption/encryption.service';
 import { Family } from 'src/family/entities/family.entity';
 
@@ -30,6 +30,9 @@ export class User extends Model {
     })
     decryptionCode: string;
 
+    @Column
+    iv: string;
+
     @Column({
         defaultValue: EncryptionStrategy.CODE,
     })
@@ -40,6 +43,6 @@ export class User extends Model {
     })
     isAdmin: boolean;
 
-    @HasOne(() => Family, 'id')
+    @BelongsTo(() => Family, { foreignKey: 'familyId'})
     family: Family;
 }

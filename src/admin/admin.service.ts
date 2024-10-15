@@ -22,8 +22,15 @@ export class AdminService {
 
     public async assignSantas(): Promise<boolean> {
         const participants = await this.userService.findAll();
+        // console.log('-------------------');
+        // console.log(`Participants: ${participants.map(x => x.name)}`);
         this.shuffledParticipants = this.unbiasedShuffle(participants);
-        const generatedPath = await this.generateGraphPath(this.shuffledParticipants, 1);
+        // console.log(`Shuffled participants: ${this.shuffledParticipants.map(x => x.name)}`);
+        // Generate deep copy of shuffled participants to avoid modifying the original list.
+        const generatedPath = await this.generateGraphPath(JSON.parse(JSON.stringify(this.shuffledParticipants)), 1);
+        // console.log('-------------------');
+        // console.log(`Generated path: ${generatedPath.map(x => x.name)}`);
+        // console.log(`Shuffled participants: ${this.shuffledParticipants.map(x => x.name)}`);
         if (generatedPath.length !== this.shuffledParticipants.length) {
             return false;
         }
@@ -31,16 +38,10 @@ export class AdminService {
             const nextIndex = i === generatedPath.length - 1 ? 0 : i + 1;
             try {
                 let user = this.shuffledParticipants[i];
-                // To-do: remove dots only from the first part, not the whole email. 
-                // Also, don't save the email in the user object as we want to use it to send an e-mail in the future.
-                
-                // Remove dots and spaces from email. Google sometimes leaves dots in, sometimes not.
-                if (user.email)
-                    user.email = user.email.toLowerCase().replace(/\./g, '').replace(/\s/g, '');
-                
-                let assignUserDto = new AssignUserDto();
-                assignUserDto.giftingTo = await this.encriptionService.encryptGiftingTo(user, generatedPath[nextIndex].name);
-                this.userService.updateUsersAssignment(user.id, assignUserDto);
+                let giftingTo = generatedPath[nextIndex].name;
+                let assignUserDto = await this.encriptionService.encryptGiftingTo(user, giftingTo);
+                console.log(assignUserDto);
+                await this.userService.updateUser(user.id, assignUserDto);
             } catch (e) {
                 console.log('--------------')
                 console.log(e);
@@ -53,12 +54,12 @@ export class AdminService {
         // console.log('-------------------');
         // console.log(`Depth: ${depth}`);
         const currentNode = remainingNodes.shift();
-        // console.log(`Current node: ${currentNode}`);
-        // console.log(`Remaining nodes: ${remainingNodes}`);
+        // console.log(`Current node: ${currentNode.name}`);
+        // console.log(`Remaining nodes: ${remainingNodes.map(x => x.name)}`);
         const forbiddenPathsFromThisNode = await this.generateAllForbiddenPaths(currentNode, remainingNodes);
-        // console.log(`Forbidden paths: ${forbiddenPathsFromThisNode}`);
+        // console.log(`Forbidden paths: ${forbiddenPathsFromThisNode.map(x => x.name)}`);
         const possiblePathsFromThisNode = remainingNodes.filter(x => !forbiddenPathsFromThisNode.includes(x));
-        // console.log(`Possible paths: ${possiblePathsFromThisNode}`);
+        // console.log(`Possible paths: ${possiblePathsFromThisNode.map(x => x.name)}`);
         if (remainingNodes.length === 0) {
             // Reached the last node on the list, validate that it has a path to the first.
             let firstNode = this.shuffledParticipants[0];
@@ -73,15 +74,14 @@ export class AdminService {
                 return [currentNode, ...path];
             }
         }
+        console.log('No path found');
         return [];
     }
 
     private async generateAllForbiddenPaths(node: User, remainingNodes: User[]): Promise<User[]> {
-        let families = await this.familyService.findAll();
-        for (let family of families) {
-            if (family.members.map(x => x.name).includes(node.name)) {
-                return family.members;
-            }
+        if (node.family) {
+            let familiy = await this.familyService.findOne({ where: { id: node.family.id }, include: [{ model: User }] });
+            return familiy.members.filter(x => x.id !== node.id);
         }
         return [];
     }
@@ -100,7 +100,6 @@ export class AdminService {
             [array[currentIndex], array[randomIndex]] = [
                 array[randomIndex], array[currentIndex]];
         }
-
         return array;
     }
 
@@ -111,11 +110,13 @@ export class AdminService {
         const allPeopleGiftToAUniquePerson = new Set(designatedSantas).size === users.length;
         let allPeopleGiftToSomeoneNotInTheirFamily = true;
         for (let user of users) {
-            console.log(user);
-            let userFamilyNames = user.family.members.map(x => x.name);
-            if (userFamilyNames.includes(user.giftingTo)) {
-                allPeopleGiftToSomeoneNotInTheirFamily = false;
-                break;
+            if (user.family) {
+                let family = await this.familyService.findOne({ where: { id: user.family.id }, include: [{ model: User }] });
+                let userFamilyNames = family.members.map(x => x.name);
+                if (userFamilyNames && userFamilyNames.includes(user.giftingTo)) {
+                    allPeopleGiftToSomeoneNotInTheirFamily = false;
+                    break;
+                }
             }
         }
         const secretNameArray = users.map(x => x.name);

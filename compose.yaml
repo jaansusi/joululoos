@@ -23,7 +23,10 @@ services:
     volumes:
       - ./input.json:/input.json
       - ./.db/:/usr/src/app/.db/
-      - infra_cdoc:/shared/cdoc
+      - shared:/shared
+    networks:
+      - santa-network
+      
   db:
     image: postgres:latest
     environment:
@@ -32,6 +35,9 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - santa-network
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin4_container
@@ -43,9 +49,15 @@ services:
       PGADMIN_DEFAULT_PASSWORD: a
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - santa-network
   
+networks:
+  santa-network:
+    name: santanet
+
 volumes:
   pgdata:
   pgadmin-data:
-  infra_cdoc:
-    external: true
+  shared:
+    name: cdoc

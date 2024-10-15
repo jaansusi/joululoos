@@ -2,12 +2,13 @@ ID_CODE=$1
 NAME=$2
 GIFTING_TO=$3
 
-FILE=./cdoc/$NAME.txt
-
-echo "testestestest"
+FILE=/shared/$NAME.txt
 
 touch $FILE
 echo $GIFTING_TO >> $FILE
-java -jar /shared/cdoc/target/cdoc.jar $FILE $ID_CODE -o ./public/cdoc_files/$NAME.cdoc
+
+curl -X POST infra-cdocweb-1:4444/cdoc -d /app/cdoc_files/$NAME.txt -d $ID_CODE -d $NAME
 
 rm -f $FILE
+
+cp $FILE.cdoc /usr/src/app/public/cdoc_files/$NAME.cdocFILE

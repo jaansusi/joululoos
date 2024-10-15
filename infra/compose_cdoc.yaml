@@ -1,5 +1,23 @@
 services:
-  cdocjar:
+  cdocweb:
     build:
       context: ..
-      dockerfile: infra/cdoc.Dockerfile
+      dockerfile: infra/cdoc_web.Dockerfile
+    volumes:
+      - secretsanta_cdoc:/app/cdoc_files
+    networks:
+      - santa-network
+    ports:
+      - "4444:4444"
+
+
+networks:
+  santa-network:
+    external: true
+    name: santanet
+
+
+volumes:
+  secretsanta_cdoc:
+    external: true
+    name: cdoc

@@ -35,20 +35,20 @@ export class AdminService {
                     decryptionCode: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
                     ...userInput
                 });
-
                 await new Promise((resolve, reject) => {
                     exec("bash ./infra/encrypt.sh " + userInput.id_code + " " + generatedPath[i] + " " + generatedPath[nextIndex], function(
-                        error,
+                        error, stdout, stderr
                     ) {
+                        console.log(stdout);
+                        
                         if (error !== null) {
                             console.log('exec error: ' + error);
                             return reject(error);
                         }
-                        return resolve(null);
+                        return resolve(stdout);
                     });
                 });
             } catch (e) {
-                console.log('--------------')
                 console.log(e);
             }
         }

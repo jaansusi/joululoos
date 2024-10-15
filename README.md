@@ -36,7 +36,7 @@ Source code is available in [Github - https://github.com/jaansusi/secretsanta](h
 
 ### Using Docker
 
-1. Build the CDOC utility with Docker:
+1. Build and run the CDOC utility with Docker:
     ```sh
     docker-compose -f ./infra/compose_cdoc.yaml up
     ```

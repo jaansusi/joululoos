@@ -2,6 +2,9 @@ package com.cdocweb;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 
 import static spark.Spark.get;
 import static spark.Spark.port;
@@ -20,10 +23,10 @@ public class App
             String jarPath = "/app/cdoc_jar/target/cdoc.jar";
 
             try {
-                ProcessBuilder processBuilder = new ProcessBuilder(
+                ProcessBuilder encrypt = new ProcessBuilder(
                         "java", "-jar", jarPath, argParts[0], argParts[1]);
-                processBuilder.redirectErrorStream(true);
-                Process process = processBuilder.start();
+                encrypt.redirectErrorStream(true);
+                Process process = encrypt.start();
 
                 StringBuilder output = new StringBuilder();
                 try (BufferedReader reader = new BufferedReader(
@@ -34,25 +37,12 @@ public class App
                     }
                 }
                 int exitCode = process.waitFor();
-
-                ProcessBuilder pb = new ProcessBuilder("mv", argParts[2]+".txt.cdoc", "cdoc_files");
-                pb.redirectErrorStream(true);
-                Process p = pb.start();
-
-                StringBuilder out = new StringBuilder();
-                try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(p.getInputStream()))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        out.append(line).append("\n");
-                    }
-                }
-                p.waitFor();
-
-
+                
+                Files.move(Paths.get(argParts[2]+".txt.cdoc"), Paths.get("cdoc_files/"+argParts[2]+".txt.cdoc"));
+                
                 if (exitCode == 0) {
                     response.status(200);
-                    return "JAR executed successfully:\n" + output.toString() + "\n" + out.toString();
+                    return "JAR executed successfully:\n" + output.toString();
                 } else {
                     response.status(500);
                     return "Error running JAR:\n" + output.toString();

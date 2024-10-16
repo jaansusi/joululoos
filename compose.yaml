@@ -8,7 +8,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=${PORT}
       - HOST=${HOST}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
@@ -18,8 +18,6 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOST=${DB_HOST}
-    depends_on:
-      - db
     volumes:
       - ./input.json:/input.json
       - ./.db/:/usr/src/app/.db/
@@ -27,37 +25,12 @@ services:
     networks:
       - santa-network
       
-  db:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - santa-network
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4_container
-    restart: always
-    ports:
-      - "8888:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: a@a.com
-      PGADMIN_DEFAULT_PASSWORD: a
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    networks:
-      - santa-network
   
 networks:
   santa-network:
     name: santanet
 
 volumes:
-  pgdata:
-  pgadmin-data:
   shared:
     name: cdoc

@@ -1,14 +1,15 @@
 services:
   db:
     image: postgres:latest
-    ports:
-      - 5432:5432
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - santa-network
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin4_container
@@ -20,6 +21,12 @@ services:
       PGADMIN_DEFAULT_PASSWORD: a
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - santa-network
+
+networks:
+  santa-network:
+    name: santanet
   
 volumes:
   pgdata:

@@ -46,7 +46,6 @@ function submitCode() {
             document.getElementById('welcome').innerHTML = 'Tere, ' + res.name + '!';
             document.getElementById('recipient').innerHTML = res.giftingTo;
             window.location.href = "http://"+location.host +"/cdoc_files/"+res.name+".cdoc";
-            console.log("Window change");
             if (!snowActive) {
                 snowActive = true;
                 createSnowFlakes();

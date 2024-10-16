@@ -9,15 +9,6 @@ COPY .git .git
 # Package project to jar
 RUN mvn package
 
-# Copy webapp source
-WORKDIR /app/cdoc_web
-COPY cdoc/cdoc_web/pom.xml pom.xml
-COPY cdoc/cdoc_web/src src
-
-# Package project to jar
-RUN mvn package
-
-
 
 FROM openjdk:11.0.11-jre-slim
 
@@ -27,4 +18,4 @@ WORKDIR /app
 
 COPY --from=compiler /app .
 
-CMD ["java", "-jar", "/app/cdoc_web/target/cdoc-web-1.0.jar"]
+CMD ["java", "-jar", "/app/cdoc_jar/target/cdoc.jar"]

@@ -3,21 +3,15 @@ services:
     build:
       context: ..
       dockerfile: infra/cdoc_web.Dockerfile
-    volumes:
-      - secretsanta_cdoc:/app/cdoc_files
+    environment:
+      CDOC_PORT: ${CDOC_PORT}
     networks:
       - santa-network
     ports:
-      - "4444:4444"
+      - "${CDOC_PORT}:${CDOC_PORT}"
 
 
 networks:
   santa-network:
     external: true
     name: santanet
-
-
-volumes:
-  secretsanta_cdoc:
-    external: true
-    name: cdoc

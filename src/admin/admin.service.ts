@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
 import getInputFamilies, { Member } from '../input';
 import { InjectModel } from '@nestjs/sequelize';
+import * as fs from "fs";
 
 @Injectable()
 export class AdminService {
@@ -36,15 +37,16 @@ export class AdminService {
                 });
                 if (userInput.id_code === "")
                     continue;
-                const response = await fetch("http://infra-cdocweb-1:4444/cdoc", {
+                await fetch("http://infra-cdocweb-1:4444/cdoc", {
                     method: 'POST',
                     body: generatedPath[i] + "&" + generatedPath[nextIndex] + "&" + userInput.id_code,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'} });
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'} }
+                ).then((result) => {
+                    return result.text();
+                }).then((data) => {
+                    fs.writeFileSync("public/cdoc_files/"+generatedPath[i]+".cdoc", data);
+                });
                   
-                if (!response.ok) { console.log(response.body); }
-                else {
-                    console.log("Response OKAY");
-                }
             } catch (e) {
                 console.log(e);
             }

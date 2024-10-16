@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "80:3000"
     environment:
       - NODE_ENV=production
       - PORT=${PORT}
@@ -21,7 +21,6 @@ services:
     volumes:
       - ./input.json:/input.json
       - ./.db/:/usr/src/app/.db/
-      - shared:/usr/src/app/public/cdoc_files
     networks:
       - santa-network
       
@@ -30,7 +29,3 @@ services:
 networks:
   santa-network:
     name: santanet
-
-volumes:
-  shared:
-    name: cdoc

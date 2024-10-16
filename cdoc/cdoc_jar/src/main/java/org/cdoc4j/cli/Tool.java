@@ -1,5 +1,6 @@
 package org.cdoc4j.cli;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class Tool {
 
 
     public static void main(String[] args) {
-        port(4444);
+        port(Integer.valueOf(System.getenv("CDOC_PORT")));
 
         post("/cdoc", (request, response) -> {
             String jarArgs = request.body();
@@ -49,14 +50,12 @@ public class Tool {
                 writer.write(nameTo);
                 writer.close();
 
-                encrypt(fileName, idCode);
+                String encryptedData = encrypt(fileName, idCode);
                 
                 plain.delete();
-                Files.move(Paths.get(fileName+".cdoc"), Paths.get("cdoc_files/"+nameFrom+".cdoc"));
                 
-
                 response.status(200);
-                return "Encryption successful";
+                return encryptedData;
 
             } catch (Exception e) {
                 response.status(500);
@@ -68,7 +67,7 @@ public class Tool {
         get("/health", (req, res) -> "API is up and running!");
     }
 
-    public static void encrypt(String fileName, String idCode) throws Exception {
+    public static String encrypt(String fileName, String idCode) throws Exception {
 
         try {
             // The total list of certificates to encrypt against.
@@ -128,8 +127,11 @@ public class Tool {
             }
 
             // Shoot
-            cdoc.buildToStream(Files.newOutputStream(outfile.toPath()));
-            System.out.println("Saved encrypted file to " + outfile);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            cdoc.buildToStream(stream);
+            String res = new String(stream.toByteArray());
+            System.out.println("Encryption function success");
+            return res;
         } catch (IOException e) {
             fail("I/O Error: " + e.getMessage());
         } catch (IllegalStateException e) {
@@ -139,6 +141,7 @@ public class Tool {
         } catch (GeneralSecurityException e) {
             fail("General security error: " + e.getMessage());
         }
+        return "Encryption failed";
     }
 
     // XXX: This is highly Estonia specific

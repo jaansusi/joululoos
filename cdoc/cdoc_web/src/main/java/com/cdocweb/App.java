@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.io.File;
+import java.io.FileWriter;
 
 
 import static spark.Spark.get;
@@ -19,12 +21,25 @@ public class App
         post("/cdoc", (request, response) -> {
             String jarArgs = request.body();
             String[] argParts = jarArgs.split("&");
+            String nameFrom = argParts[0];
+            String nameTo = argParts[1];
+            String idCode = argParts[2];
             
             String jarPath = "/app/cdoc_jar/target/cdoc.jar";
+            String sharedDir = "/app/cdoc_files/";
+            String fileName = nameFrom+".txt";
 
             try {
+                File plain = new File(fileName);
+                if (!plain.createNewFile()) {
+                    System.out.println("File creation failed");
+                }
+                FileWriter writer = new FileWriter(fileName);
+                writer.write(nameTo);
+                writer.close();
+
                 ProcessBuilder encrypt = new ProcessBuilder(
-                        "java", "-jar", jarPath, argParts[0], argParts[1]);
+                        "java", "-jar", jarPath, fileName, idCode);
                 encrypt.redirectErrorStream(true);
                 Process process = encrypt.start();
 
@@ -38,7 +53,8 @@ public class App
                 }
                 int exitCode = process.waitFor();
                 
-                Files.move(Paths.get(argParts[2]+".txt.cdoc"), Paths.get("cdoc_files/"+argParts[2]+".txt.cdoc"));
+                plain.delete();
+                Files.move(Paths.get(fileName+".cdoc"), Paths.get("cdoc_files/"+nameFrom+".cdoc"));
                 
                 if (exitCode == 0) {
                     response.status(200);

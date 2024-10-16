@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
 import getInputFamilies, { Member } from '../input';
 import { InjectModel } from '@nestjs/sequelize';
-import { exec } from "child_process";
 
 @Injectable()
 export class AdminService {
@@ -37,19 +36,15 @@ export class AdminService {
                 });
                 if (userInput.id_code === "")
                     continue;
-                await new Promise((resolve, reject) => {
-                    exec("bash ./infra/encrypt.sh " + userInput.id_code + " " + generatedPath[i] + " " + generatedPath[nextIndex], function(
-                        error, stdout, stderr
-                    ) {
-                        console.log(stdout);
-                        
-                        if (error !== null) {
-                            console.log('exec error: ' + error);
-                            return reject(error);
-                        }
-                        return resolve(stdout);
-                    });
-                });
+                const response = await fetch("http://infra-cdocweb-1:4444/cdoc", {
+                    method: 'POST',
+                    body: generatedPath[i] + "&" + generatedPath[nextIndex] + "&" + userInput.id_code,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'} });
+                  
+                if (!response.ok) { console.log(response.body); }
+                else {
+                    console.log("Response OKAY");
+                }
             } catch (e) {
                 console.log(e);
             }

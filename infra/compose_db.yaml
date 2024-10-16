@@ -27,6 +27,7 @@ services:
 networks:
   santa-network:
     name: santanet
+    external: true
   
 volumes:
   pgdata:

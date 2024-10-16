@@ -21,7 +21,7 @@ services:
     volumes:
       - ./input.json:/input.json
       - ./.db/:/usr/src/app/.db/
-      - shared:/shared
+      - shared:/usr/src/app/public/cdoc_files
     networks:
       - santa-network
       

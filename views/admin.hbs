@@ -13,11 +13,8 @@
 </head>
 
 <body>
-
-
     <main role="main" class="text-center">
         {{#if isAdmin}}
-
         <div class="adminContainer">
             {{> adminheader}}
             <div class="admin-actions">
@@ -25,6 +22,12 @@
             </div>
             <div class="validation-container">
                 <div class="validation-header">Validation Results</div>
+                {{#unless validationResult.noErrorsDuringValidation}}
+                <div class="validation-item failure">
+                    <span>Errors occured during validation:</span>
+                    <pre>{{error}}</pre>
+                </div>
+                {{else}}
                 <div class="validation-item {{#if validationResult.namesAndSantasMatch}}success{{else}}failure{{/if}}">
                     <span>Names and Santas Match:</span>
                     {{#if validationResult.namesAndSantasMatch}}Yes{{else}}No{{/if}}
@@ -39,6 +42,7 @@
                     <span>All People Gift to Someone Not in Their Family:</span>
                     {{#if validationResult.allPeopleGiftToSomeoneNotInTheirFamily}}Yes{{else}}No{{/if}}
                 </div>
+                {{/unless}}
             </div>
         </div>
         {{else}}

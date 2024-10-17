@@ -72,6 +72,9 @@ export class EncryptionService {
     }
 
     private decryptWithCode(encryptedData: string, password: string, salt: string, ivHex: string): string {
+        if (!password) {
+            throw new Error('Trying to decrypt using code strategy, user does not have decryption code!');
+        }
         const key = crypto.pbkdf2Sync(password, salt, 100000, 32, 'sha256');
         // Convert IV from hex to Buffer
         const iv = Buffer.from(ivHex, 'hex');

@@ -20,12 +20,10 @@ export class AdminController {
             if (user && user.isAdmin) {
                 const users = await this.userService.findAll({ order: [['name', 'ASC']], include: [{ model: Family }] });
                 try {
-                    // const validation = await this.adminService.validateSantas();
-                    const validation = null;
+                    const validation = await this.adminService.validateSantas();
                     return { info: 'Admin page', isAdmin: true, users: users, validationResult: validation };
                 } catch (err) {
-                    console.error(err);
-                    return { info: 'Admin page', isAdmin: true, users: users };
+                    return { info: 'Admin page', isAdmin: true, users: users, error: err.message };
                 }
             }
         }

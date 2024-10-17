@@ -21,12 +21,12 @@ export class AdminService {
 
 
     public async assignSantas(): Promise<boolean> {
-        const participants = await this.userService.findAll();
+        const participants = await this.userService.findAll({ include: [{ model: Family }] });
         // console.log('-------------------');
         // console.log(`Participants: ${participants.map(x => x.name)}`);
         this.shuffledParticipants = this.unbiasedShuffle(participants);
         // console.log(`Shuffled participants: ${this.shuffledParticipants.map(x => x.name)}`);
-        // Generate deep copy of shuffled participants to avoid modifying the original list.
+        // Create deep copy of shuffled participants to avoid modifying the original list.
         const generatedPath = await this.generateGraphPath(JSON.parse(JSON.stringify(this.shuffledParticipants)), 1);
         // console.log('-------------------');
         // console.log(`Generated path: ${generatedPath.map(x => x.name)}`);
@@ -40,7 +40,6 @@ export class AdminService {
                 let user = this.shuffledParticipants[i];
                 let giftingTo = generatedPath[nextIndex].name;
                 let assignUserDto = await this.encriptionService.encryptGiftingTo(user, giftingTo);
-                console.log(assignUserDto);
                 await this.userService.updateUser(user.id, assignUserDto);
             } catch (e) {
                 console.log('--------------')
@@ -58,12 +57,12 @@ export class AdminService {
         // console.log(`Remaining nodes: ${remainingNodes.map(x => x.name)}`);
         const forbiddenPathsFromThisNode = await this.generateAllForbiddenPaths(currentNode, remainingNodes);
         // console.log(`Forbidden paths: ${forbiddenPathsFromThisNode.map(x => x.name)}`);
-        const possiblePathsFromThisNode = remainingNodes.filter(x => !forbiddenPathsFromThisNode.includes(x));
+        const possiblePathsFromThisNode = remainingNodes.filter(x => !forbiddenPathsFromThisNode.map(y => y.id).includes(x.id));
         // console.log(`Possible paths: ${possiblePathsFromThisNode.map(x => x.name)}`);
         if (remainingNodes.length === 0) {
             // Reached the last node on the list, validate that it has a path to the first.
             let firstNode = this.shuffledParticipants[0];
-            return !forbiddenPathsFromThisNode.includes(firstNode) ? [currentNode] : [];
+            return !forbiddenPathsFromThisNode.map(y => y.id).includes(firstNode.id) ? [currentNode] : [];
         }
         for (let node of possiblePathsFromThisNode) {
             // Move the node to the front of the list.
@@ -74,14 +73,14 @@ export class AdminService {
                 return [currentNode, ...path];
             }
         }
-        console.log('No path found');
+        // console.log('No path found');
         return [];
     }
 
     private async generateAllForbiddenPaths(node: User, remainingNodes: User[]): Promise<User[]> {
         if (node.family) {
-            let familiy = await this.familyService.findOne({ where: { id: node.family.id }, include: [{ model: User }] });
-            return familiy.members.filter(x => x.id !== node.id);
+            let family = await this.familyService.findOne({ where: { id: node.family.id }, include: [{ model: User }] });
+            return family.members;
         }
         return [];
     }
@@ -106,14 +105,16 @@ export class AdminService {
     public async validateSantas(): Promise<any> {
         const users = await this.userService.findAll({ include: [{ model: Family }] });
         let names = users.map(x => x.name).sort();
-        let designatedSantas = users.map(x => x.giftingTo).sort();
+        let designatedSantas = users.map(x => this.encriptionService.decryptGiftingTo(x)).sort();
+        // console.log('names: ' + names);
+        // console.log('designatedSantas: ' + designatedSantas);
         const allPeopleGiftToAUniquePerson = new Set(designatedSantas).size === users.length;
         let allPeopleGiftToSomeoneNotInTheirFamily = true;
         for (let user of users) {
             if (user.family) {
                 let family = await this.familyService.findOne({ where: { id: user.family.id }, include: [{ model: User }] });
                 let userFamilyNames = family.members.map(x => x.name);
-                if (userFamilyNames && userFamilyNames.includes(user.giftingTo)) {
+                if (userFamilyNames && userFamilyNames.includes(this.encriptionService.decryptGiftingTo(user))) {
                     allPeopleGiftToSomeoneNotInTheirFamily = false;
                     break;
                 }
@@ -121,6 +122,7 @@ export class AdminService {
         }
         const secretNameArray = users.map(x => x.name);
         let response = {
+            noErrorsDuringValidation: true,
             namesAndSantasMatch: JSON.stringify(names) === JSON.stringify(designatedSantas),
             allPeopleGiftToAUniquePerson: allPeopleGiftToAUniquePerson,
             allPeopleGiftToSomeoneNotInTheirFamily: allPeopleGiftToSomeoneNotInTheirFamily,

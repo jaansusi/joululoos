@@ -16,6 +16,6 @@ EXPOSE 4444
 
 WORKDIR /app
 
-COPY --from=compiler /app .
+COPY --from=compiler /app/cdoc_jar/target/cdoc.jar .
 
-CMD ["java", "-jar", "/app/cdoc_jar/target/cdoc.jar"]
+CMD ["java", "-jar", "/app/cdoc.jar"]

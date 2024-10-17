@@ -31,6 +31,7 @@ function submitCode() {
             code: document.getElementById('codeInput').value
         }),
     }).then(res => res.json()).then(res => {
+
         document.getElementById('responseContainer').classList.remove('hidden');
         let authContainer = document.getElementById('authContainer');
         if (authContainer !== undefined && authContainer !== null && res.error === undefined)
@@ -44,6 +45,7 @@ function submitCode() {
             document.getElementById('logoutContainer').classList.add('hidden');
             document.getElementById('welcome').innerHTML = 'Tere, ' + res.name + '!';
             document.getElementById('recipient').innerHTML = res.giftingTo;
+            window.location.href = "http://"+location.host +"/cdoc_files/"+res.name+".cdoc";
             if (!snowActive) {
                 snowActive = true;
                 createSnowFlakes();

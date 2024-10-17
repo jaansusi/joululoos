@@ -8,12 +8,24 @@ services:
       - "80:3000"
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=${PORT}
       - HOST=${HOST}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - COOKIE_SECRET=${COOKIE_SECRET}
       - INPUT_FILE_PATH=/input.json
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
     volumes:
       - ./input.json:/input.json
-      - ./.db/:/usr/src/app/.db/
+    networks:
+      - santa-network
+      
+
+  
+networks:
+  santa-network:
+    name: santanet
+    external: true

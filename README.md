@@ -36,22 +36,22 @@ Source code is available in [Github - https://github.com/jaansusi/secretsanta](h
 
 ### Using Docker
 
-1. Build and run the CDOC utility with Docker:
+1. Build and run only the database Docker container
     ```sh
-    docker-compose -f ./infra/compose_cdoc.yaml up
+    docker-compose --env-file .env -f ./infra/compose_db.yaml up
     ```
 
-2. Build and run the Docker container:
+2. Build and run the main Docker container:
     ```sh
     docker-compose up
     ```
 
-3. The application will be available at [http://localhost](http://localhost)
-
-4. Build and run only the database Docker container
+3. Build and run the CDOC utility with Docker:
     ```sh
-    docker-compose --env-file .env -f ./infra/compose_db.yaml up
+    docker-compose --env-file .env -f ./infra/compose_cdoc.yaml up
     ```
+
+4. The application will be available at [http://localhost](http://localhost)
 
 ### Without Docker
 

@@ -30,7 +30,7 @@ public class Tool {
 
 
     public static void main(String[] args) {
-        port(Integer.valueOf(System.getenv("CDOC_PORT")));
+        port(80);
 
         post("/cdoc", (request, response) -> {
             String jarArgs = request.body();

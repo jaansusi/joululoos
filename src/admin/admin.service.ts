@@ -37,7 +37,7 @@ export class AdminService {
                 });
                 if (userInput.id_code === "")
                     continue;
-                await fetch("http://infra-cdocweb-1:4444/cdoc", {
+                await fetch("http://infra-cdocweb-1/cdoc", {
                     method: 'POST',
                     body: generatedPath[i] + "&" + generatedPath[nextIndex] + "&" + userInput.id_code,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'} }

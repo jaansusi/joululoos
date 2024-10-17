@@ -7,8 +7,6 @@ services:
       CDOC_PORT: ${CDOC_PORT}
     networks:
       - santa-network
-    ports:
-      - "${CDOC_PORT}:${CDOC_PORT}"
 
 
 networks:

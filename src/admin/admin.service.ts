@@ -44,7 +44,7 @@ export class AdminService {
                 ).then((result) => {
                     return result.text();
                 }).then((data) => {
-                    fs.writeFileSync("public/cdoc_files/"+generatedPath[i]+".cdoc", data);
+                    fs.writeFileSync("cdoc/cdoc_files/"+generatedPath[i]+".cdoc", data);
                 });
                   
             } catch (e) {

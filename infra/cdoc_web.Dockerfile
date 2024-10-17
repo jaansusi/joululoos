@@ -12,8 +12,6 @@ RUN mvn package
 
 FROM openjdk:11.0.11-jre-slim
 
-EXPOSE 4444
-
 WORKDIR /app
 
 COPY --from=compiler /app/cdoc_jar/target/cdoc.jar .

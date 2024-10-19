@@ -58,7 +58,12 @@ export class HomeController {
     request.res.cookie('santa_auth', user.id, { maxAge: 5184000000, httpOnly: false });
     // To-do: logic based on users encryption strategy
     // To-do: code decryption should use input, not the db value
-    let giftingTo = await this.encryptionService.decryptGiftingTo(user);
-    return { name: user.name, giftingTo: giftingTo };
+    try {
+      return { name: user.name, strategy: user.encryptionStrategy, giftingTo: await this.encryptionService.decryptGiftingTo(user) };
+    } catch (err) {
+      console.error(err);
+      // Return error and timestamp for debugging purposes
+      return { error: 'Viga!' + new Date().toISOString() };
+    }
   }
 }

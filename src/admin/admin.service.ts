@@ -4,7 +4,7 @@ import { EncryptionService, EncryptionStrategy } from 'src/encryption/encryption
 import { UserService } from 'src/user/user.service';
 import { FamilyService } from 'src/family/family.service';
 import { Family } from 'src/family/entities/family.entity';
-import * as fs from "fs";
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AdminService {
@@ -25,9 +25,9 @@ export class AdminService {
         // console.log(`Shuffled participants: ${this.shuffledParticipants.map(x => x.name)}`);
         // Create deep copy of shuffled participants to avoid modifying the original list.
         const generatedPath = await this.generateGraphPath(JSON.parse(JSON.stringify(this.shuffledParticipants)), 1);
-        // console.log('-------------------');
-        // console.log(`Generated path: ${generatedPath.map(x => x.name)}`);
-        // console.log(`Shuffled participants: ${this.shuffledParticipants.map(x => x.name)}`);
+        console.log('-------------------');
+        console.log(`Generated path: ${generatedPath.map(x => x.name)}`);
+        console.log(`Shuffled participants: ${this.shuffledParticipants.map(x => x.name)}`);
         if (generatedPath.length !== this.shuffledParticipants.length) {
             return false;
         }
@@ -38,20 +38,6 @@ export class AdminService {
                 let giftingTo = generatedPath[nextIndex].name;
                 let assignUserDto = await this.encriptionService.encryptGiftingTo(user, giftingTo);
                 await this.userService.updateUser(user.id, assignUserDto);
-                if (user.encryptionStrategy === EncryptionStrategy.CDOC) {
-
-                    await fetch("http://infra-cdocweb-1/cdoc", {
-                        method: 'POST',
-                        body: generatedPath[i] + "&" + generatedPath[nextIndex] + "&" + user.idCode,
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-                    }
-                    ).then((result) => {
-                        return result.text();
-                    }).then((data) => {
-                        fs.writeFileSync("cdoc/cdoc_files/" + generatedPath[i] + ".cdoc", data);
-                    });
-
-                }
             } catch (e) {
                 console.log(e);
             }
@@ -141,5 +127,12 @@ export class AdminService {
             designatedSantas: designatedSantas,
         };
         return response;
+    }
+
+    public async generateDbHash(): Promise<string> {
+        // Get all user data and hash it to prevent tampering
+        let hashData = (await this.userService.findAll({ order: [['id', 'ASC']], include: [{ model: Family }]})).map(x => x.id + x.name + x.giftingTo + x.encryptionStrategy + x.email + x.family?.id).join();
+        let dbHash = crypto.createHash("shake256", { outputLength: 4 }).update(hashData).digest('hex');
+        return dbHash;
     }
 }

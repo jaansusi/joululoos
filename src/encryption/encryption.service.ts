@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
 import { AssignUserDto } from 'src/user/dto/assign-user.dto';
 import * as crypto from 'crypto';
+import * as fs from 'fs';
 
 
 export enum EncryptionStrategy {
@@ -13,15 +14,15 @@ export enum EncryptionStrategy {
 
 @Injectable()
 export class EncryptionService {
-    public encryptGiftingTo(user: User, giftingTo: string): AssignUserDto {
+    public async encryptGiftingTo(user: User, giftingTo: string): Promise<AssignUserDto> {
         console.log(user.encryptionStrategy);
         switch (user.encryptionStrategy) {
             case EncryptionStrategy.CODE:
                 return this.encryptWithCode(giftingTo, user.id.toString());
             case EncryptionStrategy.CDOC:
-                return this.encryptWithCdoc(giftingTo);
+                return this.encryptWithCdoc(user.name, giftingTo, user.idCode);
             case EncryptionStrategy.KEY:
-                return this.encryptWithKey(giftingTo);
+                return this.encryptWithPublicKey(giftingTo);
             default:
                 throw new Error('Invalid encryption strategy');
         }
@@ -59,16 +60,24 @@ export class EncryptionService {
         return assignUserDto;
     }
 
-    private encryptWithCdoc(input: string): AssignUserDto {
-        //to-do: implement encryption
+    private async encryptWithCdoc(fromName: string, toName: string, idCode: string): Promise<AssignUserDto> {
+            await fetch("http://infra-cdocweb-1/cdoc", {
+                method: 'POST',
+                body: fromName + "&" + toName + "&" + idCode,
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }
+            ).then((result) => {
+                return result.text();
+            }).then((data) => {
+                fs.writeFileSync("cdoc/cdoc_files/" + fromName + ".cdoc", data);
+            });
+
         throw new Error('CDOC encryption is not implemented');
-        return null;
     }
 
-    private encryptWithKey(input: string): AssignUserDto {
+    private encryptWithPublicKey(key: string): AssignUserDto {
         //to-do: implement encryption
         throw new Error('KEY encryption is not implemented');
-        return null;
     }
 
     private decryptWithCode(encryptedData: string, password: string, salt: string, ivHex: string): string {

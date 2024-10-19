@@ -38,7 +38,7 @@ Source code is available in [Github - https://github.com/jaansusi/secretsanta](h
 
 1. Build and run only the database Docker container
     ```sh
-    docker-compose --env-file .env -f ./infra/compose_db.yaml up
+    docker-compose --env-file .env -f ./infra/compose_db.yaml up -d
     ```
 
 2. Build and run the main Docker container:
@@ -48,7 +48,7 @@ Source code is available in [Github - https://github.com/jaansusi/secretsanta](h
 
 3. Build and run the CDOC utility with Docker:
     ```sh
-    docker-compose --env-file .env -f ./infra/compose_cdoc.yaml up
+    docker-compose --env-file .env -f ./infra/compose_cdoc.yaml up -d
     ```
 
 4. The application will be available at [http://localhost](http://localhost)
@@ -83,7 +83,6 @@ The following environment variables are required:
 - `GOOGLE_CLIENT_ID`: Google OAuth Client ID.
 - `GOOGLE_CLIENT_SECRET`: Google OAuth Client Secret.
 - `COOKIE_SECRET`: Secret key for signing cookies.
-- `INPUT_FILE_PATH`: Path to the input JSON file with people.
 
 ## Scripts
 

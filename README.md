@@ -3,14 +3,11 @@
 Secret Santa is a web application built with NestJS that allows users to participate in a Secret Santa gift exchange.
 This project uses a SQLite database and supports Docker for containerization.
 
-## Table of Contents
+## User management
 
-- [Installation](#installation)
-- [Running the Application](#running-the-application)
-- [Environment Variables](#environment-variables)
-- [Project Structure](#project-structure)
-- [Scripts](#scripts)
-- [License](#license)
+.env file defines an e-mail that will always authenticate as an administrator.
+
+Administrators have access to Users and Families pages to manage participants.
 
 ## Source code
 

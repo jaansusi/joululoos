@@ -13,17 +13,24 @@ export class AuthService {
     if (!req.user) {
       return null;
     }
+    console.log(req.user);
+    const adminEmail = this.userService.cleanGmailAddress(process.env.ADMIN_EMAIL);
     const cleanedEmail = this.userService.cleanGmailAddress(req.user.email);
     const existingUser = await this.userService.getByEmail(cleanedEmail);
     if (existingUser) {
+      if (cleanedEmail === adminEmail && !existingUser.isAdmin) {
+        // If user is marked as admin but is not, make the user admin.
+        let dto = new CreateUserDto();
+        dto.isAdmin = true;
+        await this.userService.updateUser(existingUser.id, dto);
+      }
       return existingUser;
     }
-    const allUsers = await this.userService.findAll();
-    console.log(allUsers);
-    if (allUsers.length === 0) {
-      // If no users exist, create an admin user with the Google login
+    
+    if (cleanedEmail === adminEmail) {
+      // If admin user does not exist, create one.
       let newUserDto = new CreateUserDto();
-      newUserDto.name = req.user.displayName;
+      newUserDto.name = req.user.firstName + ' ' + req.user.lastName;
       newUserDto.email = cleanedEmail;
       newUserDto.isAdmin = true;
       await this.userService.createUser(newUserDto);

@@ -1,13 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
-import getInputFamilies, { Member } from '../input';
-import { InjectModel } from '@nestjs/sequelize';
 import { EncryptionService, EncryptionStrategy } from 'src/encryption/encryption.service';
 import { UserService } from 'src/user/user.service';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { FamilyService } from 'src/family/family.service';
-import { AssignUserDto } from 'src/user/dto/assign-user.dto';
 import { Family } from 'src/family/entities/family.entity';
+import * as fs from "fs";
 
 @Injectable()
 export class AdminService {
@@ -41,8 +38,21 @@ export class AdminService {
                 let giftingTo = generatedPath[nextIndex].name;
                 let assignUserDto = await this.encriptionService.encryptGiftingTo(user, giftingTo);
                 await this.userService.updateUser(user.id, assignUserDto);
+                if (user.encryptionStrategy === EncryptionStrategy.CDOC) {
+
+                    await fetch("http://infra-cdocweb-1/cdoc", {
+                        method: 'POST',
+                        body: generatedPath[i] + "&" + generatedPath[nextIndex] + "&" + user.idCode,
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+                    }
+                    ).then((result) => {
+                        return result.text();
+                    }).then((data) => {
+                        fs.writeFileSync("cdoc/cdoc_files/" + generatedPath[i] + ".cdoc", data);
+                    });
+
+                }
             } catch (e) {
-                console.log('--------------')
                 console.log(e);
             }
         }

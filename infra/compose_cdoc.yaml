@@ -1,0 +1,15 @@
+services:
+  cdocweb:
+    build:
+      context: ..
+      dockerfile: infra/cdoc_web.Dockerfile
+    environment:
+      CDOC_PORT: ${CDOC_PORT}
+    networks:
+      - santa-network
+
+
+networks:
+  santa-network:
+    external: true
+    name: santanet

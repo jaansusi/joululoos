@@ -4,11 +4,13 @@
             {
                 "name": "Jaan",
                 "email": "jaan.susi@gmail.com",
+                "id_code": "",
                 "isAdmin": true
             },
             {
                 "name": "Kristiina",
-                "email": "kristiina.susi93@gmail.com"
+                "email": "kristiina.susi93@gmail.com",
+                "id_code": ""
             }
         ]
     },
@@ -16,19 +18,23 @@
         "members": [
             {
                 "name": "Katre",
-                "email": "katrekikkas@gmail.com"
+                "email": "katrekikkas@gmail.com",
+                "id_code": ""
             },
             {
                 "name": "Gristen",
-                "email": "gristen.smirnov@gmail.com"
+                "email": "gristen.smirnov@gmail.com",
+                "id_code": ""
             },
             {
                 "name": "Nana",
-                "email": "eneeha@gmail.com"
+                "email": "eneeha@gmail.com",
+                "id_code": ""
             },
             {
                 "name": "Eti",
-                "email": "ethel.susi@gmail.com"
+                "email": "ethel.susi@gmail.com",
+                "id_code": ""
             }
         ]
     },
@@ -36,14 +42,17 @@
         "members": [
             {
                 "name": "Toomas",
-                "email": "toomas.susi@gmail.com"
+                "email": "toomas.susi@gmail.com",
+                "id_code": ""
             },
             {
-                "name": "Helle"
+                "name": "Helle",
+                "id_code": ""
             },
             {
                 "name": "Emilie",
-                "email": "emilie5051@gmail.com"
+                "email": "emilie5051@gmail.com",
+                "id_code": ""
             }
         ]
     },
@@ -51,7 +60,9 @@
         "members": [
             {
                 "name": "Villem",
-                "email": "villem.susi@gmail.com"
+                "email": "villem.susi@gmail.com",
+                "id_code": "",
+                "isAdmin": true
             }
         ]
     },
@@ -59,11 +70,13 @@
         "members": [
             {
                 "name": "Rasmus",
-                "email": "rasmussusi@gmail.com"
+                "email": "rasmussusi@gmail.com",
+                "id_code": ""
             },
             {
                 "name": "Carmen",
-                "email": "carmenraak@gmail.com"
+                "email": "carmenraak@gmail.com",
+                "id_code": ""
             }
         ]
     },
@@ -71,7 +84,8 @@
         "members": [
             {
                 "name": "Mattias",
-                "email": "mattias.sare@gmail.com"
+                "email": "mattias.sare@gmail.com",
+                "id_code": ""
             }
         ]
     }

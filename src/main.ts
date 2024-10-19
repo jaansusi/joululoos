@@ -6,6 +6,7 @@ import * as cookieParser from 'cookie-parser';
 import * as hbs from 'hbs';
 
 async function bootstrap() {
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
@@ -18,6 +19,7 @@ async function bootstrap() {
   console.log('Starting up...')
   console.log('Node env', process.env.NODE_ENV);
   console.log('Host', process.env.HOST);
+
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

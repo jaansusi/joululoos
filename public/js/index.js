@@ -56,7 +56,7 @@ function submitCode() {
 
 window.addEventListener("load", (event) => {
     const togglePassword = document.querySelector('#toggleUserCodeVisibility');
-
+    if (togglePassword === null) return;
     togglePassword.addEventListener('click', function () {
         const password = document.querySelector('#userCode');
 

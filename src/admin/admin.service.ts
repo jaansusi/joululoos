@@ -25,9 +25,9 @@ export class AdminService {
         // console.log(`Shuffled participants: ${this.shuffledParticipants.map(x => x.name)}`);
         // Create deep copy of shuffled participants to avoid modifying the original list.
         const generatedPath = await this.generateGraphPath(JSON.parse(JSON.stringify(this.shuffledParticipants)), 1);
-        console.log('-------------------');
-        console.log(`Generated path: ${generatedPath.map(x => x.name)}`);
-        console.log(`Shuffled participants: ${this.shuffledParticipants.map(x => x.name)}`);
+        // console.log('-------------------');
+        // console.log(`Generated path: ${generatedPath.map(x => x.name)}`);
+        // console.log(`Shuffled participants: ${this.shuffledParticipants.map(x => x.name)}`);
         if (generatedPath.length !== this.shuffledParticipants.length) {
             return false;
         }

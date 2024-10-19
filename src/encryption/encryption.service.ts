@@ -3,6 +3,7 @@ import { User } from 'src/user/entities/user.entity';
 import { AssignUserDto } from 'src/user/dto/assign-user.dto';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
+import * as path from 'path';
 
 
 export enum EncryptionStrategy {
@@ -15,7 +16,6 @@ export enum EncryptionStrategy {
 @Injectable()
 export class EncryptionService {
     public async encryptGiftingTo(user: User, giftingTo: string): Promise<AssignUserDto> {
-        console.log(user.encryptionStrategy);
         switch (user.encryptionStrategy) {
             case EncryptionStrategy.CODE:
                 return this.encryptWithCode(giftingTo, user.id.toString());
@@ -61,18 +61,20 @@ export class EncryptionService {
     }
 
     private async encryptWithCdoc(fromName: string, toName: string, idCode: string): Promise<AssignUserDto> {
-            await fetch("http://infra-cdocweb-1/cdoc", {
-                method: 'POST',
-                body: fromName + "&" + toName + "&" + idCode,
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-            }
-            ).then((result) => {
-                return result.text();
-            }).then((data) => {
-                fs.writeFileSync("cdoc/cdoc_files/" + fromName + ".cdoc", data);
-            });
-
-        throw new Error('CDOC encryption is not implemented');
+        await fetch(process.env.CDOC_HOST + ":" + process.env.CDOC_PORT + "/cdoc", {
+            method: 'POST',
+            body: fromName + "&" + toName + "&" + idCode,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }
+        ).then((result) => {
+            return result.text();
+        }).then((data) => {
+            fs.writeFileSync(path.join(process.env.CDOC_PATH, idCode + ".cdoc"), data);
+            console.log('CDOC file created');
+        });
+        let assignUserDto = new AssignUserDto();
+        assignUserDto.giftingTo = fromName + ".cdoc";
+        return assignUserDto;
     }
 
     private encryptWithPublicKey(key: string): AssignUserDto {

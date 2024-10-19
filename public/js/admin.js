@@ -4,10 +4,11 @@ function generateSantas() {
         location.href = '/admin/generate';
 }
 
-function openUserEditModal(id, name, email, strategy, isUserAdmin, familyId) {
+function openUserEditModal(id, name, email, idCode, strategy, isUserAdmin, familyId) {
     document.getElementById('editUserId').value = id ? id : '';
     document.getElementById('editUserName').value = name ? name : '';
     document.getElementById('editUserEmail').value = email ? email : '';
+    document.getElementById('editUserIdCode').value = idCode ? idCode : '';
     document.getElementById('editUserStrategy').value = strategy ? strategy : '';
     document.getElementById('editUserIsAdmin').checked = isUserAdmin ? true : false;
     document.getElementById('editUserFamily').value = familyId ? familyId : '';
@@ -19,15 +20,17 @@ function saveUser() {
     const id = document.getElementById('editUserId').value;
     const name = document.getElementById('editUserName').value;
     const email = document.getElementById('editUserEmail').value;
-    const strategy = document.getElementById('editUserStrategy').value;
+    const idCode = document.getElementById('editUserIdCode').value;
     const isAdmin = document.getElementById('editUserIsAdmin').checked;
+    const strategy = document.getElementById('editUserStrategy').value;
     const familyId = document.getElementById('editUserFamily').value;
 
     let user = {
         id: id ? parseInt(id) : null,
         name: name,
         email: email,
-        encryptionstrategy: strategy,
+        idCode: idCode,
+        encryptionStrategy: strategy,
         isAdmin: isAdmin,
         familyId: familyId ? parseInt(familyId) : null
     };

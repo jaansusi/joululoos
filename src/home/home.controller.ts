@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Render, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post, Render, Req, Res } from '@nestjs/common';
 import { Request } from 'express';
 import { UserService } from 'src/user/user.service';
 import { EncryptionService, EncryptionStrategy } from 'src/encryption/encryption.service';
@@ -19,8 +19,15 @@ export class HomeController {
         switch (user.encryptionStrategy) {
           case EncryptionStrategy.CODE:
             return {
+              encryptionWithCode: true,
               inputType: 'password',
               prefill: user.decryptionCode,
+              loggedIn: true,
+              isAdmin: user.isAdmin,
+            };
+          case EncryptionStrategy.CDOC:
+            return {
+              encryptionWithCdoc: true,
               loggedIn: true,
               isAdmin: user.isAdmin,
             };
@@ -65,5 +72,21 @@ export class HomeController {
       // Return error and timestamp for debugging purposes
       return { error: 'Viga!' + new Date().toISOString() };
     }
+  }
+
+  @Get('cdoc')
+  async getUserCdoc(@Req() request: Request) {
+    if (request.cookies['santa_auth']) {
+      const id = request.cookies['santa_auth'];
+      const user = await this.userService.getById(id);
+      if (!user || user.encryptionStrategy !== EncryptionStrategy.CDOC) {
+          return null;
+      }
+      request.res.setHeader('Content-Disposition', 'attachment; filename="' + user.idCode + '.cdoc"');
+      request.res.setHeader('Content-Type', 'application/octet-stream');
+      request.res.setHeader('santa-cdoc-filename', user.idCode + '.cdoc');
+      return this.userService.getUserCdoc(user.idCode);
+    }
+    return null;
   }
 }

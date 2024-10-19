@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AssignUserDto } from './dto/assign-user.dto';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class UserService {
@@ -22,15 +24,16 @@ export class UserService {
     }
 
     async createUser(user: CreateUserDto) {
-        return this.userRepository.upsert({
+        const userObject = {
             id: user.id ? user.id : undefined,
             name: user.name,
             email: user.email,
+            idCode: user.idCode,
             encryptionStrategy: user.encryptionStrategy,
             isAdmin: user.isAdmin,
             familyId: user.familyId,
-
-        });
+        };
+        return this.userRepository.upsert(userObject);
     }
 
     async deleteUser(userId: number) {
@@ -60,5 +63,15 @@ export class UserService {
         });
         console.log(email);
         return email;
+    }
+
+    public async getUserCdoc(idCode: string): Promise<string> {
+        try {
+            const file = fs.readFileSync(path.join(process.env.CDOC_PATH, idCode + '.cdoc'), 'utf8');
+            return file;
+        } catch (err) {
+            console.error(err);
+            return '';
+        }
     }
 }

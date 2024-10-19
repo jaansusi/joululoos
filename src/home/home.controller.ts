@@ -39,6 +39,7 @@ export class HomeController {
       if (user) {
         request.res.cookie('santa_auth', user.id, { maxAge: 5184000000, httpOnly: false });
         return {
+          encryptionWithCode: true,
           inputType: 'password',
           prefill: request.query.code,
           isAdmin: user.isAdmin,
@@ -46,9 +47,9 @@ export class HomeController {
         };
       }
       else
-        return { inputType: 'text', error: 'Vigane kood!' };
+        return { encryptionWithCode: true, inputType: 'text', error: 'Vigane kood!' };
     }
-    return { inputType: 'text', };
+    return { encryptionWithCode: true, inputType: 'text', error: 'ASD' };
   }
 
   @Post('result')
@@ -80,7 +81,7 @@ export class HomeController {
       const id = request.cookies['santa_auth'];
       const user = await this.userService.getById(id);
       if (!user || user.encryptionStrategy !== EncryptionStrategy.CDOC) {
-          return null;
+        return null;
       }
       request.res.setHeader('Content-Disposition', 'attachment; filename="' + user.idCode + '.cdoc"');
       request.res.setHeader('Content-Type', 'application/octet-stream');

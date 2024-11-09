@@ -4,13 +4,13 @@ import { FamilyService } from './family.service';
 import { CreateFamilyDto } from './dto/create-family.dto';
 import { ReadFamilyDto } from './dto/read-family.dto';
 
-@Controller('admin')
+@Controller()
 export class FamilyController {
     constructor(
         private readonly familyService: FamilyService,
     ) { }
 
-    @Get('families')
+    @Get('admin/families')
     @Render('families')
     async displayFamiliesPage(@Req() request: Request): Promise<any> {
         if (request.cookies['santa_auth']) {

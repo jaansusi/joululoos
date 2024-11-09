@@ -47,7 +47,7 @@
                             <td>{{#if this.isAdmin}}Yes{{else}}No{{/if}}</td>
                             <td>
                                 <button class="btn btn-primary btn-sm"
-                                    onclick="openUserEditModal('{{id}}', '{{name}}', '{{email}}', '{{idCode}}', '{{encryptionStrategy}}', {{this.isAdmin}}, '{{familyId}}');">Edit</button>
+                                    onclick="openUserEditModal('{{id}}');">Edit</button>
                                 <button class="btn btn-danger btn-sm" onclick="deleteUser({{id}})">Delete</button>
                             </td>
                         </tr>

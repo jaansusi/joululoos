@@ -1,19 +1,32 @@
+let userRestrictions = new MultiSelect(document.getElementById('editUserRestrictions'));
+
 function generateSantas() {
     let a = confirm("OLED KINDEL?");
     if (a)
         location.href = '/admin/generate';
 }
 
-function openUserEditModal(id, name, email, idCode, strategy, isUserAdmin, familyId) {
-    document.getElementById('editUserId').value = id ? id : '';
-    document.getElementById('editUserName').value = name ? name : '';
-    document.getElementById('editUserEmail').value = email ? email : '';
-    document.getElementById('editUserIdCode').value = idCode ? idCode : '';
-    document.getElementById('editUserStrategy').value = strategy ? strategy : '';
-    document.getElementById('editUserIsAdmin').checked = isUserAdmin ? true : false;
-    document.getElementById('editUserFamily').value = familyId ? familyId : '';
-    var editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
-    editUserModal.show();
+function openUserEditModal(id) {
+    fetch("/user/" + id, {
+        method: "GET",
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('editUserId').value = data.id;
+            document.getElementById('editUserName').value = data.name;
+            document.getElementById('editUserEmail').value = data.email;
+            document.getElementById('editUserIdCode').value = data.idCode;
+            document.getElementById('editUserStrategy').value = data.encryptionStrategy;
+            document.getElementById('editUserIsAdmin').checked = data.isAdmin;
+            document.getElementById('editUserFamily').value = data.familyId ? data.familyId : '';
+            const userRestrictions = (new MultiSelect('#editUserRestrictions')).selectedValues;
+            console.log(userRestrictions);
+            var editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+            editUserModal.show();
+        });
 }
 
 function saveUser() {
@@ -25,6 +38,9 @@ function saveUser() {
     const strategy = document.getElementById('editUserStrategy').value;
     const familyId = document.getElementById('editUserFamily').value;
 
+    const userRestrictions = (new MultiSelect('#editUserRestrictions')).selectedValues;
+    console.log(userRestrictions);
+
     let user = {
         id: id ? parseInt(id) : null,
         name: name,
@@ -35,7 +51,7 @@ function saveUser() {
         familyId: familyId ? parseInt(familyId) : null
     };
     // Make the request to the server
-    fetch("/admin/user", {
+    fetch("/user", {
         method: "POST",
         body: JSON.stringify(user),
         headers: {
@@ -49,7 +65,7 @@ function saveUser() {
         .catch((error) => {
             console.error('Error:', error);
         });
-    
+
     // Close the modal after saving
     var editUserModal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
     editUserModal.hide();
@@ -58,7 +74,7 @@ function saveUser() {
 function deleteUser(id) {
     let a = confirm("OLED KINDEL?");
     if (a)
-        fetch("/admin/user/" + id, {
+        fetch("/user/" + id, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -89,7 +105,7 @@ function saveFamily() {
         name: name
     };
     // Make the request to the server
-    fetch("/admin/family", {
+    fetch("/family", {
         method: "POST",
         body: JSON.stringify(family),
         headers: {
@@ -103,7 +119,7 @@ function saveFamily() {
         .catch((error) => {
             console.error('Error:', error);
         });
-    
+
     // Close the modal after saving
     var editUserModal = bootstrap.Modal.getInstance(document.getElementById('editFamilyModal'));
     editUserModal.hide();
@@ -112,7 +128,7 @@ function saveFamily() {
 function deleteFamily(id) {
     let a = confirm("OLED KINDEL?");
     if (a)
-        fetch("/admin/family/" + id, {
+        fetch("/family/" + id, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json; charset=UTF-8"

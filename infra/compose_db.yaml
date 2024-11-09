@@ -1,3 +1,5 @@
+name:
+  secretsanta
 services:
   db:
     image: postgres:latest

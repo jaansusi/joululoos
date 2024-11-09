@@ -5,15 +5,16 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { FamilyService } from 'src/family/family.service';
 import { Family } from 'src/family/entities/family.entity';
 import { EncryptionStrategy } from 'src/encryption/encryption.service';
+import { ReadUserDto } from './dto/read-user.dto';
 
-@Controller('admin')
+@Controller()
 export class UserController {
     constructor(
         private readonly userService: UserService,
         private readonly familyService: FamilyService,
     ) { }
 
-    @Get('users')
+    @Get('admin/users')
     @Render('users')
     async displayUsersPage(@Req() request: Request): Promise<any> {
         if (request.cookies['santa_auth']) {
@@ -32,6 +33,13 @@ export class UserController {
     @Get('user')
     async getUsers() {
         return this.userService.findAll();
+    }
+
+    @Get('user/:id')
+    async getUser(@Req() request: Request): Promise<ReadUserDto> {
+        const user = await this.userService.getById(parseInt(request.params.id));
+        let userDto = new ReadUserDto(user);
+        return userDto;
     }
 
     @Post('user')

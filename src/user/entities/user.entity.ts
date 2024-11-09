@@ -1,4 +1,4 @@
-import { Column, Table, Model, BelongsToMany, HasOne, BelongsTo } from 'sequelize-typescript';
+import { Column, Table, Model, BelongsToMany, HasOne, BelongsTo, HasMany } from 'sequelize-typescript';
 import { EncryptionStrategy } from 'src/encryption/encryption.service';
 import { Family } from 'src/family/entities/family.entity';
 
@@ -46,6 +46,35 @@ export class User extends Model {
     })
     isAdmin: boolean;
 
+    @Column
+    familyId: number;
+
     @BelongsTo(() => Family, { foreignKey: 'familyId'})
     family: Family;
+
+    @HasMany(() => UserHistoricalEntry, { foreignKey: 'id'})
+    historicalEntries: UserHistoricalEntry[];
+}
+
+@Table({
+    tableName: 'userHistoricalEntry',
+})
+export class UserHistoricalEntry extends Model {
+    @Column({
+        primaryKey: true,
+        autoIncrement: true,
+    })
+    id: number;
+
+    @BelongsTo(() => User, { foreignKey: 'id'})
+    userId: number;
+
+    @Column
+    userName: number;
+
+    @Column
+    giftingToHash: string;
+
+    @Column
+    createdAt: Date;
 }

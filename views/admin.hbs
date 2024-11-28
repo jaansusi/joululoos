@@ -27,6 +27,11 @@
                 <div class="validation-item alert alert-info">
                     <strong>DB Hash:</strong> {{dbHash}}
                 </div>
+                <div
+                    class="validation-item alert {{#if validationResult.allPeopleHaveSomeoneToGiftTo}}alert-success{{else}}alert-danger{{/if}}">
+                    <strong>Everyone has someone to gift to:</strong>
+                    {{#if validationResult.allPeopleHaveSomeoneToGiftTo}}Yes{{else}}No{{/if}}
+                </div>
                 {{#unless validationResult.noErrorsDuringValidation}}
                 <div class="validation-item alert alert-danger">
                     <strong>Errors occurred during validation:</strong>
@@ -48,8 +53,14 @@
                     <strong>All People Gift to Someone Not in Their Family:</strong>
                     {{#if validationResult.allPeopleGiftToSomeoneNotInTheirFamily}}Yes{{else}}No{{/if}}
                 </div>
-                {{/unless}}
+                <div
+                    class="validation-item alert {{#if validationResult.allPeopleGiftToSomeoneNew}}alert-success{{else}}alert-danger{{/if}}">
+                    <strong>All People Gift to Someone New:</strong>
+                    {{#if validationResult.allPeopleGiftToSomeoneNew}}Yes{{else}}No{{/if}}
+                </div>
             </div>
+            {{/unless}}
+        </div>
         </div>
         {{else}}
         <div class="alert alert-warning mt-5" role="alert">

@@ -19,12 +19,21 @@ export class UserController {
     async displayUsersPage(@Req() request: Request): Promise<any> {
         if (request.cookies['santa_auth']) {
             const id = request.cookies['santa_auth'];
-            let user = await this.userService.getById(id);
-            if (user && user.isAdmin) {
+            let requestUser = await this.userService.getById(id);
+            if (requestUser && requestUser.isAdmin) {
                 const users = await this.userService.findAll({ order: [['name', 'ASC']], include: [{ model: Family }] });
+                let usersDto = users.map(user => new ReadUserDto(user));
+                usersDto.forEach(user => {
+                    if (user.lastYearGiftingToId) {
+                        let lastYearGiftingTo = users.find(u => u.id === user.lastYearGiftingToId);
+                        if (lastYearGiftingTo) {
+                            user.lastYearGiftingToName = lastYearGiftingTo.name;
+                        }
+                    }
+                });
                 let strategies = Object.keys(EncryptionStrategy).map(key => EncryptionStrategy[key]);
                 let families = await this.familyService.findAll();
-                return { users: users, isAdmin: true, strategies: strategies, families: families };
+                return { users: usersDto, isAdmin: true, strategies: strategies, families: families, usersForLastYear: users.map(function(user){return {id: user.id, name: user.name}}) };
             }
         }
         return {};

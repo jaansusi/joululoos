@@ -13,7 +13,6 @@ export class AuthService {
     if (!req.user) {
       return null;
     }
-    console.log(req.user);
     const adminEmail = this.userService.cleanGmailAddress(process.env.ADMIN_EMAIL);
     const cleanedEmail = this.userService.cleanGmailAddress(req.user.email);
     const existingUser = await this.userService.getByEmail(cleanedEmail);

@@ -3,7 +3,6 @@ import { AdminService } from './admin.service';
 import { Request } from 'express';
 import { UserService } from 'src/user/user.service';
 import { Family } from 'src/family/entities/family.entity';
-import * as crypto from 'crypto';
 
 @Controller('admin')
 export class AdminController {
@@ -41,8 +40,9 @@ export class AdminController {
             let user = await this.userService.getById(id);
 
             if (user && user.isAdmin) {
-                await this.adminService.assignSantas();
-                return;
+                let result = await this.adminService.assignSantas();
+
+                return { success: result };
             }
         }
     }

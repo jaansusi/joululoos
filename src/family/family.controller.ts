@@ -1,4 +1,4 @@
-import { Body, Controller, forwardRef, Get, Inject, Post, Render, Req } from '@nestjs/common';
+import { Body, Controller, Delete, forwardRef, Get, Inject, Post, Render, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { FamilyService } from './family.service';
 import { CreateFamilyDto } from './dto/create-family.dto';
@@ -34,7 +34,12 @@ export class FamilyController {
     }
 
     @Post('family')
-    async createFamily(@Body() familyDto: CreateFamilyDto) {
+    async postFamily(@Body() familyDto: CreateFamilyDto) {
         return this.familyService.createFamily(familyDto);
+    }
+
+    @Delete('family/:id')
+    async deleteFamily(@Req() request: Request) {
+        return this.familyService.deleteFamily(parseInt(request.params.id));
     }
 }

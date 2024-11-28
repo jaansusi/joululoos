@@ -25,10 +25,12 @@ export class User extends Model {
     @Column
     giftingTo: string;
 
-    @Column({
-        unique: true,
-    })
-    decryptionCode: string;
+    // Used for debugging purposes, not populated in production
+    @Column
+    giftingToDebug: string;
+
+    @Column
+    decryptionCode?: string;
 
     @Column
     iv: string;
@@ -38,6 +40,7 @@ export class User extends Model {
 
     @Column({
         defaultValue: EncryptionStrategy.CODE,
+        allowNull: false,
     })
     encryptionStrategy: string;
 
@@ -52,10 +55,15 @@ export class User extends Model {
     @BelongsTo(() => Family, { foreignKey: 'familyId'})
     family: Family;
 
+    @Column
+    lastYearGiftingToId: number;
+
+    // to-do: implement usage of this
     @HasMany(() => UserHistoricalEntry, { foreignKey: 'id'})
     historicalEntries: UserHistoricalEntry[];
 }
 
+// to-do: implement usage of this
 @Table({
     tableName: 'userHistoricalEntry',
 })
@@ -71,6 +79,10 @@ export class UserHistoricalEntry extends Model {
 
     @Column
     userName: number;
+
+    // For manual entry, ideally calculates the hash and does not store the plaintext
+    @Column
+    giftingTo: string;
 
     @Column
     giftingToHash: string;

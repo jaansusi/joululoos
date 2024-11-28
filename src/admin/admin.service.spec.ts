@@ -1,9 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminService } from './admin.service';
-import familiesInput from '../input';
+import { FamilyService } from '../family/family.service';
+import { UserService } from '../user/user.service';
 
 describe('AdminService', () => {
     let adminService: AdminService;
+    let userService: UserService;
+    let familyService: FamilyService;
     const cycleCount: number = 1000;
 
     beforeEach(async () => {
@@ -12,15 +15,19 @@ describe('AdminService', () => {
         }).compile();
 
         adminService = app.get<AdminService>(AdminService);
+        userService = app.get<UserService>(UserService);
+        familyService = app.get<FamilyService>(FamilyService);
     });
 
     describe('validate the santa list', () => {
         it('santas should have all participants', async () => {
             for (let i = 0; i < cycleCount; i++) {
-                const santas = await adminService.generateSantas();
-                for (let family of familiesInput) {
+                await adminService.assignSantas();
+                const users = await userService.findAll();
+                const families = await familyService.findAll();
+                for (let family of families) {
                     for (let member of family.members) {
-                        expect(santas.includes(member.name)).toBe(true);
+                        expect(users.map(x => x.name).includes(member.name)).toBe(true);
                     }
                 }
             }
@@ -29,18 +36,21 @@ describe('AdminService', () => {
         it('no blocked connections', async () => {
             // Generate blocklist for each person in the list.
             let blocklist = {};
-            for (let family of familiesInput) {
+
+            const families = await familyService.findAll();
+            for (let family of families) {
                 for (let member of family.members) {
                     blocklist[member.name] = family.members.map(x => x.name).filter(x => x !== member.name);
                 }
             }
             for (let i = 0; i < cycleCount; i++) {
-                const santas = await adminService.generateSantas();
-                for (let j = 0; j < santas.length; j++) {
-                    const prevIndex = j === 0 ? santas.length - 1 : j - 1;
-                    const nextIndex = j === santas.length - 1 ? 0 : j + 1;
-                    expect(blocklist[santas[j]].includes(santas[prevIndex])).toBe(false);
-                    expect(blocklist[santas[j]].includes(santas[nextIndex])).toBe(false);
+                await adminService.assignSantas();
+                let users = (await userService.findAll()).map(x => x.name);
+                for (let j = 0; j < users.length; j++) {
+                    const prevIndex = j === 0 ? users.length - 1 : j - 1;
+                    const nextIndex = j === users.length - 1 ? 0 : j + 1;
+                    expect(blocklist[users[j]].includes(users[prevIndex])).toBe(false);
+                    expect(blocklist[users[j]].includes(users[nextIndex])).toBe(false);
                 }
             }
         });

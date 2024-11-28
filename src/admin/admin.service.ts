@@ -16,8 +16,8 @@ export class AdminService {
         private encriptionService: EncryptionService
     ) { }
 
-
     public async assignSantas(): Promise<boolean> {
+        await this.userService.cleanGiftingToForAll();
         const participants = await this.userService.findAll({ include: [{ model: Family }] });
         // console.log('-------------------');
         // console.log(`Participants: ${participants.map(x => x.name)}`);
@@ -32,11 +32,16 @@ export class AdminService {
             return false;
         }
         for (let i = 0; i < generatedPath.length; i++) {
+            // console.log('-------------------');
             const nextIndex = i === generatedPath.length - 1 ? 0 : i + 1;
             try {
-                let user = this.shuffledParticipants[i];
+                
+                let user = generatedPath[i];
                 let giftingTo = generatedPath[nextIndex].name;
                 let assignUserDto = await this.encriptionService.encryptGiftingTo(user, giftingTo);
+                if (process.env.NODE_ENV === 'development') {
+                    assignUserDto.giftingToDebug = giftingTo;
+                }
                 await this.userService.updateUser(user.id, assignUserDto);
             } catch (e) {
                 console.log(e);
@@ -69,16 +74,21 @@ export class AdminService {
                 return [currentNode, ...path];
             }
         }
-        // console.log('No path found');
+        // console.error('No path found');
         return [];
     }
 
     private async generateAllForbiddenPaths(node: User, remainingNodes: User[]): Promise<User[]> {
+        let forbiddenPaths = [];
         if (node.family) {
             let family = await this.familyService.findOne({ where: { id: node.family.id }, include: [{ model: User }] });
-            return family.members;
+            forbiddenPaths = family.members;
         }
-        return [];
+        if (node.lastYearGiftingToId) {
+            let lastYearGiftingTo = await this.userService.findOne({ where: { id: node.lastYearGiftingToId } });
+            forbiddenPaths.push(lastYearGiftingTo);
+        }
+        return forbiddenPaths;
     }
 
     private unbiasedShuffle(array: User[]): User[] {
@@ -102,8 +112,12 @@ export class AdminService {
         const users = await this.userService.findAll({ include: [{ model: Family }] });
         let names = users.map(x => x.name).sort();
         let designatedSantas = users.map(x => this.encriptionService.decryptGiftingTo(x)).sort();
-        // console.log('names: ' + names);
-        // console.log('designatedSantas: ' + designatedSantas);
+        let allPeopleHaveSomeoneToGiftTo = true;
+        for (let user of users) {
+            if (!user.giftingTo && (user.encryptionStrategy !== EncryptionStrategy.CDOC)) {
+                allPeopleHaveSomeoneToGiftTo = false
+            }
+        }
         const allPeopleGiftToAUniquePerson = new Set(designatedSantas).size === users.length;
         let allPeopleGiftToSomeoneNotInTheirFamily = true;
         for (let user of users) {
@@ -116,12 +130,24 @@ export class AdminService {
                 }
             }
         }
+        let allPeopleGiftToSomeoneNew = true;
+        for (let user of users) {
+            if (user.lastYearGiftingToId) {
+                let lastYearGiftingTo = await this.userService.findOne({ where: { id: user.lastYearGiftingToId } });
+                if (this.encriptionService.decryptGiftingTo(user) === lastYearGiftingTo.name) {
+                    allPeopleGiftToSomeoneNew = false;
+                    break;
+                }
+            }
+        }
         const secretNameArray = users.map(x => x.name);
         let response = {
             noErrorsDuringValidation: true,
             namesAndSantasMatch: JSON.stringify(names) === JSON.stringify(designatedSantas),
+            allPeopleHaveSomeoneToGiftTo: allPeopleHaveSomeoneToGiftTo,
             allPeopleGiftToAUniquePerson: allPeopleGiftToAUniquePerson,
             allPeopleGiftToSomeoneNotInTheirFamily: allPeopleGiftToSomeoneNotInTheirFamily,
+            allPeopleGiftToSomeoneNew: allPeopleGiftToSomeoneNew,
             usersIdsAndTheirDesignatedSantas: users.map(x => (secretNameArray.indexOf(x.name).toString() + '-' + secretNameArray.indexOf(x.giftingTo).toString())),
             names: names,
             designatedSantas: designatedSantas,
@@ -131,7 +157,7 @@ export class AdminService {
 
     public async generateDbHash(): Promise<string> {
         // Get all user data and hash it to prevent tampering
-        let hashData = (await this.userService.findAll({ order: [['id', 'ASC']], include: [{ model: Family }]})).map(x => x.id + x.name + x.giftingTo + x.encryptionStrategy + x.email + x.family?.id).join();
+        let hashData = (await this.userService.findAll({ order: [['id', 'ASC']], include: [{ model: Family }] })).map(x => x.id + x.name + x.giftingTo + x.encryptionStrategy + x.email + x.family?.id).join();
         let dbHash = crypto.createHash("shake256", { outputLength: 4 }).update(hashData).digest('hex');
         return dbHash;
     }

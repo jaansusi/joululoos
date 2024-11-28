@@ -5,12 +5,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { AssignUserDto } from './dto/assign-user.dto';
 import * as fs from 'fs';
 import * as path from 'path';
+import { EncryptionService, EncryptionStrategy } from 'src/encryption/encryption.service';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectModel(User)
         private userRepository: typeof User,
+        private encryptionService: EncryptionService,
     ) { }
 
     // to-do: deprecate "find" functions that pass through options, 
@@ -32,6 +34,7 @@ export class UserService {
             encryptionStrategy: user.encryptionStrategy,
             isAdmin: user.isAdmin,
             familyId: user.familyId,
+            lastYearGiftingToId: user.lastYearGiftingToId,
         };
         return this.userRepository.upsert(userObject);
     }
@@ -48,6 +51,10 @@ export class UserService {
         return this.userRepository.findOne({ where: { email } });
     }
 
+    async getByName(name: string) {
+        return this.userRepository.findOne({ where: { name } });
+    }
+
     async updateUser(id: number, user: CreateUserDto|AssignUserDto) {
         return this.userRepository.update(user, { where: { id } });
     }
@@ -61,7 +68,6 @@ export class UserService {
         email = email.replace(/^([^@+]+)(\+[^@]*)?@gmail\.com$/, (match, username) => {
             return username.replace(/\./g, '') + '@gmail.com';
         });
-        console.log(email);
         return email;
     }
 
@@ -72,6 +78,22 @@ export class UserService {
         } catch (err) {
             console.error(err);
             return '';
+        }
+    }
+
+    public async cleanGiftingToForAll(): Promise<void> {
+        let users = await this.findAll();
+        for (let user of users) {
+            // to-do: enable this? Probably needs some try-catch around it in case of non-decryptable secrets.
+            // const giftingToName = await this.encryptionService.decryptGiftingTo(user);
+            // const giftingToUser = await this.getByName(giftingToName);
+            // user.lastYearGiftingToId = giftingToUser?.id ?? null;
+
+            user.giftingTo = '';
+            user.giftingToDebug = '';
+            user.decryptionCode = '';
+            user.iv = '';
+            await this.updateUser(user.id, new AssignUserDto(user)).catch(err => console.error(err));
         }
     }
 }

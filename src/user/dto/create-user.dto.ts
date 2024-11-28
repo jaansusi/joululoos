@@ -1,4 +1,9 @@
+import { User } from "../entities/user.entity";
+
 export class CreateUserDto {
+    constructor(partial?: Partial<User>) {
+        Object.assign(this, partial);
+    }
     id: number;
     name: string;
     email: string;
@@ -6,4 +11,5 @@ export class CreateUserDto {
     encryptionStrategy: string;
     familyId: number;
     isAdmin: boolean;
+    lastYearGiftingToId: number;
 }

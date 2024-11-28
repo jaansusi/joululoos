@@ -1,5 +1,3 @@
-let userRestrictions = new MultiSelect(document.getElementById('editUserRestrictions'));
-
 function generateSantas() {
     let a = confirm("OLED KINDEL?");
     if (a)
@@ -7,6 +5,19 @@ function generateSantas() {
 }
 
 function openUserEditModal(id) {
+    if (id === undefined) {
+        document.getElementById('editUserId').value = '';
+        document.getElementById('editUserName').value = '';
+        document.getElementById('editUserEmail').value = '';
+        document.getElementById('editUserIdCode').value = '';
+        document.getElementById('editUserStrategy').value = 'code';
+        document.getElementById('editUserIsAdmin').checked = false;
+        document.getElementById('editUserFamily').value = '';
+        document.getElementById('editUserLastYearGiftingToId').value = '';
+        var editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+        editUserModal.show();
+        return;
+    }
     fetch("/user/" + id, {
         method: "GET",
         headers: {
@@ -22,8 +33,7 @@ function openUserEditModal(id) {
             document.getElementById('editUserStrategy').value = data.encryptionStrategy;
             document.getElementById('editUserIsAdmin').checked = data.isAdmin;
             document.getElementById('editUserFamily').value = data.familyId ? data.familyId : '';
-            const userRestrictions = (new MultiSelect('#editUserRestrictions')).selectedValues;
-            console.log(userRestrictions);
+            document.getElementById('editUserLastYearGiftingToId').value = data.lastYearGiftingToId ? data.lastYearGiftingToId : '';
             var editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
             editUserModal.show();
         });
@@ -37,9 +47,10 @@ function saveUser() {
     const isAdmin = document.getElementById('editUserIsAdmin').checked;
     const strategy = document.getElementById('editUserStrategy').value;
     const familyId = document.getElementById('editUserFamily').value;
+    const lastYearGiftingToId = document.getElementById('editUserLastYearGiftingToId').value;
 
-    const userRestrictions = (new MultiSelect('#editUserRestrictions')).selectedValues;
-    console.log(userRestrictions);
+    // const userRestrictions = (new MultiSelect('#editUserRestrictions')).selectedValues;
+    // console.log(userRestrictions);
 
     let user = {
         id: id ? parseInt(id) : null,
@@ -48,7 +59,8 @@ function saveUser() {
         idCode: idCode,
         encryptionStrategy: strategy,
         isAdmin: isAdmin,
-        familyId: familyId ? parseInt(familyId) : null
+        familyId: familyId ? parseInt(familyId) : null,
+        lastYearGiftingToId: lastYearGiftingToId ? parseInt(lastYearGiftingToId) : null,
     };
     // Make the request to the server
     fetch("/user", {
@@ -89,7 +101,7 @@ function deleteUser(id) {
             });
 }
 
-function openFamilyEditModal(id, name, email, strategy, isAdmin, familyId) {
+function openFamilyEditModal(id, name) {
     document.getElementById('editFamilyId').value = id ? id : '';
     document.getElementById('editFamilyName').value = name ? name : '';
     var editUserModal = new bootstrap.Modal(document.getElementById('editFamilyModal'));

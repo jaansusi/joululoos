@@ -9,7 +9,7 @@ import * as path from 'path';
 export enum EncryptionStrategy {
     CODE = 'code',
     CDOC = 'cdoc',
-    KEY = 'key',
+    KEY = 'keypair',
 }
 
 

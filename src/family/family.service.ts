@@ -19,8 +19,14 @@ export class FamilyService {
     }
 
     async createFamily(familyDto: CreateFamilyDto) {
-        return this.familyRepository.create({
-            name: familyDto.name
-        });
+        const familyObject = {
+            id: familyDto.id ? familyDto.id : undefined,
+            name: familyDto.name,
+        };
+        return this.familyRepository.upsert(familyObject);
+    }
+
+    async deleteFamily(familyId: number) {
+        return this.familyRepository.destroy({ where: { id: familyId } });
     }
 }

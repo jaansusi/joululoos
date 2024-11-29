@@ -12,4 +12,5 @@ export class CreateUserDto {
     familyId: number;
     isAdmin: boolean;
     lastYearGiftingToId: number;
+    interestingFacts: string;
 }

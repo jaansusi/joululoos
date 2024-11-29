@@ -58,6 +58,11 @@ export class User extends Model {
     @Column
     lastYearGiftingToId: number;
 
+    @Column({
+        type: 'TEXT',
+    })
+    interestingFacts: string;
+
     // to-do: implement usage of this
     @HasMany(() => UserHistoricalEntry, { foreignKey: 'id'})
     historicalEntries: UserHistoricalEntry[];

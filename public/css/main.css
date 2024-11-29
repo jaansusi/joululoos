@@ -101,8 +101,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    
+    min-height: 100vh;
 }
 
 .centerer>div {
@@ -125,13 +124,13 @@ canvas {
 }
 
 #responseContainer {
-    margin-top: 5em;
+    margin-top: 3em;
     padding-top: 2.5em;
     padding-bottom: 2.5em;
     border-radius: 2em;
     background-color: white;
     width: 20em;
-    height: 12em;
+    height: 5em;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -139,7 +138,7 @@ canvas {
     box-shadow: inset 1px 1px 0px rgba(51, 0, 234, 0.25), inset 0 0 6px #3127a2, inset 0 80px 80px -40px #d3ccff, 1px 1px 3px rgba(255, 255, 255, 0.75);
 }
 
-div.hidden {
+div.hidden,i.hidden {
     display: none !important;
 }
 
@@ -151,4 +150,11 @@ div.hidden {
     color:inherit;
     text-decoration:none;
     pointer-events:none;
+}
+
+#pauseIcon,#playIcon {
+    font-size: 3em;
+    height: 100px;
+    width: 100px;
+    color: white;
 }

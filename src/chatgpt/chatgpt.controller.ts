@@ -28,6 +28,5 @@ export class ChatGPTController {
             dto.content = response;
             return dto;
         }
-
     }
 }

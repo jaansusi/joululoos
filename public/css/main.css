@@ -150,10 +150,3 @@ div.hidden,i.hidden {
     text-decoration:none;
     pointer-events:none;
 }
-
-#pauseIcon,#playIcon {
-    font-size: 3em;
-    height: 100px;
-    width: 100px;
-    color: white;
-}

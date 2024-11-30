@@ -6,7 +6,10 @@ function displayMessage(msg, type) {
 
     var messageContent = document.createElement('div');
     messageContent.classList.add('messageContent');
-    messageContent.innerHTML = msg.content;
+    if (type === 'server')
+        messageContent.innerHTML = msg.content;
+    else
+        messageContent.textContent = msg.content;
 
     messageContainer.appendChild(messageContent);
 
@@ -45,6 +48,12 @@ function sendMessage() {
             .then(response => response.json())
             .then(data => {
                 displayMessage(data, 'server');
+                if (audioPlaying && data.content.includes('Panin muusika pausile!')) {
+                    playPause();
+                }
+                if (!audioPlaying && data.content.includes('Panin muusika mängima!')) {
+                    playPause();
+                }
             });
     }
 }

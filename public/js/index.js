@@ -41,7 +41,7 @@ function submitCode() {
             document.getElementById('logoutContainer').classList.add('hidden');
             document.getElementById('chatContainer').classList.remove('hidden');
             setTimeout(() => 
-                displayMessage({content: `Tere! <br />Tõmbasid loosiga nime: <b>${res.name}</b>. <br />Olen siin, et sind aidata, kirjuta mulle!<br /><br />Jõuluvana`}, 'server'), 1000);
+                displayMessage({content: `Tõmbasid loosiga nime: <b>${res.name}</b>. <br />Kirjuta mulle kui soovid muusikat kinni panna või kui sul on muid muresid või küsimusi!<br /><br />Jõuluvana`}, 'server'), 1000);
             if (!snowActive) {
                 snowActive = true;
                 createSnowFlakes();

@@ -40,8 +40,7 @@ function submitCode() {
             document.getElementById('inputContainer').classList.add('hidden');
             document.getElementById('logoutContainer').classList.add('hidden');
             document.getElementById('chatContainer').classList.remove('hidden');
-            setTimeout(() => 
-                displayMessage({content: `Tõmbasid loosiga nime: <b>${res.name}</b>. <br />Kirjuta mulle kui soovid muusikat kinni panna või kui sul on muid muresid või küsimusi!<br /><br />Jõuluvana`}, 'server'), 1000);
+            initializeChat(res);
             if (!snowActive) {
                 snowActive = true;
                 createSnowFlakes();

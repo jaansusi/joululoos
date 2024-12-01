@@ -57,3 +57,8 @@ function sendMessage() {
             });
     }
 }
+
+function initializeChat(response) {
+    setTimeout(() => 
+        displayMessage({content: `Tere, ${response.name}! Sina tõmbasid loosiga nime <b>${response.giftingTo}</b>. <br />Kirjuta mulle kui soovid muusikat kinni panna või kui sul on muid muresid või küsimusi!<br />Sinu jõuluvana`}, 'server'), 1000);
+}

@@ -142,11 +142,43 @@ div.hidden,i.hidden {
 }
 
 #toggleUserCodeVisibility {
-    color: white;
+    background-color: white;
+    color: rgb(135, 183, 254);
+    border-color: rgb(135, 183, 254);
+}
+#toggleUserCodeVisibility:hover {
+    background-color: rgb(135, 183, 254);
+    color: black;
 }
 
 .no-link {
     color:inherit;
     text-decoration:none;
     pointer-events:none;
+}
+
+#logoutContainer {
+    padding: 10px;
+    background-color: rgb(157, 0, 0);
+    border-radius: 10px;
+    border: rgb(94, 13, 12) 2px solid;
+    box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.25),
+        /* highlight */
+        inset 0 0 6px #a23227,
+        /* inner glow */
+        inset 0 80px 80px -40px #ac3223,
+        /* gradient */
+        1px 1px 3px rgba(0, 0, 0, 0.75);
+}
+
+#logoutContainer:hover {
+    background: #a61715;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75), 0 0 40px #FFF;
+    box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.25),
+        /* highlight */
+        inset 0 0 6px #da3b2c,
+        /* inner glow */
+        inset 0 80px 80px -40px #dd4330,
+        /* gradient */
+        1px 1px 3px rgba(0, 0, 0, 0.75);
 }

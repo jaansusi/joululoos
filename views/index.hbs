@@ -17,7 +17,7 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/auth.css">
-  <link rel="stylesheet" href="/css/audio.css">
+  <link rel="stylesheet" href="/css/chat.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 
   <!-- JS scripts are loaded at the end of the body to improve page load time -->
@@ -31,12 +31,6 @@
       {{#if isAdmin}}
       {{> adminheader}}
       {{/if}}
-      <div class="hidden" id="responseContainer">
-        <div id="welcome"></div>
-        <div id="preRecipientText">Sina tõmbasid loosiga nime:
-        </div>
-        <h2 id="recipient"></h2>
-      </div>
       {{#if encryptionWithCode}}
       <div class="inputContainer" id="inputContainer">
         <div class="input-group mb-3">
@@ -85,17 +79,10 @@
         </button>
       </div>
       {{/unless}}
+      {{> chat}}
       <div id="audioContainer" class="audioContainer hidden">
-        <div id="playButton" class="botón" onclick="playPause();">
-          <div class="fondo" x="0" y="0" width="200" height="200"></div>
-          <div class="icono" width="200" height="200">
-            <div class="parte izquierda" x="0" y="0" width="200" height="200" fill="#fff"></div>
-            <div class="parte derecha" x="0" y="0" width="200" height="200" fill="#fff"></div>
-          </div>
-          <div class="puntero"></div>
-        </div>
         <audio hidden id="player" playsinline="">
-          <source src="/audio/alliwantforxmasisu.mp3" type="audio/mpeg">
+          <source src="/audio/music.mp3" type="audio/mpeg">
         </audio>
       </div>
       <div id="logoutContainer" class="logoutContainer hidden">
@@ -118,6 +105,7 @@
   <script src="/js/index.js"></script>
   <script src="/js/audio.js"></script>
   <script src="/js/snow.js"></script>
+  <script src="/js/chat.js"></script>
 </body>
 
 </html>

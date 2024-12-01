@@ -12,6 +12,7 @@ export class ReadUserDto {
         this.family = user.family ? new ReadFamilyDto(user.family) : undefined;
         this.isAdmin = user.isAdmin;
         this.lastYearGiftingToId = user.lastYearGiftingToId;
+        this.interestingFacts = user.interestingFacts;
     }
     
     readonly id: number;
@@ -23,5 +24,6 @@ export class ReadUserDto {
     readonly family?: ReadFamilyDto;
     readonly isAdmin: boolean;
     readonly lastYearGiftingToId: number;
+    readonly interestingFacts: string;
     lastYearGiftingToName?: string;
 }

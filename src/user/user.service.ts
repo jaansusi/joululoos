@@ -35,6 +35,7 @@ export class UserService {
             isAdmin: user.isAdmin,
             familyId: user.familyId,
             lastYearGiftingToId: user.lastYearGiftingToId,
+            interestingFacts: user.interestingFacts,
         };
         return this.userRepository.upsert(userObject);
     }
@@ -53,6 +54,10 @@ export class UserService {
 
     async getByName(name: string) {
         return this.userRepository.findOne({ where: { name } });
+    }
+
+    async getByDecryptionCode(decryptionCode: string) {
+        return this.userRepository.findOne({ where: { decryptionCode } });
     }
 
     async updateUser(id: number, user: CreateUserDto|AssignUserDto) {

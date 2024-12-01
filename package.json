@@ -34,6 +34,7 @@
     "@sequelize/postgres": "^7.0.0-alpha.43",
     "cookie-parser": "^1.4.7",
     "hbs": "^4.2.0",
+    "openai": "^4.73.1",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.13.0",

@@ -31,19 +31,16 @@ function submitCode() {
             code: document.getElementById('userCode').value
         }),
     }).then(res => res.json()).then(res => {
-        document.getElementById('responseContainer').classList.remove('hidden');
         let authContainer = document.getElementById('authContainer');
         if (authContainer !== undefined && authContainer !== null && res.error === undefined)
             authContainer.classList.add('hidden');
         if (res.error) {
             document.getElementById('recipient').innerHTML = res.error;
-            document.getElementById('preRecipientText').classList.add('hidden');
         } else {
-            document.getElementById('preRecipientText').classList.remove('hidden');
             document.getElementById('inputContainer').classList.add('hidden');
             document.getElementById('logoutContainer').classList.add('hidden');
-            document.getElementById('welcome').innerHTML = 'Tere, ' + res.name + '!';
-            document.getElementById('recipient').innerHTML = res.giftingTo;
+            document.getElementById('chatContainer').classList.remove('hidden');
+            initializeChat(res);
             if (!snowActive) {
                 snowActive = true;
                 createSnowFlakes();

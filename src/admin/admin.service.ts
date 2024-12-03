@@ -35,7 +35,7 @@ export class AdminService {
             // console.log('-------------------');
             const nextIndex = i === generatedPath.length - 1 ? 0 : i + 1;
             try {
-                
+
                 let user = generatedPath[i];
                 let giftingTo = generatedPath[nextIndex].name;
                 let assignUserDto = await this.encriptionService.encryptGiftingTo(user, giftingTo);
@@ -160,5 +160,24 @@ export class AdminService {
         let hashData = (await this.userService.findAll({ order: [['id', 'ASC']], include: [{ model: Family }] })).map(x => x.id + x.name + x.giftingTo + x.encryptionStrategy + x.email + x.family?.id).join();
         let dbHash = crypto.createHash("shake256", { outputLength: 4 }).update(hashData).digest('hex');
         return dbHash;
+    }
+
+    public async getMessages(): Promise<any> {
+        let users = await this.userService.findAll();
+        let messages = [];
+        for (let user of users) {
+            messages.push({
+                content:
+                    `--------------------------------------------------
+Hei!
+Oma loosi tõmbamiseks vaata siia: ${process.env.HOST}?code=${user.decryptionCode}
+Oma jõulusoovid saad kirja panna siin: ${process.env.HOST}/kiri
+
+Ilusat jõuluaega!
+--------------------------------------------------`
+            })
+        }
+        console.log(messages);
+        return { messages: messages };
     }
 }

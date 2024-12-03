@@ -90,4 +90,10 @@ export class HomeController {
     }
     return null;
   }
+
+  @Get('kiri')
+  @Render('letter')
+  async letter(@Req() request: Request) {
+    return { letterUrl: process.env.GOOGLE_DOC_LETTER_LINK };
+  }
 }

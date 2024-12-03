@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="/css/auth.css">
   <link rel="stylesheet" href="/css/chat.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
   <!-- JS scripts are loaded at the end of the body to improve page load time -->
 
@@ -27,6 +28,7 @@
 <body>
   <canvas id="snow"></canvas>
   <div class="bg">
+    {{> hovericons}}
     <main role="main" class="centerer text-center">
       {{#if isAdmin}}
       {{> adminheader}}
@@ -52,7 +54,7 @@
       {{/if}}
       {{#unless loggedIn}}
       <div id="authContainer" class="authContainer">
-        <button class="gsi-material-button" onclick="location.href = '/auth/google'">
+        <button id="googleAuthButton" class="gsi-material-button" onclick="location.href = '/auth/google'">
           <div class="gsi-material-button-state"></div>
           <div class="gsi-material-button-content-wrapper">
             <div class="gsi-material-button-icon">
@@ -78,27 +80,36 @@
           </div>
         </button>
       </div>
-      {{/unless}}
-      {{> chat}}
-      <div id="audioContainer" class="audioContainer hidden">
-        <audio hidden id="player" playsinline="">
-          <source src="/audio/music.mp3" type="audio/mpeg">
-        </audio>
-      </div>
-      <div id="logoutContainer" class="logoutContainer hidden">
-        <a href="/auth/logout">
-          <svg xmlns="http://www.w3.org/2000/svg" height="2em"
-            viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-            <style>
-              svg {
-                fill: #ffffff
-              }
-            </style>
-            <path
-              d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z" />
-          </svg>
-        </a>
-      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy"
+        viewBox="0 0 16 16">
+
+        <div id="webViewWarning" class="hidden">
+          Messengerist otse avades ei saa kasutada Google autentimist. Kopeeri link ja ava brauseris.<br />
+          <div id="copyContainer" onclick="copyTextToClipboard(window.location.href)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy"
+              viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+            </svg>
+            <span id="pageUrl"></span>
+          </div>
+        </div>
+        {{/unless}}
+        {{> chat}}
+        <div id="audioContainer" class="audioContainer hidden">
+          <audio hidden id="player" playsinline="">
+            <source src="/audio/music.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+        <div id="logoutContainer" class="logoutContainer hidden">
+          <a href="/auth/logout">
+            <svg xmlns="http://www.w3.org/2000/svg" height="2em"
+              viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+              <path
+                d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z" />
+            </svg>
+          </a>
+        </div>
     </main>
   </div>
 
@@ -106,6 +117,7 @@
   <script src="/js/audio.js"></script>
   <script src="/js/snow.js"></script>
   <script src="/js/chat.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 
 </html>

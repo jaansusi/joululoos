@@ -182,3 +182,60 @@ div.hidden,i.hidden {
         /* gradient */
         1px 1px 3px rgba(0, 0, 0, 0.75);
 }
+
+#logoutContainer svg {
+    fill: white;
+}
+
+#letterIframe {
+    width: 80%;
+    height: 80vh;
+    min-height: 800px;
+    border: none;
+}
+
+#navigationIconsContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+#navigationIconsContainer a {
+    color: white;
+    font-size: 2em;
+    text-decoration: none;
+}
+
+
+
+@media (max-width: 1000px) {
+    #letterIframe {
+        width: 100%;
+        min-height: auto;
+    }
+}
+
+#webViewWarning {
+    background-color: white;
+    padding: 1em;
+    border-radius: 1em;
+}
+
+#webViewWarning svg {
+    fill: black;
+    font-size: 2em;
+}
+
+#copyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em;
+    background-color: white;
+    border-radius: 1em;
+    cursor: pointer;
+    width: 100%;
+}
+
+#copyContainer:hover {
+    background-color: #f0f0f0;
+}
